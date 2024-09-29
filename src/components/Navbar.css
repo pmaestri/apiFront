@@ -1,50 +1,72 @@
-/* src/components/Navbar.css */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f8f9fa;
   padding: 10px 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #333;
+  color: white;
 }
 
 .navbar-logo {
   font-size: 24px;
-  font-weight: bold;
-  color: #333;
 }
 
 .navbar-links {
-  list-style: none;
   display: flex;
-  gap: 20px;
+  list-style: none;
 }
 
-.navbar-links li a {
+.navbar-links li {
+  margin: 0 15px;
+  position: relative;
+}
+
+.navbar-links a {
+  color: white;
   text-decoration: none;
-  font-size: 18px;
-  color: #007bff;
-  transition: color 0.3s;
-}
-
-.navbar-links li a:hover {
-  color: #0056b3;
+  padding: 10px;
 }
 
 .navbar-icons {
   display: flex;
   align-items: center;
-  gap: 15px;
 }
 
 .search-bar {
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  margin-right: 20px;
+  padding: 5px;
 }
 
 .cart-icon {
   width: 24px;
   height: 24px;
-  cursor: pointer;
+}
+
+/* Dropdown CSS */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #444;
+  min-width: 160px;
+  z-index: 1;
+  list-style: none;
+  padding: 0;
+}
+
+.dropdown-content li {
+  padding: 10px;
+  white-space: nowrap;
+}
+
+.dropdown-content li a {
+  padding: 10px;
+  color: white;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content li a:hover {
+  background-color: #555;
 }

@@ -6,7 +6,7 @@ const Home = () => {
 const navigate = useNavigate();
   return (
     <div className="home">
-      <h1>Bienvenido a Variedades Express!</h1>
+      <h1>Bienvenido a Top Cases!</h1>
       <p>Explora nuestra selección de accesorios para celulares</p>
 
       <div className="categories">
