@@ -15,3 +15,4 @@ const MotorolaModelDetail = () => {
 };
 
 export default MotorolaModelDetail;
+

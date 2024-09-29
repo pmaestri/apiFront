@@ -9,7 +9,7 @@ const navigate = useNavigate();
       <h1>Bienvenido a Top Cases!</h1>
       <p>Explora nuestra selección de accesorios para celulares</p>
 
-      <div className="categories">
+      {/* <div className="categories">
         <div className="category">
           <img 
             src="https://via.placeholder.com/300x200.png?text=iPhone" 
@@ -31,7 +31,7 @@ const navigate = useNavigate();
           />
           <button onClick={()=>{navigate("/categories/motorola")}}>Ver Motorola</button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

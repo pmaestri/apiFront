@@ -5,9 +5,9 @@ import ProductList from "./components/ProductList";
 import Subcategory from './components/Subcategory';  
 import Navbar from './components/Navbar';           
 import Home from './components/Home';  
-import IphoneModels from './components/IphoneModels'; 
+import IphoneModels from './components/IphoneModel'; 
 import IphoneModelDetail from './components/IphoneModelDetail'; // Detalles de iPhone
-import SamsungModels from './components/SamsungModels'; // Componente para los modelos de Samsung
+import SamsungModels from './components/SamsungModel'; // Componente para los modelos de Samsung
 import SamsungModelDetail from './components/SamsungModelDetail'; // Detalles de Samsung
 import MotorolaModels from './components/MotorolaModel'; // Componente para los modelos de Motorola
 import MotorolaModelDetail from './components/MotorolaModelDetail'; // Detalles de Motorola

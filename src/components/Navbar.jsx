@@ -2,11 +2,17 @@
 import React from 'react';
 import './Navbar.css'; 
 import { Link } from 'react-router-dom';
+import logo from "../assets/images/logo.png"; 
+
 
 const Navbar = () => {
   return (
     <nav className="navbar">
-      <div className="navbar-logo">Top Cases</div>
+       <div className="logo">
+        <Link to="/">
+          <img src={logo} alt="Logo" />
+        </Link>
+      </div>
       
       <ul className="navbar-links">
         {/* Categoría Fundas */}
@@ -53,8 +59,7 @@ const Navbar = () => {
           </ul>
         </li>
 
-        {/* Otras categorías si es necesario */}
-        <li><Link to="/categories/generico">Otros Productos</Link></li>
+    
       </ul>
     </nav>
   );
