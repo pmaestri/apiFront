@@ -1,6 +1,7 @@
 /* Puedes agregar esto en un archivo CSS nuevo o en el mismo archivo CSS que usas para los componentes */
-
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
 .model-list {
+    font-family: "Fredoka", sans-serif;
     list-style-type: none; /* Sin viñetas */
     padding: 0; /* Sin padding */
   }
