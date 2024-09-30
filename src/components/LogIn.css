@@ -1,0 +1,63 @@
+/* src/components/Login.css */
+
+.login-container {
+    display: flex; /* Usar flexbox para centrar el contenido */
+    flex-direction: column; /* Colocar elementos en columna */
+    align-items: center; /* Centrar horizontalmente */
+    justify-content: flex-start; /* Alinear al inicio (parte superior) */
+    padding: 20px; /* Espacio interno */
+    background-color: #f8f9fa; /* Color de fondo suave */
+    font-family: "Fredoka", sans-serif; /* Fuente utilizada */
+    min-height: 100vh; /* Asegúrate de que la altura mínima cubra la pantalla */
+}
+
+.login-container h1 {
+    color: #bd6f95; /* Color del título */
+    margin-bottom: 20px; /* Espacio debajo del título */
+}
+
+.login-container form {
+    background-color: #ffffff; /* Fondo blanco para el formulario */
+    padding: 30px; /* Relleno interno del formulario - Aumentado para hacer el cuadrado más grande */ /* Aquí se agregó la línea */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    width: 400px; /* Ancho del formulario - Aumentado para hacer el cuadrado más grande */ /* Aquí se agregó la línea */
+}
+
+.login-container label {
+    display: block; /* Mostrar etiqueta en bloque */
+    margin-bottom: 5px; /* Espacio debajo de la etiqueta */
+    color: #6c757d; /* Color del texto de la etiqueta */
+}
+
+.login-container input {
+    width: 100%; /* Ancho completo */
+    padding: 10px; /* Relleno interno */
+    margin-bottom: 15px; /* Espacio debajo del campo de entrada */
+    border: 1px solid #ced4da; /* Borde suave */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+}
+
+.login-container button {
+    width: 100%; /* Ancho completo */
+    padding: 10px; /* Relleno interno */
+    background-color: #bd6f95; /* Color de fondo del botón */
+    color: white; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar cursor al pasar sobre el botón */
+    font-size: 16px; /* Tamaño de fuente */
+    transition: background-color 0.3s; /* Transición para el efecto hover */
+}
+
+.login-container button:hover {
+    background-color: #a76b84; /* Color de fondo al pasar el cursor */
+}
+
+.error-message {
+    color: red; /* Color del mensaje de error */
+    margin-top: 10px; /* Espacio encima del mensaje */
+    font-size: 14px; /* Tamaño de fuente */
+  }
+  

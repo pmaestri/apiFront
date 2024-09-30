@@ -8,7 +8,11 @@
   padding: 10px 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-
+/* Nueva clase para agrupar logo y categorías */
+.logo-and-links { 
+  display: flex;
+  align-items: center; /* Alinear verticalmente el logo y las categorías */
+}
 .navbar-logo {
   color: #FFFFFF; /* Color del logo */
   font-size: 24px;
@@ -38,6 +42,25 @@
 
 .navbar-links a:hover {
   background-color: #fbd5e5; /* Color al pasar el mouse */
+}
+
+.search-and-icons { 
+  display: flex;
+  align-items: center;
+}
+.icon-container { /* Contenedor para cada icono */
+  margin-left: 35px;
+}
+
+.nav-icon { /* Estilo base para los iconos */
+  font-size: 25px;
+  color: #bd6f95; /* Color de los iconos */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-icon:hover { /* Estilo al pasar el mouse */
+  color: #fbd5e5; /* Color al pasar el mouse */
 }
 
 /* Barra de búsqueda */
@@ -100,6 +123,7 @@
   width: 100px; /* Ajusta el tamaño según sea necesario */
   height: auto;
   cursor: pointer; /* Cambia el cursor al pasar por encima */
+  margin-right: 20px; /* Espaciado entre el logo y las categorías */ /* NUEVO */
 }
 /* Dejar los estilos anteriores comentados */
 /* 

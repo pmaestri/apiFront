@@ -1,5 +1,5 @@
-/*src/components/Home.css*/
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
 .home {
   font-family: "Fredoka", sans-serif;
   text-align: center;
@@ -7,58 +7,48 @@
   padding: 20px;
   background-size: cover;
   background-position: center;
-  min-height: 100vh; /* Asegúrate de que la imagen de fondo cubra toda la altura de la pantalla */
+  min-height: 100vh;
 }
 
 h1 {
   color: #bd6f95;
   font-size: 2.5em;
   margin-bottom: 10px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Añade sombra para mejorar la legibilidad */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 p {
   color: #bd6f95;
   font-size: 1.2em;
   margin-bottom: 20px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Añade sombra para mejorar la legibilidad */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
-  
-  /* .categories {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .category {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    transition: transform 0.3s ease;
-  }
-  
-  .category img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
-  
-  .category button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    margin-top: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .category button:hover {
-    background-color: #0056b3;
-  }
-  
-  .category:hover {
-    transform: scale(1.05);
-  } */
-  
+
+/* Estilos para el Slider */
+.slick-slider {
+  margin: 20px auto;
+  width: 50vw; /* Ancho completo de la ventana */
+  overflow: hidden; /* Evitar el desbordamiento */
+}
+
+.slick-slide {
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  height: 300px; /* Altura fija para el contenedor del slide */
+}
+
+.image-container {
+  width: 50%; /* Ancho completo del contenedor */
+  height: 300px; /* Altura fija para el contenedor de la imagen */
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+}
+
+.slider-image {
+  width: 50vw; /* Ancho completo de la ventana */
+  height: 100%; /* Altura fija para asegurar que ocupe el contenedor */
+  object-fit: cover; /* Recortar y ajustar la imagen */
+  border-radius: 8px; 
+}

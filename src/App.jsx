@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProductList from "./components/ProductList";
@@ -11,6 +10,10 @@ import SamsungModels from './components/SamsungModel'; // Componente para los mo
 import SamsungModelDetail from './components/SamsungModelDetail'; // Detalles de Samsung
 import MotorolaModels from './components/MotorolaModel'; // Componente para los modelos de Motorola
 import MotorolaModelDetail from './components/MotorolaModelDetail'; // Detalles de Motorola
+
+// NUEVO: Importar componentes de Carrito e Inicio de Sesión
+import Cart from './components/Cart'; // Página del carrito
+import Login from './components/LogIn'; // Página de inicio de sesión
 
 function App() {
   return (
@@ -63,12 +66,14 @@ function App() {
 
         <Route path="/categories/samsung" element={<Subcategory category="Samsung" />} />
         <Route path="/categories/motorola" element={<Subcategory category="Motorola" />} />
+
+        {/* NUEVO: Rutas para carrito e inicio de sesión */}
+        <Route path="/cart" element={<Cart />} /> {/* Ruta para la página del carrito */}
+        <Route path="/login" element={<Login />} /> {/* Ruta para la página de inicio de sesión */}
+        
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
-
-
