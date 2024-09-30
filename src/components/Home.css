@@ -52,3 +52,31 @@ p {
   object-fit: cover; /* Recortar y ajustar la imagen */
   border-radius: 8px; 
 }
+
+.services {
+  display: flex; /* Usar flexbox para disposición horizontal */
+  justify-content: space-around; /* Espacio entre los elementos */
+  margin: 20px 0; /* Margen superior e inferior */
+}
+
+.service-item {
+  text-align: center; /* Centrar texto */
+  max-width: 200px; /* Ancho máximo de los íconos */
+  color: #bd6f95;
+  background-color: #fdeaf2; /* Fondo del cuadro */
+  border: 2px solid #bd6f95; /* Borde del cuadro */
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 20px; /* Espaciado interno */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para el cuadro */
+  transition: transform 0.3s; /* Transición suave para el efecto hover */
+}
+
+.service-item:hover {
+  transform: scale(1.05); /* Efecto de aumento al pasar el ratón */
+}
+
+.service-item p {
+  margin-top: 10px; /* Margen entre el ícono y el texto */
+  font-size: 1em; /* Tamaño del texto */
+  color: #bd6f95; /* Color del texto */
+}

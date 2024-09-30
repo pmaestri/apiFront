@@ -7,7 +7,7 @@
   }
   
   .model-list li {
-    background-color: #fdeaf2; /* Color de fondo para cada modelo */
+    background-color: #fbd5e5; /* Color de fondo para cada modelo */
     margin: 10px 0; /* Margen entre modelos */
     padding: 10px; /* Espaciado en los modelos */
     border-radius: 5px; /* Bordes redondeados */

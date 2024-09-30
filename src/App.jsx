@@ -5,15 +5,16 @@ import Subcategory from './components/Subcategory';
 import Navbar from './components/Navbar';           
 import Home from './components/Home';  
 import IphoneModels from './components/IphoneModel'; 
-import IphoneModelDetail from './components/IphoneModelDetail'; // Detalles de iPhone
-import SamsungModels from './components/SamsungModel'; // Componente para los modelos de Samsung
-import SamsungModelDetail from './components/SamsungModelDetail'; // Detalles de Samsung
-import MotorolaModels from './components/MotorolaModel'; // Componente para los modelos de Motorola
-import MotorolaModelDetail from './components/MotorolaModelDetail'; // Detalles de Motorola
+import IphoneModelDetail from './components/IphoneModelDetail'; 
+import SamsungModels from './components/SamsungModel'; 
+import SamsungModelDetail from './components/SamsungModelDetail'; 
+import MotorolaModels from './components/MotorolaModel'; 
+import MotorolaModelDetail from './components/MotorolaModelDetail'; 
 
 // NUEVO: Importar componentes de Carrito e Inicio de Sesión
-import Cart from './components/Cart'; // Página del carrito
-import Login from './components/LogIn'; // Página de inicio de sesión
+import Cart from './components/Cart'; 
+import Login from './components/LogIn'; 
+import Footer from './components/Footer'; // Importar el componente Footer
 
 function App() {
   return (
@@ -68,10 +69,10 @@ function App() {
         <Route path="/categories/motorola" element={<Subcategory category="Motorola" />} />
 
         {/* NUEVO: Rutas para carrito e inicio de sesión */}
-        <Route path="/cart" element={<Cart />} /> {/* Ruta para la página del carrito */}
-        <Route path="/login" element={<Login />} /> {/* Ruta para la página de inicio de sesión */}
-        
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/login" element={<Login />} /> 
       </Routes>
+      <Footer /> {/* Agregar el Footer aquí para que aparezca en todas las páginas */}
     </Router>
   );
 }
