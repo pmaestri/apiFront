@@ -1,18 +1,15 @@
 /* Puedes agregar esto en un archivo CSS nuevo o en el mismo archivo CSS que usas para los componentes */
+
 .model-list {
     list-style-type: none; /* Sin viñetas */
     padding: 0; /* Sin padding */
   }
   
   .model-list li {
-    background-color: #F5CBF8; /* Color de fondo para cada modelo */
+    background-color: #fdeaf2; /* Color de fondo para cada modelo */
     margin: 10px 0; /* Margen entre modelos */
     padding: 10px; /* Espaciado en los modelos */
     border-radius: 5px; /* Bordes redondeados */
     transition: transform 0.3s; /* Transición suave */
-  }
-  
-  .model-list li:hover {
-    transform: scale(1.05); /* Efecto de hover */
   }
   

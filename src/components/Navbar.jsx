@@ -1,19 +1,29 @@
-// src/components/Navbar.jsx
-import React from 'react';
-import './Navbar.css'; 
+import React, { useState } from 'react';
+import './Navbar.css';
 import { Link } from 'react-router-dom';
-import logo from "../assets/images/logo.png"; 
-
+import logo from "../assets/images/logo.png";
+import { FaSearch } from 'react-icons/fa'; // Importar icono de búsqueda
 
 const Navbar = () => {
+  const [searchQuery, setSearchQuery] = useState(''); // Estado para manejar la búsqueda
+
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value); // Actualizar el estado de la búsqueda
+  };
+
+  const handleSearch = () => {
+    console.log("Buscando:", searchQuery);
+    // Lógica de búsqueda aquí o redireccionar a una página de resultados
+  };
+
   return (
     <nav className="navbar">
-       <div className="logo">
+      <div className="logo">
         <Link to="/">
-          <img src={logo} alt="Logo" />
+          <img src="/src/assets/images/logo1.png" alt="Logo" />
         </Link>
       </div>
-      
+
       <ul className="navbar-links">
         {/* Categoría Fundas */}
         <li className="dropdown">
@@ -36,9 +46,8 @@ const Navbar = () => {
             <li><Link to="/categories/vidrios/generico">Genérico</Link></li>
           </ul>
         </li>
-
-        {/* Categoría Cargadores */}
-        <li className="dropdown">
+          {/* Categoría Cargadores */}
+          <li className="dropdown">
           <Link to="#">Cargadores</Link>
           <ul className="dropdown-content">
             <li><Link to="/categories/cargadores/iphone/models">iPhone</Link></li>
@@ -59,15 +68,21 @@ const Navbar = () => {
           </ul>
         </li>
 
-    
+        {/* Barra de búsqueda */}
+        <li className="search-bar">
+          <input 
+            type="text" 
+            placeholder="Buscar productos..." 
+            value={searchQuery} 
+            onChange={handleInputChange} 
+          />
+          <button onClick={handleSearch}>
+            <FaSearch style={{ fontSize: '18px', color: '#FFFFFF' }} />
+          </button>
+        </li>
       </ul>
     </nav>
   );
 };
 
 export default Navbar;
-
-
-
-
-

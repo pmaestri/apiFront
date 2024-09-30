@@ -1,6 +1,7 @@
 /*src/components/Home.css*/
-
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
 .home {
+  font-family: "Fredoka", sans-serif;
   text-align: center;
   background-color: #FFFFFF;
   padding: 20px;
@@ -10,14 +11,14 @@
 }
 
 h1 {
-  color: #9C26A5;
+  color: #bd6f95;
   font-size: 2.5em;
   margin-bottom: 10px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Añade sombra para mejorar la legibilidad */
 }
 
 p {
-  color: #CC48D5;
+  color: #bd6f95;
   font-size: 1.2em;
   margin-bottom: 20px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Añade sombra para mejorar la legibilidad */
