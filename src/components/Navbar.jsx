@@ -3,21 +3,20 @@ import './Navbar.css';
 import { Link } from 'react-router-dom';
 import { FaSearch, FaShoppingCart, FaUser } from 'react-icons/fa'; 
 
+
 const Navbar = () => {
-  const [searchQuery, setSearchQuery] = useState(''); // Estado para manejar la búsqueda
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleInputChange = (e) => {
-    setSearchQuery(e.target.value); // Actualizar el estado de la búsqueda
+    setSearchQuery(e.target.value);
   };
 
   const handleSearch = () => {
     console.log("Buscando:", searchQuery);
-    // Lógica de búsqueda aquí o redireccionar a una página de resultados
   };
 
   return (
     <nav className="navbar">
-      {/* Contenedor agrupado para el logo y las categorías */}
       <div className="logo-and-links">
         <div className="logo">
           <Link to="/">
@@ -25,44 +24,175 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Categorías en la misma fila que el logo */}
         <ul className="navbar-links">
+          {/* Fundas */}
           <li className="dropdown">
             <Link to="#">Fundas</Link>
             <ul className="dropdown-content">
-              <li><Link to="/categories/fundas/iphone/modelos">iPhone</Link></li>
-              <li><Link to="/categories/fundas/samsung/modelos">Samsung</Link></li>
-              <li><Link to="/categories/fundas/motorola/modelos">Motorola</Link></li>
+              <li className="sub-dropdown">
+                <Link to="#">iPhone</Link>
+                <ul className="sub-dropdown-content">
+                <li><Link to="/categories/fundas/iphone/models/15_pro_max">iPhone 15 Pro Max</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/15_pro">iPhone 15 Pro</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/15_plus">iPhone 15 Plus</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/15">iPhone 15</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/14_pro_max">iPhone 14 Pro Max</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/14_pro">iPhone 14 Pro</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/14_plus">iPhone 14 Plus</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/14">iPhone 14</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/13_pro_max">iPhone 13 Pro Max</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/13_pro">iPhone 13 Pro</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/13_mini">iPhone 13 Mini</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/13">iPhone 13</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/se_3">iPhone SE (3ª generación)</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/12_pro_max">iPhone 12 Pro Max</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/12_pro">iPhone 12 Pro</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/12">iPhone 12</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/11">iPhone 11</Link></li>
+                </ul>
+              </li>
+              <li className="sub-dropdown">
+                <Link to="#">Samsung</Link>
+                <ul className="sub-dropdown-content">
+                <li><Link to="/categories/fundas/samsung/models/galaxy_s23_ultra">Galaxy S23 Ultra</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s23_ultra">Galaxy S23 Ultra</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s23_plus">Galaxy S23 Plus</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s23">Galaxy S23</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_z_fold_5">Galaxy Z Fold 5</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_z_flip_5">Galaxy Z Flip 5</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s22_ultra">Galaxy S22 Ultra</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s22_plus">Galaxy S22 Plus</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s22">Galaxy S22</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_a54_5g">Galaxy A54 5G</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_a34_5g">Galaxy A34 5G</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_a14_5g">Galaxy A14 5G</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_a04s">Galaxy A04S</Link></li>
+                </ul>
+              </li>
+              <li className="sub-dropdown">
+                <Link to="#">Motorola</Link>
+                <ul className="sub-dropdown-content">
+                <li><Link to="/categories/fundas/motorola/models/edge_40_pro">Motorola Edge 40 Pro</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/edge_40">Motorola Edge 40</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/edge_30_ultra">Motorola Edge 30 Ultra</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/edge_30_fusion">Motorola Edge 30 Fusion</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/g73_5g">Moto G73 5G</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/g53_5g">Moto G53 5G</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/g23">Moto G23</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/g13">Moto G13</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/e22">Moto E22</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/e32">Moto E32</Link></li>
+
+                </ul>
+              </li>
               <li><Link to="/categories/fundas/vertodo">Ver Todo</Link></li>
             </ul>
           </li>
 
+          {/* Vidrios */}
           <li className="dropdown">
             <Link to="#">Vidrios</Link>
             <ul className="dropdown-content">
-              <li><Link to="/categories/vidrios/iphone/modelos">iPhone</Link></li>
-              <li><Link to="/categories/vidrios/samsung/modelos">Samsung</Link></li>
-              <li><Link to="/categories/vidrios/motorola/modelos">Motorola</Link></li>
+              <li className="sub-dropdown">
+                <Link to="#">iPhone</Link>
+                <ul className="sub-dropdown-content">
+                <li><Link to="/categories/fundas/iphone/models/15_pro_max">iPhone 15 Pro Max</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/15_pro">iPhone 15 Pro</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/15_plus">iPhone 15 Plus</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/15">iPhone 15</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/14_pro_max">iPhone 14 Pro Max</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/14_pro">iPhone 14 Pro</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/14_plus">iPhone 14 Plus</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/14">iPhone 14</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/13_pro_max">iPhone 13 Pro Max</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/13_pro">iPhone 13 Pro</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/13_mini">iPhone 13 Mini</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/13">iPhone 13</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/se_3">iPhone SE (3ª generación)</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/12_pro_max">iPhone 12 Pro Max</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/12_pro">iPhone 12 Pro</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/12">iPhone 12</Link></li>
+                <li><Link to="/categories/fundas/iphone/models/11">iPhone 11</Link></li>
+                </ul>
+              </li>
+              <li className="sub-dropdown">
+                <Link to="#">Samsung</Link>
+                <ul className="sub-dropdown-content">
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s23_ultra">Galaxy S23 Ultra</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s23_plus">Galaxy S23 Plus</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s23">Galaxy S23</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_z_fold_5">Galaxy Z Fold 5</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_z_flip_5">Galaxy Z Flip 5</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s22_ultra">Galaxy S22 Ultra</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s22_plus">Galaxy S22 Plus</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_s22">Galaxy S22</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_a54_5g">Galaxy A54 5G</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_a34_5g">Galaxy A34 5G</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_a14_5g">Galaxy A14 5G</Link></li>
+                <li><Link to="/categories/vidrios/samsung/models/galaxy_a04s">Galaxy A04S</Link></li>
+                </ul>
+              </li>
+              <li className="sub-dropdown">
+                <Link to="#">Motorola</Link>
+                <ul className="sub-dropdown-content">
+                <li><Link to="/categories/fundas/motorola/models/edge_40_pro">Motorola Edge 40 Pro</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/edge_40">Motorola Edge 40</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/edge_30_ultra">Motorola Edge 30 Ultra</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/edge_30_fusion">Motorola Edge 30 Fusion</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/g73_5g">Moto G73 5G</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/g53_5g">Moto G53 5G</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/g23">Moto G23</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/g13">Moto G13</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/e22">Moto E22</Link></li>
+                <li><Link to="/categories/fundas/motorola/models/e32">Moto E32</Link></li>
+                </ul>
+              </li>
               <li><Link to="/categories/vidrios/vertodo">Ver Todo</Link></li>
             </ul>
           </li>
 
+          {/* Cargadores */}
           <li className="dropdown">
             <Link to="#">Cargadores</Link>
             <ul className="dropdown-content">
-              <li><Link to="/categories/cargadores/iphone/modelos">iPhone</Link></li>
-              <li><Link to="/categories/cargadores/samsung/modelos">Samsung</Link></li>
-              <li><Link to="/categories/cargadores/motorola/modelos">Motorola</Link></li>
+              <li className="sub-dropdown">
+                <Link to="#">iPhone</Link>
+                <ul className="sub-dropdown-content">
+                </ul>
+              </li>
+              <li className="sub-dropdown">
+                <Link to="#">Samsung</Link>
+                <ul className="sub-dropdown-content">
+                </ul>
+              </li>
+              <li className="sub-dropdown">
+                <Link to="#">Motorola</Link>
+                <ul className="sub-dropdown-content">
+                </ul>
+              </li>
               <li><Link to="/categories/cargadores/vertodo">Ver Todo</Link></li>
             </ul>
           </li>
 
+          {/* Auriculares */}
           <li className="dropdown">
             <Link to="#">Auriculares</Link>
             <ul className="dropdown-content">
-              <li><Link to="/categories/auriculares/iphone/modelos">iPhone</Link></li>
-              <li><Link to="/categories/auriculares/samsung/modelos">Samsung</Link></li>
-              <li><Link to="/categories/auriculares/motorola/modelos">Motorola</Link></li>
+              <li className="sub-dropdown">
+                <Link to="#">iPhone</Link>
+                <ul className="sub-dropdown-content">
+                </ul>
+              </li>
+              <li className="sub-dropdown">
+                <Link to="#">Samsung</Link>
+                <ul className="sub-dropdown-content">
+                </ul>
+              </li>
+              <li className="sub-dropdown">
+                <Link to="#">Motorola</Link>
+                <ul className="sub-dropdown-content">
+                </ul>
+              </li>
               <li><Link to="/categories/auriculares/vertodo">Ver Todo</Link></li>
             </ul>
           </li>
