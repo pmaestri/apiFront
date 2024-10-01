@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
 .navbar {
   font-family: "Fredoka", sans-serif;
   background-color: #fdeaf2; /* Color de fondo de la barra de navegación */
@@ -8,15 +9,33 @@
   padding: 10px 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-/* Nueva clase para agrupar logo y categorías */
+
 .logo-and-links { 
   display: flex;
   align-items: center; /* Alinear verticalmente el logo y las categorías */
 }
-.navbar-logo {
-  color: #FFFFFF; /* Color del logo */
-  font-size: 24px;
+
+.catalogo {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.catalogo a {
+  color: #bd6f95;
+  font-size: 16px;
+  text-decoration: none;
+  margin-right: 10px;
+  font-weight: bold;  /* Siempre en negrita */
+}
+
+.catalogo a:hover {
   font-weight: bold;
+}
+
+.divider {
+  color: #fbd5e5; /* Barra sutil de color rosa */
+  font-size: 20px;
 }
 
 .navbar-links {
@@ -48,6 +67,7 @@
   display: flex;
   align-items: center;
 }
+
 .icon-container { /* Contenedor para cada icono */
   margin-left: 35px;
 }
@@ -119,13 +139,31 @@
   font-weight: bold; /* Color al pasar el mouse sobre subcategorías */
 }
 
+/* Modificaciones para el logo en un cuadro rosa */
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fbd5e5; /* Borde rosa */
+  padding: 5px 13px; /* Espaciado dentro del recuadro */
+  border-radius: 8px; /* Bordes redondeados */
+  background-color: #fdeaf2; /* Fondo rosa claro */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  margin-right: 40px; /* Aumentar el margen derecho para separar del Catálogo */
+}
+
+.logo:hover {
+  background-color: #fbd5e5; /* Cambia el fondo al pasar el cursor */
+  border-color: #fbd5e5; /* Cambia el borde al pasar el cursor */
+}
+
 .logo img {
   width: 100px; /* Ajusta el tamaño según sea necesario */
-  height: auto;
+  height: auto; /* Mantiene la proporción de la imagen */
   cursor: pointer; /* Cambia el cursor al pasar por encima */
-  margin-right: 20px; /* Espaciado entre el logo y las categorías */ /* NUEVO */
 }
-/* sub menús*/
+
+/* Submenús */
 .sub-dropdown-content {
   display: none;
   position: absolute;
@@ -144,4 +182,25 @@
   padding: 10px;
   text-decoration: none;
   display: block;
+}
+
+/* Clase para manejar múltiples columnas */
+.multi-column-menu {
+  column-count: 2; /* Número de columnas por defecto */
+  column-gap: 20px; /* Espaciado entre columnas */
+  max-height: 400px; /* Ajusta según la cantidad de elementos */
+  max-width: 600px; /* Limitar el ancho total a 4 columnas */
+  overflow-y: auto; /* Añade scroll si se excede la altura */
+}
+
+.multi-column-menu li {
+  list-style-type: disc; /* Bullet points personalizados */
+  margin-left: 20px; /* Espaciado del bullet point */
+  break-inside: avoid; /* Evita que los elementos se corten entre columnas */
+}
+
+@media (min-width: 1024px) {
+  .multi-column-menu {
+    column-count: 4; /* Hasta 4 columnas en pantallas grandes */
+  }
 }

@@ -82,60 +82,6 @@
 }
 
 /* Estilos para el detalle del producto */
-.product-detail {
-  position: relative; /* Posicionamiento relativo para el contenido del detalle */
-  background-color: #ffffff; /* Fondo blanco para el detalle */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
-  max-width: 600px; /* Ancho máximo */
-  width: 90%; /* Ancho responsivo */
-}
-
-
-
-.product-detail h2 {
-  font-size: 24px; /* Tamaño de fuente para el nombre del producto */
-  color: #bd6f95; /* Color del título del producto */
-  margin: 10px 0; /* Espaciado */
-}
-
-.product-detail p {
-  font-size: 16px; /* Tamaño de fuente para la descripción y precio */
-  color: #c8799f; /* Color del texto */
-  text-align: center; /* Centrar el texto */
-  margin: 5px 0; /* Espaciado entre párrafos */
-}
-
-.product-detail .product-price {
-  font-size: 20px; /* Tamaño de fuente para el precio */
-  color: #bd6f95; /* Color para el precio */
-  font-weight: bold; /* Hacer el precio más prominente */
-  margin: 10px 0; /* Espaciado */
-}
-
-.product-detail .original-price {
-  font-size: 14px; /* Tamaño de fuente para el precio original */
-  color: #a5a5a5; /* Color gris para el precio original */
-  text-decoration: line-through; /* Tachar el precio original */
-  margin-left: 5px;
-}
-
-.product-detail button {
-  margin-top: 20px; /* Espaciado arriba del botón */
-  padding: 10px 20px; /* Espaciado interno del botón */
-  font-size: 16px; /* Tamaño de fuente para el botón */
-  color: #ffffff; /* Color del texto en el botón */
-  background-color: #bd6f95; /* Color del botón de compra */
-  border: none; /* Sin borde */
-  border-radius: 5px; /* Bordes redondeados para el botón */
-  cursor: pointer; /* Cambia el cursor al pasar el mouse */
-  transition: background-color 0.3s; /* Efecto de transición al cambiar de color */
-}
-
-.product-detail button:hover {
-  background-color: #a75b7f; /* Color más oscuro al pasar el mouse */
-}
 .product-detail-overlay {
   position: fixed; /* Fija el overlay a la pantalla */
   top: 0;
@@ -149,29 +95,117 @@
   z-index: 1000; /* Asegura que el overlay esté por encima de otros elementos */
 }
 
+.product-detail-container {
+  position: relative;
+  display: flex;
+  background-color: #ffffff; /* Fondo blanco */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
+  max-width: 800px; /* Ajuste según el diseño */
+  width: 90%;
+}
+
+.product-detail-content {
+  display: flex;
+}
+
+.product-image {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.product-image img {
+  width: 100%; /* Imagen a la izquierda */
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-info h2 {
+  font-size: 24px;
+  color: #bd6f95;
+  margin: 10px 0;
+}
+
+.product-info p {
+  font-size: 16px;
+  color: #c8799f;
+  margin: 5px 0;
+}
+
+.product-price {
+  font-size: 24px;
+  color: #bd6f95;
+  font-weight: bold;
+}
+
+.original-price {
+  font-size: 14px;
+  color: #a5a5a5;
+  text-decoration: line-through;
+}
+
+/* Botón para agregar al carrito */
+.add-to-cart-btn {
+  background-color: #bd6f95;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #a75b7f;
+}
+
+.cart-icon {
+  margin-right: 10px; /* Separación entre el ícono y el texto */
+}
 
 .close-icon {
-  position: absolute; /* Posicionamiento absoluto para el icono de cerrar */
-  top: 5px; /* Ajusta el espacio desde la parte superior */
-  right: 10px; /* Ajusta el espacio desde la derecha */
-  background: none; /* Sin fondo */
-  border: none; /* Sin borde */
-  cursor: pointer; /* Cambia el cursor al pasar el mouse */
-  color: #bd6f95; /* Color del icono */
-  font-size: 24px; /* Tamaño del icono */
-  z-index: 1; /* Asegura que el icono esté por encima del contenido */
+  position: absolute;
+  top: 15px; /* Aumenta el espacio superior */
+  right: 15px; /* Aumenta el espacio derecho */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #bd6f95;
+  font-size: 24px;
 }
 
-.product-image-container {
-  display: flex; /* Usamos flex para centrar la imagen */
-  justify-content: center; /* Centra la imagen horizontalmente */
-  margin-top: 40px; /* Añade un margen superior para separar del icono de cerrar */
+
+/* Contador de cantidad */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
 }
 
-.product-detail img {
-  width: 80%; /* Ajusta el ancho de la imagen al 80% del contenedor */
-  height: auto; /* Mantiene la proporción de la imagen */
-  border-radius: 8px; /* Bordes redondeados */
-  margin-bottom: 25px; /* Espacio inferior para separar de otros elementos */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para mayor profundidad */
+.quantity-selector button {
+  background-color: #bd6f95;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.quantity-selector span {
+  margin: 0 10px;
+  font-size: 18px;
 }
