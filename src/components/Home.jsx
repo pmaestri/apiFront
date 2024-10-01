@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'; // <--- LÍNEA MODIFICADA
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
@@ -37,6 +37,46 @@ const Home = () => {
     autoplaySpeed: 3000,
   };
 
+  const [featuredProducts] = useState([
+    {
+      id: 1,
+      name: "Funda de Silicona para Samsung",
+      description: "Protección suave y flexible para tu Samsung.",
+      price: "$5.000",
+      img: "https://via.placeholder.com/600x400",
+    },
+    {
+      id: 2,
+      name: "Cargador Inalámbrico Universal",
+      description: "Carga rápida y segura para cualquier dispositivo.",
+      price: "$9.500",
+      img: "https://via.placeholder.com/600x400",
+    },
+    {
+      id: 3,
+      name: "Funda Antigolpes para iPhone",
+      description: "Resistencia máxima a golpes y caídas.",
+      price: "$6.000",
+      discount: "-15% OFF",
+      originalPrice: "$7.000",
+      img: "https://via.placeholder.com/600x400",
+    },
+    {
+      id: 4,
+      name: "Auriculares Bluetooth Inalámbricos",
+      description: "Conectividad Bluetooth y diseño ergonómico.",
+      price: "$12.000",
+      img: "https://via.placeholder.com/600x400",
+    },
+    {
+      id: 5,
+      name: "Protector de Pantalla 3D",
+      description: "Protección total para la pantalla curva de tu móvil.",
+      price: "$3.900",
+      img: "https://via.placeholder.com/600x400",
+    },
+  ]);
+
   return (
     <div className="home">
       <div className="intro-text">
@@ -74,6 +114,28 @@ const Home = () => {
           <FontAwesomeIcon icon={faUndoAlt} size="2x" style={{ marginBottom: '10px' }} />
           <h3>Devoluciones</h3>
           <p>Devolución gratis dentro de los 30 días</p>
+        </div>
+      </div>
+
+      {/* Productos Destacados */} {/* --- SECCIÓN AGREGADA */}
+      <div className="featured-products">
+        <h2>Productos Destacados</h2>
+        <div className="product-grid">
+          {featuredProducts.map((product) => (
+            <div key={product.id} className="product-card">
+              <img src={product.img} alt={product.name} />
+              <h3>{product.name}</h3>
+              <p>{product.description}</p>
+              <p className="product-price">
+                {product.discount && <span className="product-discount">{product.discount}</span>}
+                {product.price}
+                {product.originalPrice && (
+                  <span className="original-price">{product.originalPrice}</span>
+                )}
+              </p>
+              <button>Comprar</button>
+            </div>
+          ))}
         </div>
       </div>
     </div>

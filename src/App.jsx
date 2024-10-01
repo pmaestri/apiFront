@@ -17,6 +17,7 @@ import VidriosVerTodo from './components/VidriosVerTodo'; // Nueva importación
 import Cart from './components/Cart'; 
 import Login from './components/LogIn'; 
 import Footer from './components/Footer'; // Importar el componente Footer
+import ProductDetail from './components/ProductDetail'; // Importar el componente de detalle del producto
 
 function App() {
   return (
@@ -76,7 +77,10 @@ function App() {
         <Route path="/categories/samsung" element={<Subcategory category="Samsung" />} />
         <Route path="/categories/motorola" element={<Subcategory category="Motorola" />} />
 
-        {/* NUEVO: Rutas para carrito e inicio de sesión */}
+        {/* Ruta para detalles de producto */}
+        <Route path="/product/:id" element={<ProductDetail />} /> {/* Agrega esta ruta */}
+
+        {/* Rutas para carrito e inicio de sesión */}
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} /> 
       </Routes>

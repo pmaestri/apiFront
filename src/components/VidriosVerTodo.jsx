@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './VidriosVerTodo.css';
+import { FaTimes } from 'react-icons/fa';
 
 const VidriosVerTodo = () => {
   const [featuredProducts] = useState([
@@ -42,12 +43,22 @@ const VidriosVerTodo = () => {
     }
   ]);
 
+  const [selectedProduct, setSelectedProduct] = useState(null); // Estado para el producto seleccionado
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product); // Establece el producto seleccionado
+  };
+
+  const handleCloseDetail = () => {
+    setSelectedProduct(null); // Cierra el detalle del producto
+  };
+
   return (
     <div className="vidrios-vertodo">
       <h1>Vidrios Ver Todo</h1>
       <div className="product-grid">
         {featuredProducts.map((product) => (
-          <div key={product.id} className="product-card">
+          <div key={product.id} className="product-card" onClick={() => handleProductClick(product)}>
             <img src={product.img} alt={product.name} />
             <h3>{product.name}</h3>
             <p>{product.description}</p>
@@ -62,6 +73,36 @@ const VidriosVerTodo = () => {
           </div>
         ))}
       </div>
+
+      {/* Detalle del producto seleccionado */}
+      {selectedProduct && (
+        <div className="product-detail-overlay">
+          <div className="product-detail">
+            {/* Botón para cerrar el detalle */}
+            <button className="close-icon" onClick={handleCloseDetail} aria-label="Cerrar detalle"> 
+              <FaTimes /> {/* Icono de cerrar */}
+            </button>
+
+            {/* Contenedor de la imagen del producto */}
+            <div className="product-image-container">
+              <img src={selectedProduct.img} alt={selectedProduct.name} />
+            </div>
+            
+            {/* Información del producto */}
+            <h2>{selectedProduct.name}</h2>
+            <p>{selectedProduct.description}</p>
+            <p className="product-price">{selectedProduct.price}</p>
+
+            {/* Precio original si está disponible */}
+            {selectedProduct.originalPrice && (
+              <p className="original-price">Precio original: {selectedProduct.originalPrice}</p>
+            )}
+
+            {/* Botón para agregar al carrito */}
+            <button>Agregar al Carrito</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
