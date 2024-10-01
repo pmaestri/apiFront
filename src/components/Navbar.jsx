@@ -30,40 +30,40 @@ const Navbar = () => {
           <li className="dropdown">
             <Link to="#">Fundas</Link>
             <ul className="dropdown-content">
-              <li><Link to="/categories/fundas/iphone/models">iPhone</Link></li>
-              <li><Link to="/categories/fundas/samsung/models">Samsung</Link></li>
-              <li><Link to="/categories/fundas/motorola/models">Motorola</Link></li>
-              <li><Link to="/categories/fundas/generico">Genérico</Link></li>
+              <li><Link to="/categories/fundas/iphone/modelos">iPhone</Link></li>
+              <li><Link to="/categories/fundas/samsung/modelos">Samsung</Link></li>
+              <li><Link to="/categories/fundas/motorola/modelos">Motorola</Link></li>
+              <li><Link to="/categories/fundas/vertodo">Ver Todo</Link></li>
             </ul>
           </li>
 
           <li className="dropdown">
             <Link to="#">Vidrios</Link>
             <ul className="dropdown-content">
-              <li><Link to="/categories/vidrios/iphone/models">iPhone</Link></li>
-              <li><Link to="/categories/vidrios/samsung/models">Samsung</Link></li>
-              <li><Link to="/categories/vidrios/motorola/models">Motorola</Link></li>
-              <li><Link to="/categories/vidrios/generico">Genérico</Link></li>
+              <li><Link to="/categories/vidrios/iphone/modelos">iPhone</Link></li>
+              <li><Link to="/categories/vidrios/samsung/modelos">Samsung</Link></li>
+              <li><Link to="/categories/vidrios/motorola/modelos">Motorola</Link></li>
+              <li><Link to="/categories/vidrios/vertodo">Ver Todo</Link></li>
             </ul>
           </li>
 
           <li className="dropdown">
             <Link to="#">Cargadores</Link>
             <ul className="dropdown-content">
-              <li><Link to="/categories/cargadores/iphone/models">iPhone</Link></li>
-              <li><Link to="/categories/cargadores/samsung/models">Samsung</Link></li>
-              <li><Link to="/categories/cargadores/motorola/models">Motorola</Link></li>
-              <li><Link to="/categories/cargadores/generico">Genérico</Link></li>
+              <li><Link to="/categories/cargadores/iphone/modelos">iPhone</Link></li>
+              <li><Link to="/categories/cargadores/samsung/modelos">Samsung</Link></li>
+              <li><Link to="/categories/cargadores/motorola/modelos">Motorola</Link></li>
+              <li><Link to="/categories/cargadores/vertodo">Ver Todo</Link></li>
             </ul>
           </li>
 
           <li className="dropdown">
             <Link to="#">Auriculares</Link>
             <ul className="dropdown-content">
-              <li><Link to="/categories/auriculares/iphone/models">iPhone</Link></li>
-              <li><Link to="/categories/auriculares/samsung/models">Samsung</Link></li>
-              <li><Link to="/categories/auriculares/motorola/models">Motorola</Link></li>
-              <li><Link to="/categories/auriculares/generico">Genérico</Link></li>
+              <li><Link to="/categories/auriculares/iphone/modelos">iPhone</Link></li>
+              <li><Link to="/categories/auriculares/samsung/modelos">Samsung</Link></li>
+              <li><Link to="/categories/auriculares/motorola/modelos">Motorola</Link></li>
+              <li><Link to="/categories/auriculares/vertodo">Ver Todo</Link></li>
             </ul>
           </li>
         </ul>

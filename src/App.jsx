@@ -10,6 +10,8 @@ import SamsungModels from './components/SamsungModel';
 import SamsungModelDetail from './components/SamsungModelDetail'; 
 import MotorolaModels from './components/MotorolaModel'; 
 import MotorolaModelDetail from './components/MotorolaModelDetail'; 
+import FundasVerTodo from './components/FundasVerTodo'; // Asegúrate de que esta es la ruta correcta para tu componente
+import VidriosVerTodo from './components/VidriosVerTodo'; // Nueva importación
 
 // NUEVO: Importar componentes de Carrito e Inicio de Sesión
 import Cart from './components/Cart'; 
@@ -27,9 +29,15 @@ function App() {
         <Route path="/categories/fundas/iphone/models" element={<IphoneModels />} />
         <Route path="/categories/fundas/iphone/models/:model" element={<IphoneModelDetail />} />
 
+        {/* Nueva ruta para Fundas Ver Todo */}
+        <Route path="/categories/fundas/vertodo" element={<FundasVerTodo />} /> {/* Aquí agregamos la ruta */}
+
         {/* Rutas para vidrios */}
         <Route path="/categories/vidrios/iphone/models" element={<IphoneModels />} />
         <Route path="/categories/vidrios/iphone/models/:model" element={<IphoneModelDetail />} />
+
+        {/* Nueva ruta para Vidrios Ver Todo */}
+        <Route path="/categories/vidrios/vertodo" element={<VidriosVerTodo />} /> {/* Aquí agregamos la ruta */}
 
         {/* Rutas para cargadores */}
         <Route path="/categories/cargadores/iphone/models" element={<IphoneModels />} />

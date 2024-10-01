@@ -1,7 +1,5 @@
 import React from 'react';
 import './Home.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTruck, faTag, faUndo } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -16,9 +14,15 @@ const Home = () => {
 
   const images = [imagen1, imagen2, imagen3];
   const imageDescriptions = [
-    "Descripción de la imagen 1",
-    "Descripción de la imagen 2",
-    "Descripción de la imagen 3",
+    "Explorá nuestras fundas exclusivas",
+    "Descubre los auriculares más modernos",
+    "Fundas premium para tu iPhone",
+  ];
+
+  const buttons = [
+    { text: "Explorar Fundas", action: () => navigate('/categories/fundas/iphone/models') },
+    { text: "Ver Auriculares", action: () => navigate('/categories/auriculares') },
+    { text: "Ver Más", action: () => navigate('/categories/fundas/iphone') },
   ];
 
   const settings = {
@@ -33,32 +37,38 @@ const Home = () => {
 
   return (
     <div className="home">
-      <h1>Bienvenido a Top Cases!</h1>
-      <p>Explora nuestra selección de accesorios para celulares</p>
+      <div className="intro-text">
+        <h1>¡Bienvenido a Top Cases!</h1>
+        <p>Accesorios para celulares con estilo y protección</p>
+      </div>
 
-      
-      {/* Componente Slider con configuraciones */}
       <Slider {...settings} ref={sliderRef} className="slider-container">
         {images.map((image, index) => (
           <div key={index} className="image-container">
             <img src={image} alt={`Slide ${index + 1}`} className="slider-image" />
+            <div className="overlay">
+              <h2>{imageDescriptions[index]}</h2>
+              <button onClick={buttons[index].action}>
+                {buttons[index].text}
+              </button>
+            </div>
           </div>
         ))}
       </Slider>
 
-      {/* Íconos de servicios */}
+      {/* Servicios destacados */}
       <div className="services">
         <div className="service-item">
-          <FontAwesomeIcon icon={faTruck} size="2x" />
-          <p>Envíos gratis a todo el país para compras de $25000 o más</p>
+          <h3>Envío Gratis</h3>
+          <p>Envío gratis a todo el país para compras a partir de $25.000</p>
         </div>
         <div className="service-item">
-          <FontAwesomeIcon icon={faTag} size="2x" />
-          <p>10% de descuento con efectivo y transferencias</p>
+          <h3>Descuentos</h3>
+          <p>10% de descuento con efectivo y transferencia</p>
         </div>
         <div className="service-item">
-          <FontAwesomeIcon icon={faUndo} size="2x" />
-          <p>Devoluciones gratis dentro de los 30 días</p>
+          <h3>Devoluciones</h3>
+          <p>Devolución gratis dentro de los 30 días</p>
         </div>
       </div>
     </div>
