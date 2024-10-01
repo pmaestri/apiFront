@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShippingFast, faTag, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
 import imagen1 from '../assets/images/imagen1.png';
 import imagen2 from '../assets/images/imagen2.png';
 import imagen3 from '../assets/images/imagen3.png';
@@ -20,9 +22,9 @@ const Home = () => {
   ];
 
   const buttons = [
-    { text: "Explorar Fundas", action: () => navigate('/categories/fundas/iphone/models') },
-    { text: "Ver Auriculares", action: () => navigate('/categories/auriculares') },
-    { text: "Ver Más", action: () => navigate('/categories/fundas/iphone') },
+    { text: "Explorar Fundas", action: () => navigate('/categories/fundas/vertodo') },
+    { text: "Ver Auriculares", action: () => navigate('/categories/auriculares/vertodo') },
+    { text: "Ver Más", action: () => navigate('/categories/fundas/iphone/modelos') },
   ];
 
   const settings = {
@@ -59,14 +61,17 @@ const Home = () => {
       {/* Servicios destacados */}
       <div className="services">
         <div className="service-item">
+          <FontAwesomeIcon icon={faShippingFast} size="2x" style={{ marginBottom: '10px' }} />
           <h3>Envío Gratis</h3>
           <p>Envío gratis a todo el país para compras a partir de $25.000</p>
         </div>
         <div className="service-item">
+          <FontAwesomeIcon icon={faTag} size="2x" style={{ marginBottom: '10px' }} />
           <h3>Descuentos</h3>
-          <p>10% de descuento con efectivo y transferencia</p>
+          <p>10% de descuento con efectivo y transferencias</p>
         </div>
         <div className="service-item">
+          <FontAwesomeIcon icon={faUndoAlt} size="2x" style={{ marginBottom: '10px' }} />
           <h3>Devoluciones</h3>
           <p>Devolución gratis dentro de los 30 días</p>
         </div>

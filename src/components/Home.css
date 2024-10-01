@@ -91,36 +91,38 @@ p {
 }
 
 /* Servicios */
+/* Servicios */
 .services {
   display: flex;
   justify-content: space-around;
-  margin-top: 40px;
+  margin-top: 50px; /* Aumenta el margen superior para separarlo del slider */
 }
+
 
 .service-item {
   text-align: center;
-  max-width: 200px;
+  max-width: 190px; /* Reducimos el ancho máximo */
   color: #bd6f95; /* Color principal para el texto */
   background-color: #fdeaf2; /* Fondo claro */
   border: 2px solid #bd6f95; /* Borde con color principal */
-  padding: 15px;
-  border-radius: 10px;
+  padding: 10px; /* Reducimos el padding */
+  border-radius: 8px; /* Ajustamos la curvatura */
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 }
 
 .service-item h3 {
-  font-size: 1.3em; /* Tamaño más grande para el título */
+  font-size: 1.1em; /* Reducimos el tamaño del título */
   color: #d484aa; /* Color secundario */
 }
 
 .service-item p {
-  font-size: 1.1em; /* Agrandamos el texto descriptivo */
+  font-size: 0.9em; /* Reducimos el tamaño del texto descriptivo */
   color: #c8799f; /* Color del texto descriptivo */
 }
 
 .service-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px); /* Reducción de movimiento al hacer hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Ajuste del efecto de sombra */
 }
 
 /* Dots (tres puntitos debajo del slider) */
