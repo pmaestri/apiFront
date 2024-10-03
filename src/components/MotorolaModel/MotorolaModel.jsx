@@ -1,7 +1,6 @@
-// src/components/MotorolaModels.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import "./Model.css";
+import "../Model/Model.css";
 
 const MotorolaModels = () => {
   const models = [

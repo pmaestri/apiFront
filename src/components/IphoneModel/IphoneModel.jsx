@@ -3,7 +3,7 @@
 // export default IphoneModels;
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Model.css'; // Asegúrate de importar el CSS aquí
+import "../Model/Model.css";// Asegúrate de importar el CSS aquí
 
 const IphoneModels = () => {
   const models = [

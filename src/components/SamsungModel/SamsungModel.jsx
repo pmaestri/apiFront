@@ -1,7 +1,7 @@
 // src/components/SamsungModels.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import "./Model.css";
+import "../Model/Model.css";
 
 const SamsungModels = () => {
   const models = [

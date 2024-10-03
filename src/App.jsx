@@ -93,23 +93,23 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ProductList from "./components/ProductList";
+import ProductList from "./components/ProductList/ProductList.jsx";
 import Subcategory from './components/Subcategory';  
-import Navbar from './components/Navbar';           
-import Home from './components/Home';  
-import IphoneModels from './components/IphoneModel'; 
-import IphoneModelDetail from './components/IphoneModelDetail'; 
-import SamsungModels from './components/SamsungModel'; 
-import SamsungModelDetail from './components/SamsungModelDetail'; 
-import MotorolaModels from './components/MotorolaModel'; 
-import MotorolaModelDetail from './components/MotorolaModelDetail'; 
-import FundasVerTodo from './components/FundasVerTodo'; 
-import VidriosVerTodo from './components/VidriosVerTodo'; 
-import Cart from './components/Cart'; 
-import Login from './components/LogIn'; 
-import Register from './components/Register'; // Importar el componente de registro
-import Footer from './components/Footer'; 
-import ProductDetail from './components/ProductDetail'; 
+import Navbar from './components/Navbar/Navbar.jsx';           
+import Home from './components/Home/Home.jsx';  
+import IphoneModels from './components/IphoneModel/IphoneModel.jsx'; 
+import IphoneModelDetail from './components/IphoneModelDetail/IphoneModelDetail.jsx'; 
+import SamsungModels from './components/SamsungModel/SamsungModel.jsx'; 
+import SamsungModelDetail from './components/SamsungModelDetail/SamsungModelDetail.jsx'; 
+import MotorolaModels from './components/MotorolaModel/MotorolaModel.jsx'; 
+import MotorolaModelDetail from './components/MotorolaModelDetail/MotorolaModelDetail.jsx'; 
+import FundasVerTodo from './components/CoversSeeAll/CoversSeeAll.jsx'; 
+import VidriosVerTodo from './components/GlassesSeeAll/GlassesSeeAll.jsx'; 
+import Cart from './components/Cart/Cart.jsx'; 
+import Login from './components/Auth/LogIn2.jsx'; 
+import Register from './components/Auth/Register.jsx'; // Importar el componente de registro
+import Footer from './components/Footer/Footer.jsx'; 
+import ProductDetail from './components/ProductDetail/ProductDetail.jsx'; 
 
 function App() {
   return (

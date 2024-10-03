@@ -28,7 +28,7 @@ import {
   softDeleteProduct,
   filterProductsByPrice,
   addImagesToProduct, // Asegúrate de importar la función para agregar imágenes
-} from '../api'; // Asegúrate de importar las funciones necesarias
+} from '../../api/ProductCatalogApi'; // Asegúrate de importar las funciones necesarias
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);

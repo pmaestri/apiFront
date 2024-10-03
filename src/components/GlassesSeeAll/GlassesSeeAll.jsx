@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './VidriosVerTodo.css';
+import './GlassesSeeAll.css';
 import { FaTimes, FaShoppingCart } from 'react-icons/fa'; // Importamos el icono del carrito
 
 const VidriosVerTodo = () => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './FundasVerTodo.css';
+import './CoversSeeAll.css';
 
 const FundasVerTodo = () => {
   const [featuredProducts] = useState([

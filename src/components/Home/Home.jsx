@@ -6,9 +6,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShippingFast, faTag, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
-import imagen1 from '../assets/images/imagen1.png';
-import imagen2 from '../assets/images/imagen2.png';
-import imagen3 from '../assets/images/imagen3.png';
+import imagen1 from '../../assets/images/imagen1.png';
+import imagen2 from '../../assets/images/imagen2.png';
+import imagen3 from '../../assets/images/imagen3.png';
 
 const Home = () => {
   const navigate = useNavigate();

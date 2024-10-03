@@ -5,7 +5,7 @@ const api = axios.create({
 });
 
 // Función para registrar un admin
-export const registrarAdmin = async (request) => {
+export const registerAdmin = async (request) => {
   try {
     const response = await api.post('/register/admin', request);
     return response.data;
@@ -15,7 +15,7 @@ export const registrarAdmin = async (request) => {
 };
 
 // Función para registrar un usuario
-export const registrarUsuario = async (request) => {
+export const registerUser = async (request) => {
   try {
     const response = await api.post('/register/usuario', request);
     return response.data;
@@ -25,7 +25,7 @@ export const registrarUsuario = async (request) => {
 };
 
 // Función para autenticar un usuario
-export const autenticarUsuario = async (request) => {
+export const authenticateUser = async (request) => {
   try {
     const response = await api.post('/authenticate', request);
     return response.data;
