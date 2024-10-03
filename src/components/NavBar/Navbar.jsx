@@ -13,6 +13,7 @@ const Navbar = () => {
   const handleSearch = () => {
     console.log("Buscando:", searchQuery);
   };
+const token = localStorage.getItem('token');
 
   return (
     <nav className="navbar">
@@ -258,6 +259,7 @@ const Navbar = () => {
           <Link to="/login"> {/*  Redirige a la página de inicio de sesión */}
             <FaUser className="nav-icon" title="Iniciar sesión" /> {/*  Icono de inicio de sesión */}
           </Link>
+          
         </div>
       </div>
     </nav>

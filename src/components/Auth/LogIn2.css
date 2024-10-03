@@ -2,7 +2,7 @@
 
 body {
   font-family: "Fredoka", sans-serif; /* Aplicar la fuente a todo el cuerpo */
-  background-color: #fdeaf2; /* Fondo de la página */
+  background-color: #f5f5f5; /* Fondo de la página */
   margin: 0;
   padding: 0;
 }
@@ -18,7 +18,7 @@ body {
 .alternative-login h3 {
     color: #bd6f95; /* Color del texto del encabezado */
     margin-bottom: 20px;
-    font-size: 28px; /* Aumentar el tamaño de la fuente */
+    font-size: 40px; /* Aumentar el tamaño de la fuente */
     font-weight: 700; /* Opcional: Hacer el texto más grueso */
   }
   
@@ -31,7 +31,7 @@ body {
   border-radius: 10px; /* Bordes redondeados */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
   width: 400px; /* Ancho del formulario */
-  height: 280px;
+  height: 350px;
 }
 
 .alternative-login label {
@@ -43,14 +43,16 @@ body {
 
   .alternative-login input {
     padding: 15px;
-    margin: 0 0 40px 15px; /* Margen izquierdo agregado y margen inferior */
+    margin: 0 0 40px 10px; /* Margen izquierdo agregado y margen inferior */
     border: 1px solid #bd6f95; /* Borde rosa */
     border-radius: 8px; /* Bordes redondeados */
     outline: none; /* Sin contorno */
     transition: border-color 0.3s ease; /* Transición suave del borde */
   }
   
-
+  .alternative-login input:first-of-type {
+    margin-top: 20px; /* Ajusta este valor según sea necesario para mover el primer input más abajo */
+  }
 .alternative-login input:focus {
   border-color: #bd6f95; /* Borde rosa al enfocar */
 }
@@ -60,10 +62,11 @@ body {
   color: #ffffff; /* Color del texto del botón */
   border: none;
   padding: 12px;
-  margin-top: 30px;
+  margin: 15px 0 10px; /* Ajusta el margen superior e inferior */
   border-radius: 8px; /* Bordes redondeados */
   cursor: pointer;
   transition: background-color 0.3s ease; /* Transición suave de color */
+  font-size: 16px;
 }
 
 .alternative-login button:hover {
@@ -79,11 +82,33 @@ body {
 }
 
 .alternative-login .error-message {
-  background-color: #fbd5e5; /* Fondo suave para mensaje de error */
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
   color: #bd6f95; /* Color del texto del mensaje de error */
+  margin: 10px 0; /* Espacio fijo arriba y abajo */
+  /* Otras propiedades como max-height o overflow para mantenerlo dentro del área */
 }
+
 
 .alternative-login .success-message {
   background-color: #e6f8e0; /* Fondo suave para mensaje de éxito */
   color: #4caf50; /* Color del texto del mensaje de éxito */
 }
+
+.register-button {
+  all: unset; /* Reinicia todos los estilos */
+  color: #bd6f95; /* Color del texto */
+  cursor: pointer; /* Cambiar cursor al pasar sobre el botón */
+  font-weight: 600; /* Estilo de texto */
+  text-align: center; /* Centrar el texto */
+  transition: color 0.3s ease; /* Transición suave del color */
+  margin: 8px 0; /* Reduce el margen superior e inferior */
+}
+
+
+.register-button:hover {
+  color: #fbd5e5; /* Color del texto al pasar el cursor */
+}
+
+

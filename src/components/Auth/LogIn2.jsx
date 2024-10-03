@@ -1,42 +1,22 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authenticateUser } from '../../api/AuthApi'; // Ajusta la ruta según la ubicación de tu archivo
+import { authenticateUser } from '../../api/AuthApi'; 
 import './LogIn2.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [nombreUsuario, setNombreUsuario] = useState('');
+  const [contrasenia, setContrasenia] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
 
-  // Manejador del formulario de inicio de sesión con email y password
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-
-    try {
-      const request = { email, password };
-      const response = await authenticateUser(request);
-      setSuccess('Login successful!');
-      localStorage.setItem('token', response.token);
-      console.log('Login successful:', response);
-      navigate('/');
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  // Manejador para la autenticación con username y password
   const handleLogin = async (e) => {
     e.preventDefault();
+    setErrorMessage(null);
+
     try {
-      const authData = { nombreUsuario: username, contrasenia: password };
+      const authData = { nombreUsuario, contrasenia }; 
       const response = await authenticateUser(authData);
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.access_token);
       console.log('Autenticación exitosa:', response);
       navigate('/');
     } catch (error) {
@@ -45,32 +25,42 @@ const Login = () => {
     }
   };
 
-  return (
+  const handleRegister = () => {
+    navigate('/register'); // Asegúrate de que la ruta '/register' esté configurada
+  };
 
-        <div className="alternative-login">
-          <h3>Iniciar Sesión</h3>
-          <form onSubmit={handleLogin}>
-            <div>
-              <label>Usuario:</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Contraseña:</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit">Iniciar Sesión</button>
-          </form>
+  return (
+    <div className="alternative-login">
+      <h3>Iniciar Sesión</h3>
+      <form onSubmit={handleLogin}>
+        <div>
+          <label>Nombre de Usuario:</label>
+          <input
+            type="text"
+            value={nombreUsuario} 
+            onChange={(e) => setNombreUsuario(e.target.value)} 
+            required
+          />
         </div>
+        <div>
+          <label>Contraseña:</label>
+          <input
+            type="password"
+            value={contrasenia}
+            onChange={(e) => setContrasenia(e.target.value)}
+            required
+          />
+        </div>
+        
+        {/* Contenedor para el mensaje de error con un mínimo de altura */}
+        <div style={{ minHeight: '40px', textAlign: 'center' }}>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+        </div>
+
+        <button type="submit">Iniciar Sesión</button>
+        <span onClick={handleRegister} className="register-button">Registrarse</span>
+      </form>
+    </div>
   );
 };
 

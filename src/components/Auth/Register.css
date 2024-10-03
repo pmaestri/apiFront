@@ -1,0 +1,86 @@
+.registration {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrar verticalmente */
+    align-items: center; /* Centrar horizontalmente */
+    height: 80vh; /* Altura completa de la ventana */
+  }
+  
+  .registration h2 {
+    color: #bd6f95; /* Color del texto del encabezado */
+    margin-bottom: 10px;
+    font-size: 40px; /* Tamaño de la fuente */
+    font-weight: 700; /* Texto más grueso */
+  }
+  
+  .registration form {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff; /* Fondo blanco del formulario */
+    padding: 20px;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    width: 400px; /* Ancho del formulario */
+    height: auto; /* Altura automática */
+  }
+  
+  .registration .message-container {
+    min-height: 15px; /* Reserva espacio para los mensajes */
+    width: 100%; /* Ancho completo para los mensajes */
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    margin-bottom: 10px; /* Espaciado entre el contenedor de mensajes y el formulario */
+  }
+  
+  .registration .error-message,
+  .registration .success-message {
+    text-align: center;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    width: 100%; /* Ancho completo para los mensajes */
+  }
+  
+  .registration .error-message {
+    color: #bd6f95; /* Color del texto del mensaje de error */
+  }
+  
+  .registration .success-message {
+    color: #bd6f95; /* Color del texto del mensaje de éxito */
+  }
+  
+  .registration label {
+    margin: 5px 0; /* Espaciado entre etiquetas y campos */
+    color: #bd6f95; /* Color de las etiquetas */
+    font-size: 16px; /* Tamaño de la fuente de las etiquetas */
+  }
+  
+  .registration input {
+    margin: 10px 0 10px 10px; /* Margen superior, margen inferior y margen izquierdo agregado */
+    padding: 15px;
+    border: 1px solid #bd6f95; /* Borde rosa */
+    border-radius: 8px; /* Bordes redondeados */
+    outline: none; /* Sin contorno */
+    transition: border-color 0.3s ease; /* Transición suave del borde */
+  }
+  
+  .registration input:focus {
+    border-color: #bd6f95; /* Borde rosa al enfocar */
+  }
+  
+  .registration button {
+    background-color: #bd6f95; /* Color de fondo del botón */
+    color: #ffffff; /* Color del texto del botón */
+    border: none;
+    padding: 12px;
+    margin: 15px 0 10px; /* Ajusta el margen superior e inferior */
+    border-radius: 8px; /* Bordes redondeados */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Transición suave de color */
+    font-size: 16px;
+  }
+  
+  .registration button:hover {
+    background-color: #fbd5e5; /* Cambio de color al pasar el cursor */
+  }
+  
