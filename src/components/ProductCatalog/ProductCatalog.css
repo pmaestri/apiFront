@@ -7,6 +7,7 @@
   font-size: 1.8em;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   margin-bottom: 30px;
+  margin-left:10px;
 }
 
 .product-list {
@@ -28,7 +29,6 @@
   height: 300px;
 }
 
-
 .product-item img {
   width: 30%;
   height: auto;
@@ -42,10 +42,12 @@
   margin: 10px 0;
   text-align: center; /* Centramos el título */
 }
+
 .product-info h2 {
   font-size: 34px; 
   color: #bd6f95;
 }
+
 .product-item p {
   color: #a95f80;
   font-size: 0.9em;
@@ -78,4 +80,62 @@
 .product-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+.header-container {
+  display: flex;  /* Usamos flexbox para alinear el contenido */
+  justify-content: space-between; /* Espacio entre el título y el ícono de filtro */
+  align-items: center; /* Centra verticalmente el contenido */
+}
+
+
+.filter-icon {
+  display: flex; /* Usamos flex para alinear el ícono y el texto */
+  align-items: center; /* Centra verticalmente el ícono y el texto */
+  cursor: pointer; /* Cambia el cursor al pasar sobre el ícono */
+  padding: 5px; /* Espacio alrededor del ícono */
+  border: 1px solid #bd6f95; /* Borde alrededor del ícono */
+  border-radius: 5px; /* Bordes redondeados para el ícono */
+  transition: background-color 0.3s ease; /* Transición suave para el fondo */
+  color: #bd6f95;
+  margin-right:10px;
+}
+.filter-icon:hover {
+  background-color: #e6c6d0; /* Color de fondo al pasar el mouse */
+}
+.filter-text {
+  margin-left: 5px; /* Espacio entre el ícono y el texto */
+  color: #bd6f95; /* Color del texto */
+  font-weight: bold; /* Texto en negrita */
+}
+
+.filter-form {
+  display: flex;
+  flex-direction: column;
+  background-color: #fdeaf2; /* Fondo claro para el formulario */
+  padding: 15px;
+  border: 1px solid #bd6f95; /* Borde del formulario */
+  border-radius: 8px;
+  margin-bottom: 20px; /* Espaciado entre el formulario y los productos */
+}
+
+.filter-form input {
+  margin-bottom: 10px; /* Espaciado entre los campos del formulario */
+  padding: 10px;
+  border: 1px solid #bd6f95; /* Borde de los inputs */
+  border-radius: 5px;
+}
+
+.filter-form button {
+  background-color: #bd6f95;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px; 
+}
+
+.filter-form button:hover {
+  background-color: #a35c7a; /* Cambio de color al pasar el mouse */
 }
