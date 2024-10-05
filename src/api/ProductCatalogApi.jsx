@@ -1,126 +1,72 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/products',
+  baseURL: 'http://localhost:8080/api/catalogos',
 });
 
-// Función para establecer el token en las cabeceras de axios
-export const setAuthToken = (token) => {
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete api.defaults.headers.common['Authorization'];
+// Función para obtener todos los catálogos
+export const obtenerCatalogo = async () => {
+  try {
+    const response = await api.get('/');
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error obteniendo el catálogo: ${error.message}`);
   }
 };
 
-// Función para crear un producto
-export const createProduct = async (productData) => {
+// Función para obtener productos disponibles con detalles
+export const obtenerProductosDisponiblesConDetalles = async () => {
   try {
-    const response = await api.post('/create', productData);
+    const response = await api.get('/disponibles');
     return response.data;
   } catch (error) {
-    throw new Error(`Error creating product: ${error.message}`);
+    throw new Error(`Error obteniendo productos disponibles: ${error.message}`);
   }
 };
 
-// Función para agregar imágenes a un producto
-export const addImagesToProduct = async (productId, images) => {
+// Función para agregar un producto a un catálogo
+export const agregarProductoACatalogo = async (productoId) => {
   try {
-    const formData = new FormData();
-    images.forEach((image) => {
-      formData.append('images', image);
-    });
-    const response = await api.post(`/add-images`, formData, {
-      params: { productId },
-    });
-    return response.data;
+    await api.post(`/${productoId}`);
   } catch (error) {
-    throw new Error(`Error adding images: ${error.message}`);
+    throw new Error(`Error agregando producto al catálogo: ${error.message}`);
   }
 };
 
-// Función para eliminar un producto (eliminación suave)
-export const softDeleteProduct = async (productId) => {
+// Función para eliminar un producto de un catálogo
+export const eliminarProductoDelCatalogo = async (productoId) => {
   try {
-    const response = await api.put(`/delete/${productId}`);
-    return response.data;
+    await api.delete(`/${productoId}`);
   } catch (error) {
-    throw new Error(`Error deleting product: ${error.message}`);
+    throw new Error(`Error eliminando producto del catálogo: ${error.message}`);
   }
 };
 
-// Función para actualizar un producto
-export const updateProduct = async (productId, updatedData) => {
+// Función para crear un catálogo
+export const crearCatalogo = async (catalogo) => {
   try {
-    const response = await api.put(`/update/${productId}`, updatedData);
-    return response.data;
+    await api.post('/', catalogo);
   } catch (error) {
-    throw new Error(`Error updating product: ${error.message}`);
+    throw new Error(`Error creando el catálogo: ${error.message}`);
   }
 };
 
-// Función para obtener todos los productos
-export const fetchProductos = async () => {
+// Función para obtener el detalle de un producto
+export const obtenerDetalleProducto = async (productoId) => {
   try {
-    const response = await api.get('/get');
+    const response = await api.get(`/${productoId}`);
     return response.data;
   } catch (error) {
-    throw new Error(`Error fetching products: ${error.message}`);
+    throw new Error(`Error obteniendo el detalle del producto: ${error.message}`);
   }
 };
 
-// Función para obtener un producto por ID
-export const fetchProductById = async (productId) => {
+// Función para filtrar productos
+export const filtrarProductos = async (filtros) => {
   try {
-    const response = await api.get(`/get/${productId}`);
+    const response = await api.get('/filtrar', { params: filtros });
     return response.data;
   } catch (error) {
-    throw new Error(`Error fetching product by ID: ${error.message}`);
-  }
-};
-
-// Función para obtener productos por categoría
-export const fetchProductsByCategory = async (categoryId) => {
-  try {
-    const response = await api.get(`/get/cat/${categoryId}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error fetching products by category: ${error.message}`);
-  }
-};
-
-// Función para filtrar productos por precio
-export const filterProductsByPrice = async (minPrice, maxPrice) => {
-  try {
-    const response = await api.get('/get/filter', {
-      params: { minPrice, maxPrice },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error filtering products by price: ${error.message}`);
-  }
-};
-
-// Función para eliminar un tag de un producto
-export const removeTagFromProduct = async (productId, tag) => {
-  try {
-    const response = await api.delete(`/${productId}/removeTag`, {
-      params: { tag },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error removing tag from product: ${error.message}`);
-  }
-};
-
-// Función para eliminar una imagen de un producto
-export const removeImageFromProduct = async (productId, imageId) => {
-  try {
-    const response = await api.delete(`/${productId}/removeImage`, {
-      params: { imageId },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error removing image from product: ${error.message}`);
+    throw new Error(`Error filtrando productos: ${error.message}`);
   }
 };

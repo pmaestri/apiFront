@@ -24,10 +24,9 @@ const token = localStorage.getItem('token');
           </Link>
         </div>
 
-        {/* Aquí agregamos el ícono de catálogo y la barra */}
+        {/* Aquí agregamos el ícono de catálogo*/}
         <div className="catalogo">
-          <Link to="/vertodocatalogo">Catálogo</Link>
-          <span className="divider">|</span>  {/* Barra sutil */}
+          <Link to="/ProductCatalog">Catálogo</Link>
         </div>
 
         <ul className="navbar-links">

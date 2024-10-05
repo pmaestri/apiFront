@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import ProductList from "./components/ProductList/ProductList.jsx";
+//import ProductList from "./components/ProductList/ProductList.jsx";
 import Subcategory from './components/Subcategory';  
-import Navbar from './components/Navbar/Navbar.jsx';           
+import Navbar from './components/NavBar/Navbar.jsx';           
 import Home from './components/Home/Home.jsx';  
 import IphoneModels from './components/IphoneModel/IphoneModel.jsx'; 
 import IphoneModelDetail from './components/IphoneModelDetail/IphoneModelDetail.jsx'; 
@@ -14,9 +14,10 @@ import FundasVerTodo from './components/CoversSeeAll/CoversSeeAll.jsx';
 import VidriosVerTodo from './components/GlassesSeeAll/GlassesSeeAll.jsx'; 
 import Cart from './components/Cart/Cart.jsx'; 
 import Login from './components/Auth/LogIn2.jsx'; 
-import Register from './components/Auth/Register.jsx'; // Importar el componente de registro
+import Register from './components/Auth/Register.jsx'; 
 import Footer from './components/Footer/Footer.jsx'; 
 import ProductDetail from './components/ProductDetail/ProductDetail.jsx'; 
+import ProductCatalog from './components/ProductCatalog/ProductCatalog.jsx';
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
       <Navbar /> 
       <Routes>
         <Route path="/" element={<Home />} />
+
+        <Route path="/ProductCatalog" element={<ProductCatalog />} />
         
         {/* Rutas para fundas */}
         <Route path="/categories/fundas/iphone/models" element={<IphoneModels />} />

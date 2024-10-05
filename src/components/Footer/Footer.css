@@ -1,26 +1,45 @@
 /* src/components/Footer.css */
 .footer {
-    background-color: #fdeaf2; /* Fondo del footer */
-    padding: 20px;
-    text-align: center;
+  background-color: #fdeaf2; /* Fondo del footer */
+  padding: 20px;
+  text-align: center;
+}
+
+.contact-container {
+  display: flex; /* Usar flexbox para disposición horizontal */
+  flex-wrap: wrap; /* Permitir que los elementos se envuelvan en líneas */
+  justify-content: center; /* Centrar los elementos en el contenedor */
+  align-items: center; /* Centrar verticalmente */
+  margin-top: 10px; /* Margen superior para separar del título */
+}
+
+.footer-contact {
+  display: flex; /* Para que el ícono y el texto estén alineados */
+  align-items: center; /* Centrar verticalmente los íconos y el texto */
+  margin: 0 10px; /* Margen horizontal entre los enlaces */
+  text-decoration: none; /* Sin subrayado en el enlace */
+  color: #bd6f95; /* Color del texto */
+  font-size: 16px; /* Tamaño de fuente base */
+}
+
+.footer-icon {
+  margin-right: 5px; /* Espacio entre el ícono y el texto */
+}
+
+/* Media Queries para hacer el footer más responsivo */
+@media (max-width: 768px) {
+  .footer-contact {
+      flex: 1 1 100%; /* Cada contacto ocupa el 100% del ancho */
+      margin: 10px 0; /* Margen vertical entre contactos */
   }
-  
-  .contact-container {
-    display: flex; /* Usar flexbox para disposición horizontal */
-    justify-content: center; /* Centrar los elementos en el contenedor */
-    align-items: center; /* Centrar verticalmente */
-    margin-top: 10px; /* Margen superior para separar del título */
+}
+
+@media (max-width: 480px) {
+  .footer {
+      padding: 15px; /* Ajustar el padding para pantallas más pequeñas */
   }
   
   .footer-contact {
-    display: flex; /* Para que el ícono y el texto estén alineados */
-    align-items: center; /* Centrar verticalmente los íconos y el texto */
-    margin: 0 10px; /* Margen horizontal entre los enlaces */
-    text-decoration: none; /* Sin subrayado en el enlace */
-    color: #bd6f95; /* Color del texto */
+      font-size: 14px; /* Reducir el tamaño de la fuente en pantallas más pequeñas */
   }
-  
-  .footer-icon {
-    margin-right: 5px; /* Espacio entre el ícono y el texto */
-  }
-  
+}

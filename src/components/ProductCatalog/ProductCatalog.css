@@ -1,0 +1,81 @@
+.product-catalog {
+  margin-top: 20px;
+}
+
+.product-catalog h2 {
+  color: #bd6f95; /* Color principal para el título del catálogo de productos */
+  font-size: 1.8em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
+}
+
+.product-list {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.product-item {
+  background-color: #fdeaf2; /* Fondo claro */
+  border: 2px solid #bd6f95; /* Borde del producto */
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  max-width: 200px; 
+  margin: 10px; /* Reducido de 20px a 10px */
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 10px; /* Reducido de 15px a 10px */
+  height: 300px;
+}
+
+
+.product-item img {
+  width: 30%;
+  height: auto;
+  border-bottom: 2px solid #bd6f95; /* Línea de separación */
+  border-radius: 8px 8px 0 0; /* Curva solo en la parte superior */
+}
+
+.product-item h3 {
+  color: #d484aa;
+  font-size: 1.2em;
+  margin: 10px 0;
+  text-align: center; /* Centramos el título */
+}
+.product-info h2 {
+  font-size: 34px; 
+  color: #bd6f95;
+}
+.product-item p {
+  color: #a95f80;
+  font-size: 0.9em;
+  margin-top:10px;
+}
+
+.product-price {
+  font-size: 1.4em; /* Tamaño de fuente del precio */
+  font-weight: bold;
+  color: #bd6f95; /* Color del precio */
+  margin: 10px 0;
+}
+
+.product-item button {
+  background-color: #bd6f95;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease;
+  font-size: 0.9em; /* Ajuste de tamaño de texto del botón */
+}
+
+.product-item button:hover {
+  background-color: #a35c7a;
+}
+
+.product-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
