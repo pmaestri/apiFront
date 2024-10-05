@@ -17,7 +17,7 @@ body {
 
 .alternative-login h3 {
     color: #bd6f95; /* Color del texto del encabezado */
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 40px; /* Aumentar el tamaño de la fuente */
     font-weight: 700; /* Opcional: Hacer el texto más grueso */
   }
@@ -35,7 +35,7 @@ body {
 }
 
 .alternative-login label {
-    margin: 10px 0 5px; /* Espaciado entre etiquetas */
+    margin: 2px 0 2px; /* Espaciado entre etiquetas */
     color: #bd6f95; /* Color de las etiquetas */
     font-size: 16px; /* Tamaño de la fuente de las etiquetas (ajusta según sea necesario) */
   }
@@ -43,11 +43,12 @@ body {
 
   .alternative-login input {
     padding: 15px;
-    margin: 0 0 40px 10px; /* Margen izquierdo agregado y margen inferior */
+    margin: 0 0 20px 5px; /* Margen izquierdo agregado y margen inferior */
     border: 1px solid #bd6f95; /* Borde rosa */
     border-radius: 8px; /* Bordes redondeados */
     outline: none; /* Sin contorno */
     transition: border-color 0.3s ease; /* Transición suave del borde */
+    width: 90%;
   }
   
   .alternative-login input:first-of-type {

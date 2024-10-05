@@ -3,12 +3,12 @@
     flex-direction: column;
     justify-content: center; /* Centrar verticalmente */
     align-items: center; /* Centrar horizontalmente */
-    height: 80vh; /* Altura completa de la ventana */
+    height: 50%; /* Altura completa de la ventana */
   }
   
   .registration h2 {
     color: #bd6f95; /* Color del texto del encabezado */
-    margin-bottom: 10px;
+    margin-bottom: 2px;
     font-size: 40px; /* Tamaño de la fuente */
     font-weight: 700; /* Texto más grueso */
   }
@@ -21,16 +21,20 @@
     border-radius: 10px; /* Bordes redondeados */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
     width: 400px; /* Ancho del formulario */
-    height: auto; /* Altura automática */
+    height: 100%; /* Altura automática */
   }
   
+
+  
   .registration .message-container {
-    min-height: 15px; /* Reserva espacio para los mensajes */
+    min-height: 10px; /* Aumentar la altura mínima para más espacio */
     width: 100%; /* Ancho completo para los mensajes */
     display: flex;
     justify-content: center; /* Centrar horizontalmente */
-    margin-bottom: 10px; /* Espaciado entre el contenedor de mensajes y el formulario */
+    margin-bottom: 5px; /* Aumentar el margen inferior para evitar que se superponga con otros elementos */
+    margin-top: 5px;
   }
+
   
   .registration .error-message,
   .registration .success-message {
@@ -39,6 +43,7 @@
     margin-top: 10px;
     border-radius: 8px;
     width: 100%; /* Ancho completo para los mensajes */
+    font-size: 20px;
   }
   
   .registration .error-message {
@@ -56,6 +61,7 @@
   }
   
   .registration input {
+    width: 90%;
     margin: 10px 0 10px 10px; /* Margen superior, margen inferior y margen izquierdo agregado */
     padding: 15px;
     border: 1px solid #bd6f95; /* Borde rosa */

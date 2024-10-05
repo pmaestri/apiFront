@@ -35,22 +35,31 @@ const Login = () => {
       <form onSubmit={handleLogin}>
         <div>
           <label>Nombre de Usuario:</label>
-          <input
-            type="text"
-            value={nombreUsuario} 
-            onChange={(e) => setNombreUsuario(e.target.value)} 
-            required
-          />
+          <div>
+            <input
+              type="text"
+              value={nombreUsuario} 
+              onChange={(e) => setNombreUsuario(e.target.value)} 
+              required
+              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
+            />
+          </div>
         </div>
         <div>
           <label>Contraseña:</label>
-          <input
-            type="password"
-            value={contrasenia}
-            onChange={(e) => setContrasenia(e.target.value)}
-            required
-          />
+          <div>
+            <input
+              type="password"
+              value={contrasenia}
+              onChange={(e) => setContrasenia(e.target.value)}
+              required
+              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
+            />
+          </div>
         </div>
+
         
         {/* Contenedor para el mensaje de error con un mínimo de altura */}
         <div style={{ minHeight: '40px', textAlign: 'center' }}>

@@ -1,5 +1,7 @@
-import { useState } from 'react';
+
 import { registerUser } from "../../api/AuthApi";
+import { useState } from 'react';
+
 import './Register.css';
 
 const Registration = () => {
@@ -11,10 +13,30 @@ const Registration = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
+  // Definir handleEmailInvalid fuera de handleSubmit
+  const handleEmailInvalid = (e) => {
+    if (!e.target.value) {
+      e.target.setCustomValidity('Por favor, complete este campo.');
+    } else if (!e.target.value.includes('@')) {
+      e.target.setCustomValidity('Por favor, incluya un "@" en la dirección de correo electrónico.');
+    } else {
+      e.target.setCustomValidity(''); // Limpia el mensaje si no hay error
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+
+    // Validaciones adicionales
+    if (!email) {
+      setError('Por favor, complete este campo.');
+      return;
+    } else if (!email.includes('@')) {
+      setError('Por favor, incluya un "@" en la dirección de correo electrónico.');
+      return;
+    }
 
     try {
       const request = { 
@@ -25,7 +47,7 @@ const Registration = () => {
         contrasenia: password 
       };
       await registerUser(request);
-      setSuccess('User registered successfully!');
+      setSuccess('Usuario registrado correctamente!');
     } catch (error) {
       setError(error.message);
     }
@@ -33,57 +55,76 @@ const Registration = () => {
 
   return (
     <div className="registration"> 
-      <h2>Register User</h2>
-      {/* Contenedor para los mensajes de error y éxito */}
+      <h2>Registrar Usuario</h2>
       <div className="message-container">
         {error && <p className="error-message">{error}</p>}
         {success && <p className="success-message">{success}</p>}
       </div>
       <form onSubmit={handleSubmit}>
+      <div>
+        <label>Nombre:</label>
         <div>
-          <label>Nombre:</label>
           <input 
             type="text" 
             value={nombre} 
             onChange={(e) => setNombre(e.target.value)} 
             required 
+            onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+            onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
           />
         </div>
+      </div>
+      <div>
+        <label>Apellido:</label>
         <div>
-          <label>Apellido:</label>
           <input 
             type="text" 
             value={apellido} 
             onChange={(e) => setApellido(e.target.value)} 
             required 
+            onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+            onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
           />
         </div>
+      </div>
+      <div>
+        <label>Nombre de Usuario:</label>
         <div>
-          <label>Nombre de Usuario:</label>
           <input 
             type="text" 
             value={nombreUsuario} 
             onChange={(e) => setNombreUsuario(e.target.value)} 
             required 
+            onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+            onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
           />
         </div>
+      </div>
+      <div>
+        <label>Email:</label>
         <div>
-          <label>Email:</label>
           <input 
             type="email" 
             value={email} 
             onChange={(e) => setEmail(e.target.value)} 
-            required 
+            required
+            onInvalid={handleEmailInvalid}
           />
         </div>
+      </div>
+
         <div>
           <label>Contraseña:</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
+          <div>
+            <input 
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
+            />
+          </div>
         </div>
         <button type="submit">Registrar</button>
       </form>
