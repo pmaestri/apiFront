@@ -176,7 +176,9 @@ const handleFiltrarProductos = async (e) => {
                                     <p className="product-price">${producto.precio}</p>
                                 )}
 
-                                <button onClick={() => handleVerDetalleProducto(producto.id)}>Comprar</button>
+                                <div className="button-container">
+                                    <button onClick={() => handleVerDetalleProducto(producto.id)}>Comprar</button>
+                                </div>
                             </div>
                         ))
                     ) : (
@@ -201,7 +203,6 @@ const handleFiltrarProductos = async (e) => {
                             </div>
                             <div className="product-info">
                                 <h2>{productoSeleccionado.nombre}</h2>
-                                <p>{productoSeleccionado.descripcion}</p>
                                 <p className="product-price">${productoSeleccionado.precio}</p>
 
                                 {productoSeleccionado.descuento > 0 && (
@@ -210,11 +211,14 @@ const handleFiltrarProductos = async (e) => {
                                         {((productoSeleccionado.precio * (100 - productoSeleccionado.descuento)) / 100).toFixed(2)}
                                     </p>
                                 )}
+                                <p>{productoSeleccionado.descripcion}</p>
 
                                 <p><strong>Estado:</strong> {productoSeleccionado.disponible ? 'Disponible' : 'No disponible'}</p>
                                 <p><strong>Categoría:</strong> {productoSeleccionado.nombreCategoria}</p>
                                 <p><strong>Marca:</strong> {productoSeleccionado.marca}</p>
-                                <p><strong>Modelo:</strong> {productoSeleccionado.modelo}</p>
+                                {productoSeleccionado.modelo && (
+                                    <p><strong>Modelo:</strong> {productoSeleccionado.modelo}</p>
+                                 )}
 
                                 <div className="quantity-selector">
                                     <button onClick={decreaseQuantity}>-</button>
