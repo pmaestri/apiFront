@@ -15,6 +15,13 @@ const Navbar = () => {
   };
 const token = localStorage.getItem('token');
 
+const handleCatalogClick = () => {
+  // Verifica si ya estás en la ruta del catálogo
+  if (location.pathname === '/ProductCatalog') {
+    window.location.reload();  // Recarga la página
+  }
+};
+
   return (
     <nav className="navbar">
       <div className="logo-and-links">
@@ -26,7 +33,7 @@ const token = localStorage.getItem('token');
 
         {/* Aquí agregamos el ícono de catálogo*/}
         <div className="catalogo">
-          <Link to="/ProductCatalog">Catálogo</Link>
+          <Link to="/ProductCatalog" onClick={handleCatalogClick}>Catálogo</Link>
         </div>
 
         <ul className="navbar-links">
