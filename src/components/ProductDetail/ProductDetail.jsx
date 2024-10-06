@@ -19,6 +19,21 @@ const ProductDetail = ({ onClose }) => {
     setProduct(selectedProduct);
   }, [id]);
 
+  // Función para agregar el producto al carrito
+  const addToCart = (product) => {
+    const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const productInCart = currentCart.find(item => item.id === product.id);
+
+    if (productInCart) {
+      productInCart.quantity += 1;
+    } else {
+      currentCart.push({ ...product, quantity: 1 });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(currentCart));
+    alert("Producto agregado al carrito");
+  };
+
   return (
     <div className="product-detail-overlay">
       <div className="product-detail">
@@ -31,6 +46,10 @@ const ProductDetail = ({ onClose }) => {
             {product.originalPrice && (
               <p className="original-price">Precio original: {product.originalPrice}</p>
             )}
+
+            {/* Botón para agregar al carrito */}
+            <button onClick={() => addToCart(product)}>Agregar al Carrito</button>
+
             <button onClick={onClose}>Cerrar</button>
           </>
         ) : (

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
-import { FaSearch, FaShoppingCart, FaUser, FaBook } from 'react-icons/fa';  // Importamos el ícono de catálogo
+import { FaSearch, FaShoppingCart, FaUser, FaBook } from 'react-icons/fa';
+import Cart from '../Cart/Cart.jsx';  // Importamos el componente del carrito
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [showCart, setShowCart] = useState(false); // Estado para mostrar/ocultar carrito
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -13,14 +15,19 @@ const Navbar = () => {
   const handleSearch = () => {
     console.log("Buscando:", searchQuery);
   };
-const token = localStorage.getItem('token');
 
-const handleCatalogClick = () => {
-  // Verifica si ya estás en la ruta del catálogo
-  if (location.pathname === '/ProductCatalog') {
-    window.location.reload();  // Recarga la página
-  }
-};
+  const token = localStorage.getItem('token');
+
+  const handleCatalogClick = () => {
+    if (location.pathname === '/ProductCatalog') {
+      window.location.reload();  // Recarga la página si ya estás en ProductCatalog
+    }
+  };
+
+  // Función para mostrar/ocultar carrito
+  const toggleCart = () => {
+    setShowCart(!showCart);
+  };
 
   return (
     <nav className="navbar">
@@ -31,7 +38,7 @@ const handleCatalogClick = () => {
           </Link>
         </div>
 
-        {/* Aquí agregamos el ícono de catálogo*/}
+        {/* Ícono de catálogo */}
         <div className="catalogo">
           <Link to="/ProductCatalog" onClick={handleCatalogClick}>Catálogo</Link>
         </div>
@@ -239,8 +246,8 @@ const handleCatalogClick = () => {
         </ul>
       </div>
 
-     {/* Barra de búsqueda y nuevos iconos */}
-     <div className="search-and-icons"> {/* Contenedor para barra de búsqueda e iconos */}
+      {/* Barra de búsqueda y nuevos iconos */}
+      <div className="search-and-icons">
         <div className="search-bar">
           <input
             type="text"
@@ -253,21 +260,21 @@ const handleCatalogClick = () => {
           </button>
         </div>
 
-        {/* Icono de carrito */}
-        <div className="icon-container"> {/*  Contenedor para icono de carrito */}
-          <Link to="/cart"> {/*  Redirige a la página de carrito */}
-            <FaShoppingCart className="nav-icon" title="Carrito" /> {/* Icono de carrito */}
-          </Link>
+ {/* Icono de carrito */}
+ <div className="icon-container">
+          <FaShoppingCart className="nav-icon" onClick={toggleCart} title="Carrito" />
         </div>
 
         {/* Icono de inicio de sesión */}
-        <div className="icon-container"> {/*  Contenedor para icono de inicio de sesión */}
-          <Link to="/login"> {/*  Redirige a la página de inicio de sesión */}
-            <FaUser className="nav-icon" title="Iniciar sesión" /> {/*  Icono de inicio de sesión */}
+        <div className="icon-container">
+          <Link to="/login">
+            <FaUser className="nav-icon" title="Iniciar sesión" />
           </Link>
-          
         </div>
       </div>
+
+      {/* Renderizar el carrito si showCart es verdadero */}
+      {showCart && <Cart onClose={toggleCart} />}  {/* Aquí pasamos la función toggleCart como onClose */}
     </nav>
   );
 };

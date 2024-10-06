@@ -1,0 +1,134 @@
+.cart {
+    background-color: #fdeaf2;
+    padding: 20px;
+    border-radius: 12px;
+    width: 320px;
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+}
+
+.cart h2 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #bd6f95;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.cart-items-container {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 10px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+}
+
+.cart-item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.cart-item div {
+    flex-grow: 1;
+}
+
+.cart-item h3 {
+    font-size: 18px;
+    color: #d484aa;
+    font-weight: bold;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.cart-item p {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+}
+
+.cart-item input {
+    width: 50px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #d484aa;
+    font-size: 14px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.cart-item button {
+    background-color: transparent;
+    color: #d484aa;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.cart-item button:hover {
+    color: #bd6f95;
+}
+
+.confirm-cart {
+    background-color: #bd6f95;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.confirm-cart:hover {
+    background-color: #d484aa;
+}
+
+.close-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    color: #d484aa;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-icon:hover {
+    color: #bd6f95;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #bd6f95;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #fbd5e5;
+}

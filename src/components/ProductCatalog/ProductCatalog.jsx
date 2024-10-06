@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './ProductCatalog.css';
 import {
     obtenerProductosDisponiblesConDetalles,
-    agregarProductoACatalogo,
     obtenerDetalleProducto,
     filtrarProductos
 } from '../../api/ProductCatalogApi';
@@ -15,14 +14,8 @@ const ProductCatalog = () => {
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     const [cantidad, setCantidad] = useState(1);
     const [mostrarFiltro, setMostrarFiltro] = useState(false);
-    const [filtros, setFiltros] = useState({ 
-        nombre: '', 
-        categoriaId: '', 
-        precioMinimo: '', 
-        precioMaximo: '', 
-        marca: '', 
-        modelo: '' 
-    });
+    const [filtros, setFiltros] = useState({ nombre: '', categoriaId: '', precioMinimo: '', precioMaximo: '', marca: '', modelo: '' });
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Estado para el mensaje de éxito
 
     useEffect(() => {
         const fetchProductos = async () => {
@@ -66,27 +59,57 @@ const ProductCatalog = () => {
         }
     };
 
-const handleFiltrarProductos = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-        const filtrosAEnviar = {
-            ...(filtros.nombre && { nombre: filtros.nombre }), 
-            ...(filtros.categoriaId && { categoriaId: filtros.categoriaId }),
-            ...(filtros.precioMinimo && { precioMinimo: parseFloat(filtros.precioMinimo) }),
-            ...(filtros.precioMaximo && { precioMaximo: parseFloat(filtros.precioMaximo) }),
-            ...(filtros.marca && { marca: filtros.marca }),
-            ...(filtros.modelo && { modelo: filtros.modelo }),
-        };
+    const handleFiltrarProductos = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const filtrosAEnviar = {
+                ...(filtros.nombre && { nombre: filtros.nombre }), 
+                ...(filtros.categoriaId && { categoriaId: filtros.categoriaId }),
+                ...(filtros.precioMinimo && { precioMinimo: parseFloat(filtros.precioMinimo) }),
+                ...(filtros.precioMaximo && { precioMaximo: parseFloat(filtros.precioMaximo) }),
+                ...(filtros.marca && { marca: filtros.marca }),
+                ...(filtros.modelo && { modelo: filtros.modelo }),
+            };
 
-        const dataFiltrada = await filtrarProductos(filtrosAEnviar);
-        setProductos(dataFiltrada);
-    } catch (error) {
-        setError(`Error al filtrar productos: ${error.message}`);
-    } finally {
-        setLoading(false);
-    }
-};
+            const dataFiltrada = await filtrarProductos(filtrosAEnviar);
+            setProductos(dataFiltrada);
+        } catch (error) {
+            setError(`Error al filtrar productos: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Función para agregar productos al carrito
+    const addToCart = (product, quantity) => {
+        const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+        const productInCart = currentCart.find(item => item.id === product.id);
+
+        if (productInCart) {
+            // Si ya está en el carrito, aumenta la cantidad
+            productInCart.quantity += quantity;
+        } else {
+            // Agrega el producto al carrito con toda la información necesaria
+            currentCart.push({ 
+                id: product.id,
+                name: product.nombre,
+                price: product.precio,
+                image: `data:image/jpeg;base64,${product.imagen}`,  // Usa la imagen del producto
+                quantity: quantity
+            });
+        }
+
+        // Guarda en el localStorage
+        localStorage.setItem('cart', JSON.stringify(currentCart));
+        console.log("Producto agregado al carrito:", currentCart);  // Para depurar
+
+        // Mostrar mensaje de éxito
+        setShowSuccessMessage(true);
+        setTimeout(() => {
+            setShowSuccessMessage(false);  // Oculta el mensaje después de 3 segundos
+        }, 3000);
+    };
 
     return (
         <div className="product-catalog">
@@ -109,20 +132,20 @@ const handleFiltrarProductos = async (e) => {
                     <input
                         type="text"
                         placeholder="Categoría"
-                        value={filtros.categoriaId} // Cambiado a categoriaId
-                        onChange={(e) => setFiltros({ ...filtros, categoriaId: e.target.value })} // Cambiado a categoriaId
+                        value={filtros.categoriaId}
+                        onChange={(e) => setFiltros({ ...filtros, categoriaId: e.target.value })}
                     />
                     <input
                         type="number"
                         placeholder="Precio Mínimo"
-                        value={filtros.precioMinimo} // Cambiado a precioMinimo
-                        onChange={(e) => setFiltros({ ...filtros, precioMinimo: e.target.value })} // Cambiado a precioMinimo
+                        value={filtros.precioMinimo}
+                        onChange={(e) => setFiltros({ ...filtros, precioMinimo: e.target.value })}
                     />
                     <input
                         type="number"
                         placeholder="Precio Máximo"
-                        value={filtros.precioMaximo} // Cambiado a precioMaximo
-                        onChange={(e) => setFiltros({ ...filtros, precioMaximo: e.target.value })} // Cambiado a precioMaximo
+                        value={filtros.precioMaximo}
+                        onChange={(e) => setFiltros({ ...filtros, precioMaximo: e.target.value })}
                     />
                     <input
                         type="text"
@@ -218,7 +241,7 @@ const handleFiltrarProductos = async (e) => {
                                 <p><strong>Marca:</strong> {productoSeleccionado.marca}</p>
                                 {productoSeleccionado.modelo && (
                                     <p><strong>Modelo:</strong> {productoSeleccionado.modelo}</p>
-                                 )}
+                                )}
 
                                 <div className="quantity-selector">
                                     <button onClick={decreaseQuantity}>-</button>
@@ -226,10 +249,13 @@ const handleFiltrarProductos = async (e) => {
                                     <button onClick={increaseQuantity}>+</button>
                                 </div>
 
-                                <button className="add-to-cart-btn">
+                                <button className="add-to-cart-btn" onClick={() => addToCart(productoSeleccionado, cantidad)}>
                                     <FaShoppingCart className="cart-icon" />
                                     <span>Agregar al Carrito</span>
                                 </button>
+                                {showSuccessMessage && (
+                                    <p className="success-message">Producto agregado con éxito!</p> // Mensaje de éxito
+                                )}
                             </div>
                         </div>
                     </div>
