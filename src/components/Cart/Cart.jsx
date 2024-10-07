@@ -35,6 +35,9 @@ const Cart = ({ onClose }) => {
     setCartItems(updatedCartItems); // Actualizar el estado con el carrito actualizado
   };
 
+  // Calcular el total del carrito sumando los subtotales de cada producto
+  const totalCarrito = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
   return (
     <div className="cart">
       {/* Botón para cerrar el pop-up */}
@@ -51,7 +54,6 @@ const Cart = ({ onClose }) => {
               {item.image && <img src={item.image} alt={item.name} />}
               <div>
                 <h3>{item.name}</h3>
-                <p>Precio: ${item.price}</p>
                 <p>Cantidad:</p>
                 <input
                   type="number"
@@ -70,9 +72,15 @@ const Cart = ({ onClose }) => {
                 <button onClick={() => decreaseItemQuantity(item.id)}>
                   <FaTrashAlt />
                 </button>
+                <p style={{ textAlign: 'right', width: '100%' }}> ${item.price * item.quantity}</p>
+
               </div>
             </li>
           ))}
+          {/* Mostrar el total del carrito */}
+          <div className="cart-total">
+            <h3>Total: ${totalCarrito.toFixed(2)}</h3>
+          </div>
         </div>
       )}
       {/* Botón para confirmar el carrito */}

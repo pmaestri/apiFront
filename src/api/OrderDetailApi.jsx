@@ -13,22 +13,22 @@ export const setAuthToken = (token) => {
   }
 };
 
-// Función para obtener un detalle de pedido por su ID
-export const fetchDetallePedido = async (detalleId) => {
+// Función para obtener un detalle de pedido por su ID (nombre en español)
+export const obtenerDetallePedido = async (detalleId) => {
   try {
     const response = await api.get(`/${detalleId}`);
     return response.data;
   } catch (error) {
-    throw new Error(`Error fetching detalle pedido: ${error.message}`);
+    throw new Error(`Error al obtener detalle de pedido: ${error.message}`);
   }
 };
 
-// Función para crear un nuevo detalle de pedido
-export const createDetallePedido = async (pedidoId, detalleData) => {
+// Función para crear un nuevo detalle de pedido (nombre en español)
+export const crearDetallePedido = async (pedidoId, detalleData) => {
   try {
     const response = await api.post(`/${pedidoId}`, detalleData);
     return response.data;
   } catch (error) {
-    throw new Error(`Error creating detalle pedido: ${error.message}`);
+    throw new Error(`Error al crear detalle de pedido: ${error.message}`);
   }
 };

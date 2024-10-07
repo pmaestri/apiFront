@@ -132,3 +132,7 @@
 ::-webkit-scrollbar-track {
     background-color: #fbd5e5;
 }
+
+.cart-total{
+    color: #bd6f95;
+}
