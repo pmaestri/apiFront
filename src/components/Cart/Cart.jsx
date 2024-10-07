@@ -37,7 +37,7 @@ const Cart = ({ onClose }) => {
 
   return (
     <div className="cart">
-      {/* Botón para cerrar el popup */}
+      {/* Botón para cerrar el pop-up */}
       <button className="close-icon" onClick={onClose}>
         <FaTimes />
       </button>

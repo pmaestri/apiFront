@@ -16,6 +16,7 @@ const ProductCatalog = () => {
     const [mostrarFiltro, setMostrarFiltro] = useState(false);
     const [filtros, setFiltros] = useState({ nombre: '', categoriaId: '', precioMinimo: '', precioMaximo: '', marca: '', modelo: '' });
     const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Estado para el mensaje de éxito
+    const [message, setMessage] = useState(null); // Nuevo estado para manejar los mensajes informativos
 
     useEffect(() => {
         const fetchProductos = async () => {
@@ -249,13 +250,38 @@ const ProductCatalog = () => {
                                     <button onClick={increaseQuantity}>+</button>
                                 </div>
 
-                                <button className="add-to-cart-btn" onClick={() => addToCart(productoSeleccionado, cantidad)}>
+                                <button
+                                    className="add-to-cart-btn"
+                                    onClick={() => {
+                                        if (cantidad > productoSeleccionado.stock) {
+                                            setMessage(`No hay suficiente stock disponible. Stock actual: ${productoSeleccionado.stock}`);
+                                            setTimeout(() => setMessage(''), 3000);
+                                        } else {
+                                            addToCart(productoSeleccionado, cantidad);
+                                            setError(null);
+                                            setShowSuccessMessage(true);
+                                            setTimeout(() => setShowSuccessMessage(false), 3000);
+                                        }
+                                    }}
+                                >
                                     <FaShoppingCart className="cart-icon" />
                                     <span>Agregar al Carrito</span>
                                 </button>
-                                {showSuccessMessage && (
-                                    <p className="success-message">Producto agregado con éxito!</p> // Mensaje de éxito
-                                )}
+
+                                
+                                <div style={{ height: '50px' }}>
+                                    {/* Mensaje de éxito cuando se agrega correctamente */}
+                                    {showSuccessMessage && (
+                                        <p className="success-message">¡Producto agregado con éxito!</p>
+                                    )}
+
+                                    {/* Mostrar mensaje informativo de stock insuficiente */}
+                                    {message && (
+                                        <p className="info-message">
+                                            {message}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

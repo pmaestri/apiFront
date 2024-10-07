@@ -163,3 +163,16 @@
 .filter-form button:hover {
   background-color: #a35c7a;
 }
+.success-message, .info-message {
+  position: absolute; /* Posicionar el mensaje en relación al contenedor */
+  top: 10px; /* Espaciado desde la parte superior */
+  left: 50%; /* Centrar horizontalmente */
+  transform: translateX(-50%); /* Ajustar el centro del mensaje */
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con transparencia */
+  color: #bd6f95; /* Color de texto */
+  padding: 10px; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para el mensaje */
+  z-index: 10; /* Asegúrate de que el mensaje esté sobre otros elementos */
+  font-weight: bold;
+}
