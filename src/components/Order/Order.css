@@ -1,0 +1,90 @@
+/* Estilo general para el contenedor del pedido */
+.pedido-container {
+    background-color: #fdeaf2; /* Color de fondo similar al carrito */
+    padding: 40px; /* Mayor padding para dar espacio a los elementos */
+    border-radius: 12px; /* Bordes redondeados */
+    width: 800px; /* Ancho ajustado para mayor comodidad */
+    margin: 50px auto; /* Centrado en la página */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Sombra para dar profundidad */
+    font-family: 'Fredoka', sans-serif; /* Aplicar la fuente preferida */
+}
+
+/* Contenedor para productos y confirmación */
+.pedido-content {
+    display: flex; /* Disposición en flexbox para alinear elementos */
+    justify-content: space-between; /* Espacio entre los elementos */
+}
+
+/* Estilo para los elementos del carrito */
+.cart-items-container {
+    flex: 1; /* Ocupa espacio flexible */
+    margin-right: 20px; /* Margen a la derecha */
+}
+
+/* Estilo para cada producto en el carrito */
+.cart-product {
+    display: flex; /* Disposición en flexbox para alinear imagen y detalles */
+    margin-bottom: 15px; /* Espacio entre productos */
+    padding: 10px; /* Espacio interno */
+    border: 1px solid #ddd; /* Borde ligero */
+    border-radius: 8px; /* Bordes redondeados */
+    background-color: #fff; /* Fondo blanco para los productos */
+}
+
+/* Estilo para las imágenes de los productos */
+.cart-product img {
+    width: 60px; /* Ancho fijo para las imágenes */
+    height: 110px; /* Altura fija para las imágenes */
+    object-fit: cover; /* Mantiene la proporción de la imagen */
+    margin-right: 15px; /* Espacio a la derecha de la imagen */
+    border-radius: 5px; /* Bordes redondeados de la imagen */
+}
+
+/* Estilo para la confirmación de pedido */
+.order-confirmation-container {
+    flex: 1; /* Ocupa espacio flexible */
+    background-color: #fff; /* Fondo blanco para la confirmación */
+    padding: 20px; /* Espacio interno */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+}
+
+/* Estilos para encabezados */
+.pedido-container h2, 
+.pedido-container h3 {
+    margin: 0 0 10px; /* Margen inferior */
+}
+
+/* Estilo para el botón de confirmar pedido */
+.pedido-confirm-button {
+    background-color: #ff4d4d; /* Color de fondo del botón */
+    color: #fff; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 15px; /* Espaciado interno */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    font-size: 16px; /* Tamaño de la fuente */
+}
+
+.pedido-confirm-button:hover {
+    background-color: #ff1a1a; /* Color de fondo en hover */
+}
+
+/* Estilo para los selectores */
+.pedido-select {
+    padding: 10px; /* Espaciado interno */
+    margin-top: 10px; /* Margen superior */
+    border: 1px solid #ddd; /* Borde ligero */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de la fuente */
+}
+
+/* Estilo para listas */
+.pedido-list {
+    list-style-type: none; /* Sin viñetas */
+    padding: 0; /* Sin padding */
+}
+
+.pedido-list-item {
+    margin-bottom: 10px; /* Espacio entre elementos de la lista */
+}

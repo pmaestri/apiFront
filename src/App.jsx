@@ -18,6 +18,7 @@ import Register from './components/Auth/Register.jsx';
 import Footer from './components/Footer/Footer.jsx'; 
 import ProductDetail from './components/ProductDetail/ProductDetail.jsx'; 
 import ProductCatalog from './components/ProductCatalog/ProductCatalog.jsx';
+import Order from './components/Order/Order.jsx';
 
 function App() {
   return (
@@ -75,7 +76,8 @@ function App() {
         {/* Rutas para carrito, inicio de sesión y registro */}
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} /> 
-        <Route path="/register" element={<Register />} /> {/* Agregar ruta de registro aquí */}
+        <Route path="/register" element={<Register />} /> 
+        <Route path="/confirmacion-pedido" element={<Order />} /> {/* Ruta para el componente Order */}
       </Routes>
       <Footer /> 
     </Router>

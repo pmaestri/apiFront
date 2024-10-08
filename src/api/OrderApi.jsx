@@ -13,15 +13,18 @@ export const setAuthToken = (token) => {
   }
 };
 
-// Función para crear un nuevo pedido
-export const crearPedido = async (usuarioId, pedido) => {
+export const crearPedido = async (pedido) => {
   try {
-    const response = await api.post(`/${usuarioId}`, pedido);
+    console.log('Creating order with payload:', pedido); // Log the payload
+    const response = await api.post('/crear', pedido); // Cambiar la URL para omitir el usuarioId
+    console.log('Order created successfully:', response.data); // Log success
     return response.data;
   } catch (error) {
+    console.error('Error details:', error.response ? error.response.data : error.message); // Log error details
     throw new Error(`Error creando el pedido: ${error.message}`);
   }
 };
+
 
 // Función para obtener un pedido por su ID
 export const obtenerPedido = async (pedidoId) => {

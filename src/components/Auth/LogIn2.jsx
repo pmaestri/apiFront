@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authenticateUser } from '../../api/AuthApi'; 
 import './LogIn2.css';
+//import jwt_decode from 'jwt-decode'; // Asegúrate de importar jwt-decode
 
 const Login = () => {
   const [nombreUsuario, setNombreUsuario] = useState('');
@@ -12,12 +13,15 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMessage(null);
-
+  
     try {
       const authData = { nombreUsuario, contrasenia }; 
       const response = await authenticateUser(authData);
       localStorage.setItem('token', response.access_token);
-      console.log('Autenticación exitosa:', response);
+      console.log(response.access_token);
+
+      
+  
       navigate('/');
     } catch (error) {
       setErrorMessage('Error al iniciar sesión. Verifica tus credenciales.');

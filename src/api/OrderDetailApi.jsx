@@ -13,7 +13,7 @@ export const setAuthToken = (token) => {
   }
 };
 
-// Función para obtener un detalle de pedido por su ID (nombre en español)
+// Función para obtener un detalle de pedido por su ID
 export const obtenerDetallePedido = async (detalleId) => {
   try {
     const response = await api.get(`/${detalleId}`);
@@ -23,7 +23,7 @@ export const obtenerDetallePedido = async (detalleId) => {
   }
 };
 
-// Función para crear un nuevo detalle de pedido (nombre en español)
+// Función para crear un nuevo detalle de pedido con un ID de pedido
 export const crearDetallePedido = async (pedidoId, detalleData) => {
   try {
     const response = await api.post(`/${pedidoId}`, detalleData);
