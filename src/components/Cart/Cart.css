@@ -20,7 +20,7 @@
 }
 
 .cart-items-container {
-    max-height: 300px;
+    max-height: 350px;
     overflow-y: auto;
     margin-bottom: 20px;
     padding-right: 10px;
@@ -38,8 +38,8 @@
 }
 
 .cart-item img {
-    width: 60px;
-    height: 60px;
+    width: 65px;
+    height: 100px;
     border-radius: 8px;
     object-fit: cover;
     margin-right: 10px;
@@ -135,4 +135,48 @@
 
 .cart-total{
     color: #bd6f95;
+}
+.stock-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.remove-icon {
+    background: none; /* Sin fondo */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cursor de puntero al pasar el mouse */
+    margin-left: 50px; /* Espacio a la izquierda del icono */
+}
+
+.price-container {
+    display: flex;
+    justify-content: space-between; /* Espacia los elementos en el contenedor */
+    align-items: center; /* Alinea verticalmente el contenido al centro */
+    margin-top: 5px; /* Ajusta según tus necesidades */
+    width: 100%; /* Asegúrate de que ocupe todo el ancho */
+}
+.quantity-control {
+    display: flex;
+    align-items: center; /* Centra verticalmente */
+    background-color: #f0f0f0; /* Fondo gris claro */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 5px; /* Espaciado interno más pequeño */
+    width: 57px;
+    height: 25px;
+}
+
+.quantity-control button {
+    background-color: transparent;
+    color: #d484aa;
+    border: 1px solid #d484aa; /* Borde para los botones */
+    border-radius: 4px; /* Bordes redondeados en los botones */
+    width: 20px; /* Ancho reducido */
+    height: 20px; /* Alto reducido */
+    font-size: 16px; /* Fuente más pequeña */
+    cursor: pointer; /* Cursor de puntero */
+}
+
+.quantity-control span {
+    margin: 0 5px; /* Espacio alrededor del número */
+    font-size: 16px; /* Fuente más pequeña para el número */
 }

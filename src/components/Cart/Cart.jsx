@@ -7,6 +7,7 @@ const Cart = ({ onClose }) => {
   const [cartItems, setCartItems] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
+  const [stockMessage, setStockMessage] = useState('');
   const navigate = useNavigate();
 
   // Cargar productos del localStorage
@@ -14,6 +15,10 @@ const Cart = ({ onClose }) => {
     const savedCartItems = JSON.parse(localStorage.getItem('cart')) || [];
     if (savedCartItems.length > 0) {
       setCartItems(savedCartItems);
+      savedCartItems.forEach(item => {
+        console.log(`Item en carrito: ${item.name}, Stock: ${item.stock}`);
+      });
+      console.log("Elementos en el carrito:", savedCartItems);
     }
   }, []);
 
@@ -29,7 +34,7 @@ const Cart = ({ onClose }) => {
         if (item.quantity > 1) {
           return { ...item, quantity: item.quantity - 1 };
         } else {
-          return null;
+          return null; // Si la cantidad es 1, se eliminará
         }
       }
       return item;
@@ -37,21 +42,27 @@ const Cart = ({ onClose }) => {
     setCartItems(updatedCartItems);
   };
 
-  // Aumentar la cantidad de productos según el stock disponible
   const increaseItemQuantity = (itemId) => {
     const updatedCartItems = cartItems.map(item => {
       if (item.id === itemId) {
-        // Verificar si la cantidad supera el stock
+        console.log(`Evaluando item: ${item.name}, Cantidad: ${item.quantity}, Stock: ${item.stock}`);
+
+        // Comprobar que la cantidad no supere el stock
         if (item.quantity < item.stock) {
+          console.log(`Cantidad aumentada: ${item.quantity + 1}`);
+          setStockMessage(''); // Limpiar mensaje de stock insuficiente
           return { ...item, quantity: item.quantity + 1 };
         } else {
-          // Mostrar mensaje de stock limitado
-          setPopupMessage(`No puedes agregar más de ${item.stock} unidades de ${item.name}.`);
-          setShowPopup(true);
+          // Mostrar mensaje si no hay suficiente stock
+          const message = `No hay suficiente stock disponible para ${item.name}. Stock actual: ${item.stock}`;
+          setStockMessage(message); // Actualiza el mensaje
+          setShowPopup(true); // Muestra el popup
+          return item; // No actualizar la cantidad
         }
       }
       return item;
     });
+
     setCartItems(updatedCartItems);
   };
 
@@ -79,6 +90,7 @@ const Cart = ({ onClose }) => {
   // Cerrar popup de error de stock
   const closePopup = () => {
     setShowPopup(false);
+    setStockMessage(''); // Limpiar el mensaje de stock al cerrar
   };
 
   return (
@@ -87,6 +99,10 @@ const Cart = ({ onClose }) => {
         <FaTimes />
       </button>
       <h2>Carrito de Compras</h2>
+
+      {/* Mensaje de stock */}
+      {stockMessage && <p className="stock-message">{stockMessage}</p>}
+
       {cartItems.length === 0 ? (
         <p>El carrito está vacío.</p>
       ) : (
@@ -96,31 +112,39 @@ const Cart = ({ onClose }) => {
               {item.image && <img src={item.image} alt={item.name} />}
               <div>
                 <h3>{item.name}</h3>
+                <div className="quantity-control-container">
                 <div className="quantity-control">
                   <button onClick={() => decreaseItemQuantity(item.id)}>-</button>
                   <span>{item.quantity}</span>
-                  <button onClick={() => increaseItemQuantity(item.id)}>+</button>
+                  <button 
+                    onClick={() => increaseItemQuantity(item.id)}
+                    disabled={item.quantity >= item.stock}
+                  >
+                    +
+                  </button>
                 </div>
-                
-                {/* Mostrar el precio original tachado si hay descuento */}
-                {item.discount > 0 ? (
-                  <>
-                    <p style={{ textDecoration: 'line-through', color: 'gray' }}>
-                      ${item.originalPrice} x {item.quantity}
+              </div>
+
+                <div className="price-container">
+                  {item.discount > 0 ? (
+                    <div style={{ textAlign: 'right', width: '100%' }}>
+                      <p style={{ textDecoration: 'line-through', color: 'gray', margin: 0 }}>
+                        ${item.originalPrice} x {item.quantity}
+                      </p>
+                      <p style={{ fontWeight: 'bold', color: 'green', margin: 0 }}>
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </p>
+                    </div>
+                  ) : (
+                    <p style={{ textAlign: 'right', width: '100%', margin: 0 }}>
+                      ${ (item.price * item.quantity).toFixed(2) }
                     </p>
-                    <p style={{ fontWeight: 'bold', color: 'green' }}>
-                      ${(item.price * item.quantity)}
-                    </p>
-                  </>
-                ) : (
-                  <p style={{ textAlign: 'right', width: '100%' }}>
-                    ${item.price * item.quantity}
-                  </p>
-                )}
-                
-                <button onClick={() => removeItemFromCart(item.id)}>
-                  <FaTrashAlt />
-                </button>
+                  )}
+
+                  <button className="remove-icon" onClick={() => removeItemFromCart(item.id)}>
+                    <FaTrashAlt />
+                  </button>
+                </div>
               </div>
             </li>
           ))}
@@ -129,7 +153,13 @@ const Cart = ({ onClose }) => {
           </div>
         </div>
       )}
-      <button className="confirm-cart" onClick={handleConfirmCart}>Confirmar Carrito</button>
+      <button 
+        className="confirm-cart" 
+        onClick={handleConfirmCart} 
+        disabled={cartItems.length === 0} // Deshabilita el botón si el carrito está vacío
+      >
+        Confirmar Carrito
+      </button>
 
       {/* Popup para errores de stock */}
       {showPopup && (

@@ -4,9 +4,34 @@ import { crearPedido, setAuthToken, obtenerPedido } from '../../api/OrderApi.jsx
 import { crearDetallePedido } from '../../api/OrderDetailApi.jsx';
 import './Order.css';
 
+const Popup = ({ detalles, onClose }) => {
+  return (
+    <div className="popup-overlay">
+      <div className="popup-content">
+        <h2 className="title-highlight">Pedido Confirmado</h2>
+        <p>El pedido se ha efectuado exitosamente! Muchas gracias por confiar en nosotros.</p>
+        <h3>Detalles del Pedido:</h3>
+        <ul>
+          {detalles.detallePedidoDto.map(detalle => (
+            <li key={detalle.id}>
+              <p>Producto: {detalle.producto.nombre}</p>
+              <p>Cantidad: {detalle.cantidad}</p>
+              <p>Precio: ${detalle.precio.toFixed(2)}</p>
+            </li>
+          ))}
+        </ul>
+        <p>Método de Pago: {detalles.metodoPagoEnum}</p>
+        <p className="total-highlight">Total: ${detalles.total.toFixed(2)}</p>
+        <button onClick={onClose} className="close-button">Cerrar</button>
+      </div>
+    </div>
+  );
+};
 const Pedido = () => {
   const [metodoPago, setMetodoPago] = useState('');
   const [cuotas, setCuotas] = useState(1);
+  const [showPopup, setShowPopup] = useState(false);
+  const [pedidoDetalles, setPedidoDetalles] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { cartItems, totalCarrito } = location.state || { cartItems: [], totalCarrito: 0 };
@@ -25,7 +50,8 @@ const Pedido = () => {
   // Función para manejar la confirmación del pedido
   const handleConfirmarPedido = async () => {
     try {
-      const nuevoPedido = await crearPedido({ metodoPago });
+      // Crear el objeto del pedido con metodoPago y cuotas
+      const nuevoPedido = await crearPedido({ metodoPago, cuotas: metodoPago === 'CREDITO' ? cuotas : undefined });
       console.log('Pedido creado:', nuevoPedido);
 
       const detalles = await Promise.all(
@@ -43,7 +69,9 @@ const Pedido = () => {
       const pedidoConfirmado = await obtenerPedido(nuevoPedido.id);
       console.log('Pedido confirmado:', pedidoConfirmado);
 
-      navigate(`/pedido/${nuevoPedido.id}/confirmacion`);
+      // Mostrar el pop-up con los detalles del pedido
+      setPedidoDetalles(pedidoConfirmado);
+      setShowPopup(true);
     } catch (error) {
       console.error('Error al crear el pedido:', error.message);
     }
@@ -77,9 +105,7 @@ const Pedido = () => {
                       {item.discount > 0 ? (
                         <>
                           <p className="original-price">
-                            <span style={{ textDecoration: 'line-through' }}>
-                              ${item.originalPrice}
-                            </span>
+                            <span style={{ textDecoration: 'line-through' }}>Precio: ${item.originalPrice}</span>
                           </p>
                           <p className="discounted-price">Precio con Descuento: ${item.price.toFixed(2)}</p>
                         </>
@@ -103,7 +129,7 @@ const Pedido = () => {
             <h3>Total después de descuento: ${totalConDescuento.toFixed(2)}</h3>
           ) : null}
           <div>
-            <h3>Selecciona el método de pago:</h3>
+            <h4>Selecciona el método de pago:</h4>
             <select className="pedido-select" value={metodoPago} onChange={(e) => setMetodoPago(e.target.value)}>
               <option value="">Seleccionar...</option>
               <option value="EFECTIVO">Efectivo</option>
@@ -114,7 +140,7 @@ const Pedido = () => {
           </div>
           {metodoPago === 'CREDITO' && (
             <div>
-              <h3>Selecciona el número de cuotas:</h3>
+              <h3 className="select-cuotas-header">Selecciona el número de cuotas:</h3>
               <select className="pedido-select" value={cuotas} onChange={(e) => setCuotas(e.target.value)}>
                 <option value={1}>1 cuota</option>
                 <option value={3}>3 cuotas</option>
@@ -127,6 +153,11 @@ const Pedido = () => {
           </button>
         </div>
       </div>
+
+      {/* Mostrar el pop-up si está activo */}
+      {showPopup && (
+        <Popup detalles={pedidoDetalles} onClose={() => setShowPopup(false)} />
+      )}
     </div>
   );
 };

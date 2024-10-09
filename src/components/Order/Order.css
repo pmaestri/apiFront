@@ -7,6 +7,7 @@
     margin: 50px auto;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     font-family: 'Poppins', sans-serif;
+    height: 90%;
 }
 
 /* Contenedor de los productos y confirmación de pedido */
@@ -74,7 +75,6 @@
 /* Precio con descuento */
 .discounted-price {
     font-size: 16px;
-    color: #e53e3e; /* Mantengo rojo intenso para visibilidad */
     font-weight: 600;
 }
 
@@ -92,15 +92,26 @@
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    height: 100%;
+    text-align: center;
 }
 
 /* Estilos de encabezados */
 .pedido-container h2, 
 .pedido-container h3 {
-    font-size: 20px;
+    font-size: 25px;
     color: #c8799f; /* Ajustado a la paleta */
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    margin-top:5px;
 }
+.pedido-container h3 {
+    font-size: 15px; /* Cambiar el tamaño de la fuente aquí */
+}
+.pedido-container h4 {
+    font-size: 15px; /* Cambiar el tamaño de la fuente aquí */
+    color: #c8799f;
+}
+
 
 /* Botón de confirmación del pedido */
 .pedido-confirm-button {
@@ -141,3 +152,55 @@
 .pedido-list-item {
     margin-bottom: 20px;
 }
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Asegúrate de que esté por encima del contenido */
+  }
+  
+  .popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 700px; /* Aumentado para un pop-up más ancho */
+    width: 100%; /* Asegura que ocupe el 100% del espacio disponible hasta el max-width */
+    max-height: 80%; /* Asegura que el contenido no exceda la altura de la ventana */
+    overflow-y: auto; /* Habilita el scroll si el contenido es demasiado largo */
+  }
+  
+  
+  .popup-content button {
+    background-color:#df8fb5;/* Cambia esto al color de tu tema */
+    color: white; /* Color del texto */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Animación para el cambio de color */
+    margin-top: 20px; /* Espaciado superior */
+  }
+  
+  .popup-content button:hover {
+    background-color:#df8fb5; /* Color del botón al pasar el mouse */
+  }
+  .total-highlight {
+    font-size: 1.5em; /* Aumenta el tamaño de la fuente */
+    font-weight: bold; /* Haz el texto más grueso */
+    color: #df8fb5; /* Cambia el color al de tu tema */
+    margin-top: 10px; /* Espacio superior para separar del texto anterior */
+  }
+  .title-highlight {
+    font-size: 1.8em; /* Aumenta el tamaño de la fuente */
+    font-weight: bold; /* Haz el texto más grueso */
+    color: #df8fb5; /* Cambia el color al de tu tema */
+    margin-bottom: 10px; /* Espacio inferior para separar del siguiente texto */
+  }
+    
+    
