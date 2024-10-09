@@ -87,23 +87,30 @@ const ProductCatalog = () => {
         const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
         const productInCart = currentCart.find(item => item.id === product.id);
 
+        // Verificar si hay descuento y calcular el precio final
+        const finalPrice = product.descuento > 0 
+          ? (product.precio * (1 - product.descuento / 100))  // Precio con descuento
+          : product.precio;  // Precio original si no hay descuento
+
         if (productInCart) {
             // Si ya está en el carrito, aumenta la cantidad
             productInCart.quantity += quantity;
         } else {
-            // Agrega el producto al carrito con toda la información necesaria
+            // Agrega el producto al carrito con toda la información necesaria, incluyendo el precio correcto
             currentCart.push({ 
                 id: product.id,
                 name: product.nombre,
-                price: product.precio,
+                price: finalPrice,  // Guardar el precio final calculado (con descuento si aplica)
+                originalPrice: product.precio,  // Guardar el precio original también
                 image: `data:image/jpeg;base64,${product.imagen}`,  // Usa la imagen del producto
+                discount: product.descuento,  // Guardar el porcentaje de descuento si aplica
                 quantity: quantity
             });
         }
 
         // Guarda en el localStorage
         localStorage.setItem('cart', JSON.stringify(currentCart));
-        console.log("Producto agregado al carrito:", currentCart);  // Para depurar
+        console.log("Producto agregado al carrito con precio:", finalPrice);  // Para depurar
 
         // Mostrar mensaje de éxito
         setShowSuccessMessage(true);

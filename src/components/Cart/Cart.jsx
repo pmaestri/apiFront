@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
-import './Cart.css';  
-import { FaTrashAlt, FaTimes } from 'react-icons/fa'; // Íconos de FontAwesome
-import { crearPedido } from '../../api/OrderApi.jsx';
+import { useNavigate } from 'react-router-dom';
+import './Cart.css';
+import { FaTrashAlt, FaTimes } from 'react-icons/fa';
 
 const Cart = ({ onClose }) => {
   const [cartItems, setCartItems] = useState([]);
-  const navigate = useNavigate(); // Inicializa useNavigate
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const navigate = useNavigate();
 
-  // Cargar los productos desde el localStorage solo una vez cuando el componente se monte
+  // Cargar productos del localStorage
   useEffect(() => {
     const savedCartItems = JSON.parse(localStorage.getItem('cart')) || [];
     if (savedCartItems.length > 0) {
@@ -16,12 +17,12 @@ const Cart = ({ onClose }) => {
     }
   }, []);
 
-  // Guardar el carrito en el localStorage cada vez que cartItems cambie
+  // Guardar carrito en localStorage
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Reducir la cantidad de un producto en el carrito o eliminar si es el último
+  // Reducir la cantidad del producto o eliminarlo
   const decreaseItemQuantity = (itemId) => {
     const updatedCartItems = cartItems.map(item => {
       if (item.id === itemId) {
@@ -36,14 +37,49 @@ const Cart = ({ onClose }) => {
     setCartItems(updatedCartItems);
   };
 
+  // Aumentar la cantidad de productos según el stock disponible
+  const increaseItemQuantity = (itemId) => {
+    const updatedCartItems = cartItems.map(item => {
+      if (item.id === itemId) {
+        // Verificar si la cantidad supera el stock
+        if (item.quantity < item.stock) {
+          return { ...item, quantity: item.quantity + 1 };
+        } else {
+          // Mostrar mensaje de stock limitado
+          setPopupMessage(`No puedes agregar más de ${item.stock} unidades de ${item.name}.`);
+          setShowPopup(true);
+        }
+      }
+      return item;
+    });
+    setCartItems(updatedCartItems);
+  };
+
+  // Eliminar producto del carrito
+  const removeItemFromCart = (itemId) => {
+    const updatedCartItems = cartItems.filter(item => item.id !== itemId);
+    setCartItems(updatedCartItems);
+  };
+
   // Calcular el total del carrito
   const totalCarrito = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  // Manejar la confirmación del carrito
+  // Confirmar carrito y verificar stock
   const handleConfirmCart = () => {
-  // Redirigir a la vista de confirmación y pasar el carrito
-  navigate('/confirmacion-pedido', { state: { cartItems, totalCarrito } });
-};
+    const itemsExceedingStock = cartItems.filter(item => item.quantity > item.stock);
+    if (itemsExceedingStock.length > 0) {
+      const stockMessages = itemsExceedingStock.map(item => `${item.name}: stock disponible ${item.stock}`);
+      setPopupMessage(`No se puede confirmar el pedido. Los siguientes productos no tienen suficiente stock:\n${stockMessages.join('\n')}`);
+      setShowPopup(true);
+    } else {
+      navigate('/confirmacion-pedido', { state: { cartItems, totalCarrito } });
+    }
+  };
+
+  // Cerrar popup de error de stock
+  const closePopup = () => {
+    setShowPopup(false);
+  };
 
   return (
     <div className="cart">
@@ -60,24 +96,31 @@ const Cart = ({ onClose }) => {
               {item.image && <img src={item.image} alt={item.name} />}
               <div>
                 <h3>{item.name}</h3>
-                <p>Cantidad:</p>
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) => {
-                    const newQuantity = parseInt(e.target.value);
-                    setCartItems(cartItems.map(cartItem =>
-                      cartItem.id === item.id
-                        ? { ...cartItem, quantity: Math.max(1, newQuantity) }
-                        : cartItem
-                    ));
-                  }}
-                  min="1"
-                />
-                <button onClick={() => decreaseItemQuantity(item.id)}>
+                <div className="quantity-control">
+                  <button onClick={() => decreaseItemQuantity(item.id)}>-</button>
+                  <span>{item.quantity}</span>
+                  <button onClick={() => increaseItemQuantity(item.id)}>+</button>
+                </div>
+                
+                {/* Mostrar el precio original tachado si hay descuento */}
+                {item.discount > 0 ? (
+                  <>
+                    <p style={{ textDecoration: 'line-through', color: 'gray' }}>
+                      ${item.originalPrice} x {item.quantity}
+                    </p>
+                    <p style={{ fontWeight: 'bold', color: 'green' }}>
+                      ${(item.price * item.quantity)}
+                    </p>
+                  </>
+                ) : (
+                  <p style={{ textAlign: 'right', width: '100%' }}>
+                    ${item.price * item.quantity}
+                  </p>
+                )}
+                
+                <button onClick={() => removeItemFromCart(item.id)}>
                   <FaTrashAlt />
                 </button>
-                <p style={{ textAlign: 'right', width: '100%' }}> ${item.price * item.quantity}</p>
               </div>
             </li>
           ))}
@@ -87,6 +130,14 @@ const Cart = ({ onClose }) => {
         </div>
       )}
       <button className="confirm-cart" onClick={handleConfirmCart}>Confirmar Carrito</button>
+
+      {/* Popup para errores de stock */}
+      {showPopup && (
+        <div className="popup">
+          <p>{popupMessage}</p>
+          <button onClick={closePopup}>Cerrar</button>
+        </div>
+      )}
     </div>
   );
 };

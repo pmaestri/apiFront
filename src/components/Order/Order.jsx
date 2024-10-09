@@ -4,7 +4,7 @@ import { crearPedido, setAuthToken, obtenerPedido } from '../../api/OrderApi.jsx
 import { crearDetallePedido } from '../../api/OrderDetailApi.jsx';
 import './Order.css';
 
-const Pedido = ({ token }) => {
+const Pedido = () => {
   const [metodoPago, setMetodoPago] = useState('');
   const [cuotas, setCuotas] = useState(1);
   const location = useLocation();
@@ -72,10 +72,22 @@ const Pedido = ({ token }) => {
                 <li className="pedido-list-item" key={item.id}>
                   <div className="cart-product">
                     <img src={item.image} alt={item.name} />
-                    <div>
+                    <div className="cart-product-details">
                       <h3>{item.name}</h3>
+                      {item.discount > 0 ? (
+                        <>
+                          <p className="original-price">
+                            <span style={{ textDecoration: 'line-through' }}>
+                              ${item.originalPrice}
+                            </span>
+                          </p>
+                          <p className="discounted-price">Precio con Descuento: ${item.price.toFixed(2)}</p>
+                        </>
+                      ) : (
+                        <p className="product-price">Precio: ${item.price.toFixed(2)}</p>
+                      )}
                       <p>Cantidad: {item.quantity}</p>
-                      <p>Subtotal: ${ (item.price * item.quantity).toFixed(2) }</p>
+                      <p>Subtotal: ${(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                   </div>
                 </li>
