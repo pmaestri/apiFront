@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
 
-.container {
-  font-family: "Fredoka", sans-serif;
-  padding: 20px;
-  background-color: #fef3f8; /* Color de fondo del contenedor */
-}
-
 .header {
   text-align: center;
   margin-bottom: 30px;
@@ -16,6 +10,7 @@
   font-size: 28px;
   font-weight: 700; /* Título con peso de fuente más alto */
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .card {
@@ -44,29 +39,35 @@
   color: #444; /* Color del texto del contenido */
 }
 
-.input-search {
-  padding: 10px 15px;
-  border-radius: 30px; /* Bordes redondeados */
-  border: 2px solid #bd6f95; /* Borde rosa claro */
-  margin-right: 10px; /* Espaciado entre la barra y el botón */
-  transition: border-color 0.3s ease;
+.search-input-user {
+    padding: 10px 15px;
+    border-radius: 5px; /* Bordes redondeados */
+    margin-right: 10px; /* Espaciado entre la barra y el botón */
+    margin-left: 35%;
+    outline:none;
+    height:22px;
+    width:180px;
+    border: 2px solid #bd6f95; /* Borde rosa claro */
+}
+.search-input-user:focus {
+    border: 2px solid #bd6f95; /* Borde rosa al hacer foco */
+    box-shadow: 0 0 5px rgba(189, 111, 149, 0.5); /* Sombra suave al hacer foco */
+    background-color: white; /* Asegura que el fondo siga siendo blanco al hacer foco */
 }
 
-.input-search:focus {
-  border-color: #bd6f95; /* Cambiar borde al enfocar */
-  outline: none; /* Eliminar borde predeterminado */
-}
+
 
 .button {
     background-color: #bd6f95; /* Color de fondo del botón */
     border: none; /* Sin borde */
     color: white; /* Color del texto del botón */
     padding: 12px 20px; /* Espaciado interior del botón */
-    border-radius: 30px; /* Bordes redondeados */
+    border-radius: 10px; /* Bordes redondeados */
     cursor: pointer; /* Cambiar cursor al pasar por encima */
     font-weight: bold; /* Texto en negrita */
     transition: background-color 0.3s, box-shadow 0.3s; /* Transición suave al pasar el mouse */
     margin: 10px; /* Espaciado entre botones */
+    height:40px;
   }
   
   .button:hover {
@@ -80,9 +81,6 @@
   }
   
 
-.button-wide {
-  width: 100%; /* Botón ocupa el ancho completo */
-}
 .pedido-list {
     list-style-type: none; /* Elimina los puntos de la lista */
     padding: 0; /* Elimina el padding por defecto */

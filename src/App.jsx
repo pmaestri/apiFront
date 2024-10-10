@@ -27,7 +27,6 @@ function App() {
   return (
     <Router>
       <MainContent />
-      <Footer /> 
     </Router>
   );
 }
@@ -101,6 +100,10 @@ function MainContent() {
         <Route path="/admin-home/ordenes" element={<OrdersAdmin />} />
         <Route path="/admin-home/productos" element={<ProductsAdmin />} />
       </Routes>
+
+      {/* Muestra el Footer solo si no estás en la ruta de AdminHome o sus subcomponentes */}
+      {location.pathname !== '/admin-home' && 
+       !location.pathname.startsWith('/admin-home/') && <Footer />}
     </>
   );
 }

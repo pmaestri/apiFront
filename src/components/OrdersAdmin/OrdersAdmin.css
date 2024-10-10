@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
+.orders-title{
+    color: #bd6f95; /* Color del título */
+    font-size: 28px;
+    font-weight: 700; /* Título con peso de fuente más alto */
+    margin-bottom: 25px;
+    text-align:center;
+}
+.orders-button{
+    background-color: #bd6f95; /* Color de fondo del botón */
+    border: none; /* Sin borde */
+    color: white; /* Color del texto del botón */
+    padding: 12px 20px; /* Espaciado interior del botón */
+    border-radius: 10px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar cursor al pasar por encima */
+    font-weight: bold; /* Texto en negrita */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Transición suave al pasar el mouse */
+    margin: 10px; /* Espaciado entre botones */
+    height:40px;
+ 
+}
+.orders-button:hover {
+    background-color: #fbd5e5; /* Color de fondo en hover */
+    color: #bd6f95; /* Cambia el color del texto en hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave en hover */
+  }
+  .orders-button:active {
+    transform: scale(0.95); /* Efecto de presionar */
+  }
+  
+.orders-admin-button-wide {
+  width: 100%; /* Botón ocupa el ancho completo */
+}
+.orders-search-input {
+    padding: 10px 15px;
+    border-radius: 5px; /* Bordes redondeados */
+    margin-right: 10px; /* Espaciado entre la barra y el botón */
+    margin-left: 35%;
+    outline:none;
+    height:22px;
+    width:180px;
+    border: 2px solid #bd6f95; /* Borde rosa claro */
+}
+.orders-search-input:focus {
+    border: 2px solid #bd6f95; /* Borde rosa al hacer foco */
+    box-shadow: 0 0 5px rgba(189, 111, 149, 0.5); /* Sombra suave al hacer foco */
+    background-color: white; /* Asegura que el fondo siga siendo blanco al hacer foco */
+}
+.orders-card{
+    background-color: #fdeaf2; /* Color de fondo de las tarjetas */
+    border: 2px solid #fbd5e5; /* Borde rosa claro */
+    border-radius: 12px; /* Bordes redondeados */
+    padding: 20px;
+    margin: 15px 0; /* Margen vertical entre tarjetas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra más prominente */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición suave al pasar el mouse */
+}
+.orders-card-title{
+    font-size: 22px;
+    font-weight: 600;
+    color: #bd6f95; /* Color del título de la tarjeta */
+}
+.detalle-pedido-item {
+    margin-bottom: 20px; /* Espacio entre los productos */
+    display: block; /* Asegura que cada item ocupe una línea completa */
+    color: #bd6f95; 
+  }
+
+.orders-card:hover {
+    transform: translateY(-8px); /* Elevar la tarjeta al pasar el mouse */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Sombra más destacada */
+  }
+  

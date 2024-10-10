@@ -77,12 +77,13 @@ const UserAdmin = () => {
         <h1 className="title">Administración de Usuarios</h1>
         {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       </div>
-      <div className="search-bar">
+      
+      <div className="search-bar-user">
         <input 
           type="text" 
           value={usuarioId} 
           onChange={(e) => setUsuarioId(e.target.value.trim())} 
-          className="search-input" 
+          className="search-input-user" 
           placeholder="Buscar usuario por ID" 
         />
         <button onClick={buscarUsuario} className="button">Buscar Usuario</button>
