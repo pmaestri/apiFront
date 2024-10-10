@@ -260,7 +260,7 @@ const Navbar = () => {
           </button>
         </div>
 
- {/* Icono de carrito */}
+  {/* Icono de carrito */}
  <div className="icon-container">
           <FaShoppingCart className="nav-icon" onClick={toggleCart} title="Carrito" />
         </div>

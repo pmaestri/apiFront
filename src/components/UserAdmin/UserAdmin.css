@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
+.container {
+  font-family: "Fredoka", sans-serif;
+  padding: 20px;
+  background-color: #fef3f8; /* Color de fondo del contenedor */
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  color: #bd6f95; /* Color del título */
+  font-size: 28px;
+  font-weight: 700; /* Título con peso de fuente más alto */
+  margin-bottom: 20px;
+}
+
+.card {
+  background-color: #fdeaf2; /* Color de fondo de las tarjetas */
+  border: 2px solid #fbd5e5; /* Borde rosa claro */
+  border-radius: 12px; /* Bordes redondeados */
+  padding: 20px;
+  margin: 15px 0; /* Margen vertical entre tarjetas */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra más prominente */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición suave al pasar el mouse */
+}
+
+.card:hover {
+  transform: translateY(-8px); /* Elevar la tarjeta al pasar el mouse */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Sombra más destacada */
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #bd6f95; /* Color del título de la tarjeta */
+}
+
+.card-content {
+  margin-top: 15px;
+  color: #444; /* Color del texto del contenido */
+}
+
+.input-search {
+  padding: 10px 15px;
+  border-radius: 30px; /* Bordes redondeados */
+  border: 2px solid #bd6f95; /* Borde rosa claro */
+  margin-right: 10px; /* Espaciado entre la barra y el botón */
+  transition: border-color 0.3s ease;
+}
+
+.input-search:focus {
+  border-color: #bd6f95; /* Cambiar borde al enfocar */
+  outline: none; /* Eliminar borde predeterminado */
+}
+
+.button {
+    background-color: #bd6f95; /* Color de fondo del botón */
+    border: none; /* Sin borde */
+    color: white; /* Color del texto del botón */
+    padding: 12px 20px; /* Espaciado interior del botón */
+    border-radius: 30px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar cursor al pasar por encima */
+    font-weight: bold; /* Texto en negrita */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Transición suave al pasar el mouse */
+    margin: 10px; /* Espaciado entre botones */
+  }
+  
+  .button:hover {
+    background-color: #fbd5e5; /* Color de fondo en hover */
+    color: #bd6f95; /* Cambia el color del texto en hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave en hover */
+  }
+  
+  .button:active {
+    transform: scale(0.95); /* Efecto de presionar */
+  }
+  
+
+.button-wide {
+  width: 100%; /* Botón ocupa el ancho completo */
+}
+.pedido-list {
+    list-style-type: none; /* Elimina los puntos de la lista */
+    padding: 0; /* Elimina el padding por defecto */
+    margin: 0; /* Elimina el margen por defecto */
+    display: block; /* Asegura que los elementos sean bloque */
+  }
+  
+  .pedido-item {
+    display: block; /* Cada pedido ocupará una nueva línea */
+    margin-bottom: 10px; /* Espacio entre los pedidos */ 
+    padding: 8px; /* Opcional: padding para mayor legibilidad */
+    border-radius: 5px; /* Opcional: bordes redondeados */
+  }
+  
+  
+
+.total {
+  font-weight: bold; /* Total en negrita */
+  color: #bd6f95; /* Color del total */
+  font-size: 20px; /* Tamaño del texto del total */
+  margin-top: 15px; /* Margen superior */
+}
+
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .card {
+    margin: 10px 0; /* Menos margen en pantallas pequeñas */
+    padding: 15px; /* Menos espaciado interior en pantallas pequeñas */
+  }
+
+  .button {
+    width: 100%; /* Botón ocupa el ancho completo en pantallas pequeñas */
+  }
+
+  .input-search {
+    width: 100%; /* Barra de búsqueda ocupa el ancho completo */
+    margin: 10px 0; /* Margen superior e inferior */
+  }
+}
+.pedidos-button {
+    background-color:#bd6f95; /* Color de fondo verde */
+    color: white; /* Color del texto */
+    padding: 10px 15px; /* Espaciado interno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor de puntero al pasar el mouse */
+    font-size: 16px; /* Tamaño de la fuente */
+    margin-top: 10px; /* Espacio arriba */
+  }
+  
+  .eliminar-button {
+    background-color: #bd6f95; /* Color de fondo */
+    color: white; /* Color del texto */
+    padding: 10px 15px; /* Espaciado interno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor de puntero al pasar el mouse */
+    font-size: 16px; /* Tamaño de la fuente */
+    margin-top: 10px; /* Espacio arriba */
+}

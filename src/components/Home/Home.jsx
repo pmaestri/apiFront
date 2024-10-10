@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // <--- LÍNEA MODIFICADA
+import React, { useState } from 'react'; // 
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';

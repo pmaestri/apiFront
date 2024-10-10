@@ -1,6 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-//import ProductList from "./components/ProductList/ProductList.jsx";
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Subcategory from './components/Subcategory';  
 import Navbar from './components/NavBar/Navbar.jsx';           
 import Home from './components/Home/Home.jsx';  
@@ -19,14 +18,31 @@ import Footer from './components/Footer/Footer.jsx';
 import ProductDetail from './components/ProductDetail/ProductDetail.jsx'; 
 import ProductCatalog from './components/ProductCatalog/ProductCatalog.jsx';
 import Order from './components/Order/Order.jsx';
+import AdminHome from './components/AdminHome/AdminHome.jsx'; // Importa tu componente AdminHome
+import UserAdmin from './components/UserAdmin/UserAdmin.jsx'; // Importa el componente UserAdmin
+import ProductsAdmin from './components/ProductsAdmin/ProductsAdmin.jsx'; // Importa el componente ProductsAdmin
+import OrdersAdmin from './components/OrdersAdmin/OrdersAdmin.jsx'; // Importa el componente OrdersAdmin
 
 function App() {
   return (
     <Router>
-      <Navbar /> 
+      <MainContent />
+      <Footer /> 
+    </Router>
+  );
+}
+
+function MainContent() {
+  const location = useLocation(); // Aquí usamos useLocation
+
+  return (
+    <>
+      {/* Muestra el Navbar solo si no estás en la ruta de AdminHome o sus subcomponentes */}
+      {location.pathname !== '/admin-home' && 
+       !location.pathname.startsWith('/admin-home/') && <Navbar />}
+      
       <Routes>
         <Route path="/" element={<Home />} />
-
         <Route path="/ProductCatalog" element={<ProductCatalog />} />
         
         {/* Rutas para fundas */}
@@ -77,10 +93,15 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} /> 
         <Route path="/register" element={<Register />} /> 
-        <Route path="/confirmacion-pedido" element={<Order />} /> {/* Ruta para el componente Order */}
+        <Route path="/confirmacion-pedido" element={<Order />} /> 
+
+        {/* Rutas para el componente AdminHome y sus subcomponentes */}
+        <Route path="/admin-home" element={<AdminHome />} />
+        <Route path="/admin-home/usuarios" element={<UserAdmin />} />
+        <Route path="/admin-home/ordenes" element={<OrdersAdmin />} />
+        <Route path="/admin-home/productos" element={<ProductsAdmin />} />
       </Routes>
-      <Footer /> 
-    </Router>
+    </>
   );
 }
 

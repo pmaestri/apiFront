@@ -44,7 +44,7 @@ export const eliminarUsuario = async () => {
   }
 };
 
-// Función para obtener un usuario por ID
+// Función para obtener un usuario por ID si sos el mismo
 export const obtenerUsuario = async () => {
   try {
     const response = await api.get('/usuarioId');
@@ -81,5 +81,32 @@ export const obtenerUsuariosVisualDtos = async () => {
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo los UsuarioVisualDto: ${error.message}`);
+  }
+};
+// Nueva función para obtener el rol del usuario autenticado
+export const obtenerRolUsuario = async () => {
+  try {
+    const response = await api.get('/rol');
+    return response.data; // Devuelve el rol del usuario ('admin' o 'comprador')
+  } catch (error) {
+    throw new Error(`Error obteniendo el rol del usuario: ${error.message}`);
+  }
+};
+// Función para obtener un usuario por ID si sos admin
+export const obtenerUsuarioAdmin = async (usuarioId) => {
+  try {
+    console.log(usuarioId);
+    const response = await api.get(`/${usuarioId}`); // Cambia esto para incluir el ID en la URL
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error obteniendo el usuario: ${error.message}`);
+  }
+};
+// Función para eliminar un usuario
+export const eliminarUsuarioAdmin = async (usuarioId) => { // Agregué el argumento usuarioId
+  try {
+    await api.delete(`/${usuarioId}`); // Uso el usuarioId en la URL
+  } catch (error) {
+    throw new Error(`Error eliminando el usuario: ${error.message}`);
   }
 };
