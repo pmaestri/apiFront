@@ -1,14 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authenticateUser } from '../../api/AuthApi'; 
 import './LogIn2.css';
-//import jwt_decode from 'jwt-decode'; // Asegúrate de importar jwt-decode
 
 const Login = () => {
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [contrasenia, setContrasenia] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para verificar si el usuario ha iniciado sesión
   const navigate = useNavigate();
+
+  // Recuperar valores de localStorage al montar el componente
+  useEffect(() => {
+    const storedNombreUsuario = localStorage.getItem('nombreUsuario');
+    const storedContrasenia = localStorage.getItem('contrasenia');
+    const token = localStorage.getItem('token'); // Recupera el token
+
+    if (storedNombreUsuario) setNombreUsuario(storedNombreUsuario);
+    if (storedContrasenia) setContrasenia(storedContrasenia);
+    if (token) setIsLoggedIn(true); // Si hay un token, el usuario está logueado
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,14 +30,27 @@ const Login = () => {
       const response = await authenticateUser(authData);
       localStorage.setItem('token', response.access_token);
       console.log(response.access_token);
-
       
-  
-      navigate('/');
+      // Guardar los valores en localStorage
+      localStorage.setItem('nombreUsuario', nombreUsuario);
+      localStorage.setItem('contrasenia', contrasenia);
+
+      // Establece el estado isLoggedIn a true al iniciar sesión
+      setIsLoggedIn(true); 
     } catch (error) {
       setErrorMessage('Error al iniciar sesión. Verifica tus credenciales.');
       console.error('Error en la autenticación:', error);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('nombreUsuario');
+    localStorage.removeItem('contrasenia');
+
+    setIsLoggedIn(false); // Restablecer el estado de inicio de sesión
+    setNombreUsuario(''); // Limpiar el campo de nombre de usuario
+    setContrasenia(''); // Limpiar el campo de contraseña
   };
 
   const handleRegister = () => {
@@ -64,15 +88,27 @@ const Login = () => {
           </div>
         </div>
 
-        
         {/* Contenedor para el mensaje de error con un mínimo de altura */}
         <div style={{ minHeight: '40px', textAlign: 'center' }}>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
 
-        <button type="submit">Iniciar Sesión</button>
-        <span onClick={handleRegister} className="register-button">Registrarse</span>
+        {/* Botones de inicio de sesión y registro solo si no está logueado */}
+        {!isLoggedIn && (
+          <>
+            <button type="submit">Iniciar Sesión</button>
+            <span onClick={handleRegister} className="register-button">Registrarse</span>
+          </>
+        )}
+              {/* Botón de cerrar sesión visible solo si está logueado */}
+      {isLoggedIn && (
+        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+          <button onClick={handleLogout}>Cerrar Sesión</button>
+        </div>
+      )}
       </form>
+
+
     </div>
   );
 };
