@@ -34,7 +34,7 @@ const Pedido = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [pedidoDetalles, setPedidoDetalles] = useState(null);
   const location = useLocation();
-  const navigate = useNavigate(); // Línea agregada para la navegación
+  const navigate = useNavigate();
   const { cartItems, totalCarrito } = location.state || { cartItems: [], totalCarrito: 0 };
 
   // Obtener el token desde el almacenamiento local
@@ -121,14 +121,10 @@ const Pedido = () => {
               ))}
             </ul>
           )}
-          <h3>Total: ${totalCarrito.toFixed(2)}</h3>
         </div>
 
         <div className="order-confirmation-container">
           <h2>Confirmar Pedido</h2>
-          {metodoPago === 'EFECTIVO' || metodoPago === 'TRANSFERENCIA' ? (
-            <h3>Total después de descuento: ${totalConDescuento.toFixed(2)}</h3>
-          ) : null}
           <div>
             <h4>Selecciona el método de pago:</h4>
             <select className="pedido-select" value={metodoPago} onChange={(e) => setMetodoPago(e.target.value)}>
@@ -152,6 +148,18 @@ const Pedido = () => {
           <button className="pedido-confirm-button" onClick={handleConfirmarPedido} disabled={!metodoPago || cartItems.length === 0}>
             Confirmar Pedido
           </button>
+
+          {/* Mostrar total debajo del botón Confirmar Pedido */}
+          <div className="order-total">
+            {metodoPago === 'EFECTIVO' || metodoPago === 'TRANSFERENCIA' ? (
+              <>
+                <p className="original-total-price">Total: ${totalCarrito.toFixed(2)}</p>
+                <p className="discounted-total-price">Total con Descuento: ${totalConDescuento.toFixed(2)}</p>
+              </>
+            ) : (
+              <p className="total-price">Total: ${totalCarrito.toFixed(2)}</p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -161,7 +169,7 @@ const Pedido = () => {
           detalles={pedidoDetalles} 
           onClose={() => { 
             setShowPopup(false); 
-            navigate('/'); // Línea agregada para redirigir al home
+            navigate('/'); // Redirigir al home
           }} 
         />
       )}

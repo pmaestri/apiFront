@@ -10,10 +10,10 @@ export default defineConfig({
       allow: [
         //'/Users/paulamaestri/apiFront',
         //'/Users/paulamaestri/apiFront/node_modules/slick-carousel/slick/fonts'
-         'C:/Users/Emma/Desktop/API FRONT/apiFront',
-         'C:/Users/Emma/Desktop/API FRONT/node_modules/slick-carousel/slick/fonts'
-         //'C:/Users/russo/API FRONT/apiFront',
-         //'C:/Users/russo/API FRONT/apiFront/node_modules/slick-carousel/slick/fonts'
+         //'C:/Users/Emma/Desktop/API FRONT/apiFront',
+         //'C:/Users/Emma/Desktop/API FRONT/node_modules/slick-carousel/slick/fonts'
+         'C:/Users/russo/API FRONT/apiFront',
+         'C:/Users/russo/API FRONT/apiFront/node_modules/slick-carousel/slick/fonts'
       ]
     }
   }

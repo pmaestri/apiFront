@@ -1,6 +1,6 @@
 /* Contenedor del pedido */
 .pedido-container {
-    background-color: #fdeaf2; /* Color de fondo ajustado a la paleta */
+    background-color: #fdeaf2; 
     padding: 40px;
     border-radius: 12px;
     width: 900px;
@@ -27,9 +27,9 @@
     display: flex;
     margin-bottom: 20px;
     padding: 15px;
-    border: 1px solid #f3aacb; /* Borde ajustado a la paleta */
+    border: 1px solid #f3aacb; 
     border-radius: 10px;
-    background-color: #ffffff; /* Mantengo el blanco para contraste */
+    background-color: #ffffff; 
     align-items: center;
     transition: transform 0.3s ease;
 }
@@ -54,20 +54,27 @@
 
 .cart-product-details h3 {
     font-size: 18px;
-    color: #c8799f; /* Color ajustado de la paleta */
+    color: #c8799f; 
     margin-bottom: 8px;
 }
 
 .cart-product-details p {
     font-size: 14px;
-    color: #bd6f95; /* Ajustado a la paleta */
+    color: #bd6f95; 
     margin-bottom: 4px;
+}
+
+/* Eliminar bullet points */
+.pedido-list {
+    list-style-type: none;
+    padding-left: 0; 
+    margin: 0;
 }
 
 /* Precio original (tachado) */
 .original-price {
     font-size: 14px;
-    color: #df8fb5; /* Ajustado a la paleta */
+    color: #df8fb5; 
     text-decoration: line-through;
     margin-right: 8px;
 }
@@ -76,12 +83,13 @@
 .discounted-price {
     font-size: 16px;
     font-weight: 600;
+    color: #c8799f;
 }
 
 /* Precio normal si no hay descuento */
 .product-price {
     font-size: 16px;
-    color: #bd6f95; /* Ajustado a la paleta */
+    color: #bd6f95; 
     font-weight: 600;
 }
 
@@ -92,7 +100,6 @@
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    height: 100%;
     text-align: center;
 }
 
@@ -100,23 +107,56 @@
 .pedido-container h2, 
 .pedido-container h3 {
     font-size: 25px;
-    color: #c8799f; /* Ajustado a la paleta */
+    color: #c8799f; 
     margin-bottom: 10px;
-    margin-top:5px;
+    margin-top: 5px;
 }
+
 .pedido-container h3 {
-    font-size: 15px; /* Cambiar el tamaño de la fuente aquí */
+    font-size: 15px;
 }
+
 .pedido-container h4 {
-    font-size: 15px; /* Cambiar el tamaño de la fuente aquí */
+    font-size: 15px;
     color: #c8799f;
 }
 
+/* Selector de pago */
+.pedido-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #bd6f95;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-top: 10px;
+    background-color: white;
+    color: #bd6f95;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* Cambiar color del borde y texto cuando esté en foco */
+.pedido-select:focus {
+    outline: none;
+    border: 2px solid #c8799f;
+}
+
+/* Estilo de las opciones dentro del selector */
+.pedido-select option {
+    background-color: white;
+    color: #bd6f95;
+    font-weight: 600;
+}
+
+/* Hover en el selector */
+.pedido-select:hover {
+    border-color: #c8799f;
+}
 
 /* Botón de confirmación del pedido */
 .pedido-confirm-button {
     width: 100%;
-    background-color: #bd6f95; /* Color de fondo ajustado */
+    background-color: #bd6f95;
     color: #ffffff;
     border: none;
     border-radius: 6px;
@@ -129,29 +169,34 @@
 }
 
 .pedido-confirm-button:hover {
-    background-color: #c8799f; /* Color de hover ajustado a la paleta */
+    background-color: #c8799f;
 }
 
-/* Selector de pago */
-.pedido-select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #df8fb5; /* Borde ajustado */
-    border-radius: 6px;
-    font-size: 16px;
-    margin-top: 10px;
+/* Total debajo del botón de confirmar pedido */
+.order-total {
+    margin-top: 20px;
 }
 
-/* Lista de productos */
-.pedido-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+.original-total-price {
+    font-size: 18px;
+    color: #df8fb5;
+    text-decoration: line-through;
+    margin-bottom: 8px;
 }
 
-.pedido-list-item {
-    margin-bottom: 20px;
+.discounted-total-price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #bd6f95;
 }
+
+.total-price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #bd6f95;
+}
+
+/* Estilos de popup */
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -162,45 +207,56 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Asegúrate de que esté por encima del contenido */
-  }
-  
-  .popup-content {
-    background-color: white;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
-    max-width: 700px; /* Aumentado para un pop-up más ancho */
-    width: 100%; /* Asegura que ocupe el 100% del espacio disponible hasta el max-width */
-    max-height: 80%; /* Asegura que el contenido no exceda la altura de la ventana */
-    overflow-y: auto; /* Habilita el scroll si el contenido es demasiado largo */
-  }
-  
-  
-  .popup-content button {
-    background-color:#df8fb5;/* Cambia esto al color de tu tema */
-    color: white; /* Color del texto */
+    max-width: 700px;
+    width: 100%;
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+/* Botón de cerrar popup */
+.popup-content button {
+    background-color: #df8fb5;
+    color: white;
     border: none;
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Animación para el cambio de color */
-    margin-top: 20px; /* Espaciado superior */
-  }
-  
-  .popup-content button:hover {
-    background-color:#df8fb5; /* Color del botón al pasar el mouse */
-  }
-  .total-highlight {
-    font-size: 1.5em; /* Aumenta el tamaño de la fuente */
-    font-weight: bold; /* Haz el texto más grueso */
-    color: #df8fb5; /* Cambia el color al de tu tema */
-    margin-top: 10px; /* Espacio superior para separar del texto anterior */
-  }
-  .title-highlight {
-    font-size: 1.8em; /* Aumenta el tamaño de la fuente */
-    font-weight: bold; /* Haz el texto más grueso */
-    color: #df8fb5; /* Cambia el color al de tu tema */
-    margin-bottom: 10px; /* Espacio inferior para separar del siguiente texto */
-  }
-    
-    
+    margin-top: 20px;
+}
+
+.popup-content button:hover {
+    background-color: #bd6f95;
+}
+
+/* Resaltado de total */
+.total-highlight {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #df8fb5;
+    margin-top: 10px;
+}
+
+/* Título resaltado */
+.title-highlight {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #df8fb5;
+    margin-bottom: 10px;
+}
+
+/* Efecto hover en el popup */
+.popup-content {
+    transition: transform 0.3s ease;
+}
+
+.popup-content:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}

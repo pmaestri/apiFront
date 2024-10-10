@@ -24,56 +24,7 @@ const ProductDetail = ({ onClose }) => {
     fetchProduct();
   }, [id]);
 
-  // Función para agregar el producto al carrito
-  const addToCart = (product) => {
-    console.log("Producto a agregar al carrito:", {
-      id: product.id,
-      name: product.name,
-      stock: product.stock, // Asegúrate de que aquí se muestra correctamente el stock
-      quantity,
-      price: finalPrice,
-    });
-    
-    const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
-    const productInCart = currentCart.find(item => item.id === product.id);
 
-    // Verificar si existe el precio con descuento y aplicarlo si es necesario
-    const finalPrice = product.discount 
-      ? (product.price * (1 - product.discount / 100)) // Precio con descuento
-      : product.price; // Precio original si no hay descuento
-
-    // Verificar si hay suficiente stock antes de agregar al carrito
-    if (quantity > product.stock) {
-      setMessage(`No hay suficiente stock disponible. Stock actual: ${product.stock}`);
-      setTimeout(() => setMessage(''), 3000); // Limpiar el mensaje después de 3 segundos
-    } else {
-      if (productInCart) {
-        // Si el producto ya está en el carrito, actualiza la cantidad
-        if (productInCart.quantity + quantity <= product.stock) {
-          productInCart.quantity += quantity;
-        } else {
-          setMessage(`No hay suficiente stock disponible. Stock actual: ${product.stock}`);
-          setTimeout(() => setMessage(''), 3000);
-          return;
-        }
-      } else {
-        // Agrega el producto al carrito con stock
-        currentCart.push({ 
-          id: product.id,
-          name: product.name,
-          price: finalPrice,
-          originalPrice: product.originalPrice || product.price,
-          discount: product.discount || 0,
-          image: product.img,
-          quantity, // Cantidad seleccionada
-          stock: product.stock // **Aquí se agrega el stock correctamente**
-        });
-      }
-
-      localStorage.setItem('cart', JSON.stringify(currentCart));
-      alert(`Producto agregado al carrito con precio: $${finalPrice}`);
-    }
-  };
 
   // Función para aumentar la cantidad seleccionada
   const increaseQuantity = () => {

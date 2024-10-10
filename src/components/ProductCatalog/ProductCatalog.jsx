@@ -38,6 +38,7 @@ const ProductCatalog = () => {
         setLoading(true);
         try {
             const detalle = await obtenerDetalleProducto(productoId);
+            
             setProductoSeleccionado(detalle);
         } catch (error) {
             setError(`Error al obtener el detalle del producto: ${error.message}`);
@@ -84,6 +85,7 @@ const ProductCatalog = () => {
 
     // Función para agregar productos al carrito
     const addToCart = (product, quantity) => {
+        console.log(product);  // Verificar el contenido del producto
         const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
         const productInCart = currentCart.find(item => item.id === product.id);
 
@@ -95,20 +97,27 @@ const ProductCatalog = () => {
 
         if (productInCart) {
             // Si ya está en el carrito, aumenta la cantidad
-            productInCart.quantity += quantity;
+            const totalQuantity = productInCart.quantity + quantity;
+
+            if (totalQuantity <= product.stock) {
+            productInCart.quantity = totalQuantity; // Actualizar la cantidad en el carrito
+            } else {
+            console.log(`No hay suficiente stock disponible para ${product.nombre}.`);
+            alert(`No puedes agregar más de ${product.stock} unidades en total para ${product.nombre}.`);
+            return;
+            }
         } else {
             // Agrega el producto al carrito con toda la información necesaria, incluyendo el precio correcto
             currentCart.push({ 
                 id: product.id,
-                name: product.nombre,
-                price: finalPrice,  // Guardar el precio final calculado (con descuento si aplica)
-                originalPrice: product.precio,  // Guardar el precio original también
-                image: `data:image/jpeg;base64,${product.imagen}`,  // Usa la imagen del producto
-                discount: product.descuento,  // Guardar el porcentaje de descuento si aplica
-                quantity: quantity,
-                stock: product.stock
-                
-            });
+                name: product.nombre, // Usamos 'nombre' en lugar de 'name'
+                price: finalPrice, // Precio final con descuento si aplica
+                originalPrice: product.precio, // Precio original
+                image: `data:image/jpeg;base64,${product.imagen}`, // Imagen del producto en formato base64
+                discount: product.descuento, // Descuento si aplica
+                quantity: quantity, // Cantidad seleccionada
+                stock: product.stock // Stock disponible
+              });
         }
 
         // Guarda en el localStorage
@@ -223,6 +232,7 @@ const ProductCatalog = () => {
             )}
 
             {productoSeleccionado && (
+                
                 <div className="product-detail-overlay">
                     <div className="product-detail-container">
                         <button className="close-icon" onClick={handleCloseDetail} aria-label="Cerrar detalle">
