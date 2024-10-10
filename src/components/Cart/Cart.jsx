@@ -8,6 +8,7 @@ const Cart = ({ onClose }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [stockMessage, setStockMessage] = useState('');
+  const [loginMessage, setLoginMessage] = useState(''); // Estado para el mensaje de inicio de sesión
   const navigate = useNavigate();
 
   // Cargar productos del localStorage
@@ -77,6 +78,16 @@ const Cart = ({ onClose }) => {
 
   // Confirmar carrito y verificar stock
   const handleConfirmCart = () => {
+    // Verificar si el usuario está logueado
+    const token = localStorage.getItem('token'); // Obtener el token del localStorage
+    if (!token) { // Si no hay token, mostrar mensaje y redirigir a la página de inicio de sesión
+      setLoginMessage('Por favor, inicie sesión para continuar.'); // Mensaje de inicio de sesión
+      setTimeout(() => {
+        navigate('/login'); // Cambia la ruta según la que uses para la página de inicio de sesión
+      }, 2000); // Esperar 2 segundos antes de redirigir
+      return; // Salir de la función
+    }
+
     const itemsExceedingStock = cartItems.filter(item => item.quantity > item.stock);
     if (itemsExceedingStock.length > 0) {
       const stockMessages = itemsExceedingStock.map(item => `${item.name}: stock disponible ${item.stock}`);
@@ -100,6 +111,9 @@ const Cart = ({ onClose }) => {
       </button>
       <h2>Carrito de Compras</h2>
 
+      {/* Mensaje de inicio de sesión */}
+      {loginMessage && <p className="login-message">{loginMessage}</p>}
+
       {/* Mensaje de stock */}
       {stockMessage && <p className="stock-message">{stockMessage}</p>}
 
@@ -113,17 +127,17 @@ const Cart = ({ onClose }) => {
               <div>
                 <h3>{item.name}</h3>
                 <div className="quantity-control-container">
-                <div className="quantity-control">
-                  <button onClick={() => decreaseItemQuantity(item.id)}>-</button>
-                  <span>{item.quantity}</span>
-                  <button 
-                    onClick={() => increaseItemQuantity(item.id)}
-                    disabled={item.quantity >= item.stock}
-                  >
-                    +
-                  </button>
+                  <div className="quantity-control">
+                    <button onClick={() => decreaseItemQuantity(item.id)}>-</button>
+                    <span>{item.quantity}</span>
+                    <button 
+                      onClick={() => increaseItemQuantity(item.id)}
+                      disabled={item.quantity >= item.stock}
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
-              </div>
 
                 <div className="price-container">
                   {item.discount > 0 ? (
