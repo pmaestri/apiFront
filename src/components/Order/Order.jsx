@@ -27,13 +27,14 @@ const Popup = ({ detalles, onClose }) => {
     </div>
   );
 };
+
 const Pedido = () => {
   const [metodoPago, setMetodoPago] = useState('');
   const [cuotas, setCuotas] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [pedidoDetalles, setPedidoDetalles] = useState(null);
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Línea agregada para la navegación
   const { cartItems, totalCarrito } = location.state || { cartItems: [], totalCarrito: 0 };
 
   // Obtener el token desde el almacenamiento local
@@ -156,7 +157,13 @@ const Pedido = () => {
 
       {/* Mostrar el pop-up si está activo */}
       {showPopup && (
-        <Popup detalles={pedidoDetalles} onClose={() => setShowPopup(false)} />
+        <Popup 
+          detalles={pedidoDetalles} 
+          onClose={() => { 
+            setShowPopup(false); 
+            navigate('/'); // Línea agregada para redirigir al home
+          }} 
+        />
       )}
     </div>
   );
