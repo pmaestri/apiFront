@@ -13,25 +13,45 @@ export const setAuthToken = (token) => {
   }
 };
 
-// Función para crear un nuevo producto
-export const crearProducto = async (productoData) => {
+export const crearProducto = async (formData, token) => {
   try {
-    const response = await api.post('', productoData);
-    return response.data;
+      const response = await api.post('', formData, {
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data'
+          }
+      });
+      return response.data;
   } catch (error) {
-    throw new Error(`Error creando el producto: ${error.message}`);
+      throw new Error(error.response?.data?.message || 'Error al crear el producto');
   }
 };
 
 // Función para actualizar un producto
-export const actualizarProducto = async (productoId, productoData) => {
+export const actualizarProducto = async (productoId, productoData, token) => {
   try {
-    const response = await api.put(`/${productoId}`, productoData);
+    const formData = new FormData();
+
+    // Agrega solo los campos que deseas actualizar
+    Object.entries(productoData).forEach(([key, value]) => {
+      if (value !== '') { // Solo agrega los campos que no son vacíos
+        formData.append(key, value);
+      }
+    });
+
+    const response = await api.put(`/${productoId}`, formData, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
     return response.data;
   } catch (error) {
     throw new Error(`Error actualizando el producto: ${error.message}`);
   }
 };
+
 
 // Función para eliminar un producto
 export const eliminarProducto = async (productoId) => {
@@ -53,9 +73,13 @@ export const obtenerProducto = async (productoId) => {
 };
 
 // Función para obtener todos los productos
-export const obtenerProductos = async () => {
+export const obtenerProductos = async (token) => {
   try {
-    const response = await api.get('');
+    const response = await api.get('', {
+      headers: {
+        Authorization: `Bearer ${token}`, // Enviar el token de autorización
+      },
+    });
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo los productos: ${error.message}`);

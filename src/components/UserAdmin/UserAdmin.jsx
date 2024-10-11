@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
-import { obtenerUsuarioAdmin, obtenerUsuariosVisualDtos, eliminarUsuarioAdmin } from '../../api/UserApi.jsx'; // Importa la función eliminarUsuario
+import { obtenerUsuarioAdmin, obtenerUsuariosVisualDtos, eliminarUsuarioAdmin , setAuthToken} from '../../api/UserApi.jsx'; // Importa la función eliminarUsuario
 import './UserAdmin.css';
+
 
 const UserAdmin = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -10,7 +12,18 @@ const UserAdmin = () => {
   const [usuarioBuscado, setUsuarioBuscado] = useState(null);
   const [verTodosVisible, setVerTodosVisible] = useState(false);
   const [verPedidos, setVerPedidos] = useState({});
+  const navigate = useNavigate(); // Inicializar navigate
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setAuthToken(token); // Configura el token en las solicitudes
+    } else {
+      // Redirige al usuario a la página de login si no hay token
+      navigate('/login');
+    }
+  }, [navigate]);
+  
   // Función para obtener todos los usuarios
   const fetchUsuarios = async () => {
     try {
