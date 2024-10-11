@@ -54,13 +54,18 @@ export const actualizarProducto = async (productoId, productoData, token) => {
 
 
 // Función para eliminar un producto
-export const eliminarProducto = async (productoId) => {
+export const eliminarProducto = async (productoId, token) => {
   try {
-    await api.delete(`/${productoId}`);
+    await api.delete(`/${productoId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Enviar el token de autorización
+      },
+    });
   } catch (error) {
     throw new Error(`Error eliminando el producto: ${error.message}`);
   }
 };
+
 
 // Función para obtener un producto por ID
 export const obtenerProducto = async (productoId) => {

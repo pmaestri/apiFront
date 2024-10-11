@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
-import { crearProducto, actualizarProducto, obtenerProductos } from '../../api/ProductApi.jsx';
+import { crearProducto, actualizarProducto, obtenerProductos, eliminarProducto } from '../../api/ProductApi.jsx';
 import { useNavigate } from 'react-router-dom';
 import { obtenerRolUsuario, setAuthToken } from '../../api/UserApi.jsx';
 import './ProductsAdmin.css';
+import { FaTrashAlt } from 'react-icons/fa';
+
 
 const ProductsAdmin = () => {
   const navigate = useNavigate();
@@ -115,6 +117,22 @@ const ProductsAdmin = () => {
     // Alternar entre mostrar y ocultar productos
     setShowProductos(!showProductos);
   };
+  const handleEliminarProducto = async (productoId) => {
+    const confirmacion = window.confirm('¿Estás seguro de que deseas eliminar este producto?');
+    if (confirmacion) {
+      const token = localStorage.getItem('token'); // Obtén el token desde localStorage
+      try {
+        await eliminarProducto(productoId, token);
+        // Actualizar la lista de productos después de eliminar
+        const productosActualizados = productos.filter((producto) => producto.id !== productoId);
+        setProductos(productosActualizados);
+        alert('Producto eliminado con éxito');
+      } catch (error) {
+        alert(`Error al eliminar el producto: ${error.message}`);
+      }
+    }
+  };
+  
   
   if (!isAdmin) return null;
 
@@ -132,8 +150,10 @@ const ProductsAdmin = () => {
       </button>
 
       <button className="ProductsAdmin__toggle-button" onClick={handleMostrarProductos}>
-        Mostrar Todos los Productos
+        {showProductos ? 'Ocultar Productos' : 'Mostrar Todos los Productos'}
       </button>
+
+
 
       {/* Formulario para crear producto */}
       <div className={`ProductsAdmin__form-container ${showCreateForm ? 'visible' : 'hidden'}`}>
@@ -206,6 +226,12 @@ const ProductsAdmin = () => {
                     <p>Descuento: {producto.descuento}%</p>
                     <p>Categoría: {producto.nombreCategoria}</p>
                     <p>{producto.disponible ? 'Disponible' : 'No Disponible'}</p>
+                    <button
+                      className="ProductsAdmin__delete-button"
+                      onClick={() => handleEliminarProducto(producto.id)}
+                    >
+                      <FaTrashAlt /> Eliminar
+                    </button>
                   </div>
                 </div>
               ))}
