@@ -1,18 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
-
 .navbar {
   font-family: "Fredoka", sans-serif;
-  background-color: #fdeaf2; /* Color de fondo de la barra de navegación */
+  background-color: #fdeaf2;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
 }
 
-.logo-and-links { 
+.logo-and-links {
   display: flex;
-  align-items: center; /* Alinear verticalmente el logo y las categorías */
+  align-items: center;
 }
 
 .catalogo {
@@ -26,20 +26,15 @@
   font-size: 16px;
   text-decoration: none;
   margin-right: 10px;
-  font-weight: bold;  /* Siempre en negrita */
+  font-weight: bold;
 }
 
 .catalogo a:hover {
   font-weight: bold;
 }
 
-.divider {
-  color: #fbd5e5; /* Barra sutil de color rosa */
-  font-size: 20px;
-}
-
 .navbar-links {
-  list-style-type: none; /* Sin viñetas */
+  list-style-type: none;
   display: flex;
   align-items: center;
   margin: 0;
@@ -47,160 +42,135 @@
 }
 
 .navbar-links li {
-  position: relative; /* Para que el menú desplegable se posicione correctamente */
-  margin: 0 15px; /* Espaciado entre elementos */
+  margin: 0 15px;
 }
 
 .navbar-links a {
-  color: #bd6f95; /* Color de los enlaces */
-  text-decoration: none; /* Sin subrayado */
+  color: #bd6f95;
+  text-decoration: none;
   padding: 10px 15px;
   border-radius: 5px;
-  transition: background-color 0.3s; /* Transición suave */
+  transition: background-color 0.3s;
 }
 
 .navbar-links a:hover {
-  background-color: #fbd5e5; /* Color al pasar el mouse */
+  background-color: #fbd5e5;
 }
 
-.search-and-icons { 
+.search-and-icons {
   display: flex;
   align-items: center;
+  position: relative; /* Asegura que el contenedor de las sugerencias se posicione respecto a la barra de búsqueda */
 }
 
-.icon-container { /* Contenedor para cada icono */
+.icon-container {
   margin-left: 35px;
 }
 
-.nav-icon { /* Estilo base para los iconos */
+.nav-icon {
   font-size: 25px;
-  color: #bd6f95; /* Color de los iconos */
+  color: #bd6f95;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.nav-icon:hover { /* Estilo al pasar el mouse */
-  color: #fbd5e5; /* Color al pasar el mouse */
+.nav-icon:hover {
+  color: #fbd5e5;
 }
 
-/* Barra de búsqueda */
 .search-bar {
-  display: flex; /* Alineación horizontal */
-  align-items: center; /* Centrar elementos verticalmente */
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
 .search-bar input {
-  padding: 8px 10px; /* Espaciado interior del campo */
-  border: 1px solid #CCCCCC; /* Borde del campo */
-  border-radius: 5px; /* Bordes redondeados */
-  outline: none; /* Quitar contorno al seleccionar */
-  width: 200px; /* Ancho del campo */
+  padding: 8px 10px;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  outline: none;
+  width: 200px;
 }
 
 .search-bar button {
-  background-color: #bd6f95; /* Color de fondo del botón */
-  border: none; /* Sin borde */
-  padding: 8px 10px; /* Espaciado interior del botón */
-  margin-left: 5px; /* Espaciado entre el campo de texto y el botón */
-  border-radius: 5px; /* Bordes redondeados */
-  cursor: pointer; /* Cambiar cursor al pasar por encima */
+  background-color: #bd6f95;
+  border: none;
+  padding: 8px 10px;
+  margin-left: 5px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .search-bar button:hover {
-  background-color: #fbd5e5; /* Color al pasar el mouse en el botón */
+  background-color: #fbd5e5;
 }
 
-/* Subcategorías desplegables */
-.dropdown-content {
-  display: none; /* Ocultar subcategorías por defecto */
-  position: absolute;
-  background-color: #fbd5e5; /* Color de fondo del menú desplegable */
-  min-width: 160px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block; /* Mostrar subcategorías al pasar el mouse */
-}
-
-.dropdown-content li {
-  margin: 0; /* Sin margen entre subcategorías */
-}
-
-.dropdown-content a {
-  color: #bd6f95; /* Color de los enlaces en subcategorías */
-  padding: 10px; /* Espaciado en subcategorías */
-  display: block; 
-  text-align: left; /* Alinear texto a la izquierda */
-}
-
-.dropdown-content a:hover {
-  font-weight: bold; /* Color al pasar el mouse sobre subcategorías */
-}
-
-/* Modificaciones para el logo en un cuadro rosa */
 .logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #fbd5e5; /* Borde rosa */
-  padding: 5px 13px; /* Espaciado dentro del recuadro */
-  border-radius: 8px; /* Bordes redondeados */
-  background-color: #fdeaf2; /* Fondo rosa claro */
+  border: 2px solid #fbd5e5;
+  padding: 5px 13px;
+  border-radius: 8px;
+  background-color: #fdeaf2;
   transition: background-color 0.3s ease, border-color 0.3s ease;
-  margin-right: 40px; /* Aumentar el margen derecho para separar del Catálogo */
+  margin-right: 40px;
 }
 
 .logo:hover {
-  background-color: #fbd5e5; /* Cambia el fondo al pasar el cursor */
-  border-color: #fbd5e5; /* Cambia el borde al pasar el cursor */
+  background-color: #fbd5e5;
+  border-color: #fbd5e5;
 }
 
 .logo img {
-  width: 100px; /* Ajusta el tamaño según sea necesario */
-  height: auto; /* Mantiene la proporción de la imagen */
-  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  width: 100px;
+  height: auto;
+  cursor: pointer;
 }
 
-/* Submenús */
-.sub-dropdown-content {
-  display: none;
+/* Sugerencias de productos */
+.suggestions-box {
   position: absolute;
-  background-color: #fdeaf2;
-  left: 100%;
-  top: 0;
-  z-index: 1000;
-  min-width: 160px;
+  top: 100%;
+  left: 0;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 99;
+  margin-top: 5px;
 }
 
-.sub-dropdown:hover .sub-dropdown-content {
-  display: block;
-}
-
-.sub-dropdown-content a {
+.suggestion-item {
+  display: flex;
+  align-items: center;
   padding: 10px;
-  text-decoration: none;
-  display: block;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Clase para manejar múltiples columnas */
-.multi-column-menu {
-  column-count: 2; /* Número de columnas por defecto */
-  column-gap: 20px; /* Espaciado entre columnas */
-  max-height: 400px; /* Ajusta según la cantidad de elementos */
-  max-width: 600px; /* Limitar el ancho total a 4 columnas */
-  overflow-y: auto; /* Añade scroll si se excede la altura */
+.suggestion-item:hover {
+  background-color: #fdeaf2;
 }
 
-.multi-column-menu li {
-  list-style-type: disc; /* Bullet points personalizados */
-  margin-left: 20px; /* Espaciado del bullet point */
-  break-inside: avoid; /* Evita que los elementos se corten entre columnas */
+.suggestion-item img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 10px;
 }
 
-@media (min-width: 1024px) {
-  .multi-column-menu {
-    column-count: 4; /* Hasta 4 columnas en pantallas grandes */
-  }
+.suggestion-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.suggestion-details p {
+  margin: 0;
+  color: #bd6f95;
+  font-size: 14px;
 }

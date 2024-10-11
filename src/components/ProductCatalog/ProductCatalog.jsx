@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './ProductCatalog.css';
 import {
     obtenerProductosDisponiblesConDetalles,
     obtenerDetalleProducto,
     filtrarProductos
 } from '../../api/ProductCatalogApi';
-import { FaTimes, FaShoppingCart, FaFilter } from 'react-icons/fa';
+import { FaTimes, FaShoppingCart } from 'react-icons/fa';
 
 const ProductCatalog = () => {
     const [productos, setProductos] = useState([]);
@@ -13,10 +14,43 @@ const ProductCatalog = () => {
     const [loading, setLoading] = useState(true);
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     const [cantidad, setCantidad] = useState(1);
-    const [mostrarFiltro, setMostrarFiltro] = useState(false);
     const [filtros, setFiltros] = useState({ nombre: '', categoriaId: '', precioMinimo: '', precioMaximo: '', marca: '', modelo: '' });
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Estado para el mensaje de éxito
-    const [message, setMessage] = useState(null); // Nuevo estado para manejar los mensajes informativos
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [message, setMessage] = useState(null);
+    const [modelos, setModelos] = useState([]);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const marcas = ['IPHONE', 'SAMSUNG', 'MOTOROLA', 'GENERICO'];
+    const modelosPorMarca = {
+        IPHONE: ['IPHONE_15_PRO_MAX', 'IPHONE_15_PRO', 'IPHONE_15_PLUS', 'IPHONE_15', 'IPHONE_14_PRO_MAX', 'IPHONE_14_PRO', 'IPHONE_14_PLUS', 'IPHONE_14', 'IPHONE_13_PRO_MAX', 'IPHONE_13_PRO', 'IPHONE_13_MINI', 'IPHONE_13'],
+        SAMSUNG: ['GALAXY_S23_ULTRA', 'GALAXY_S23_PLUS', 'GALAXY_S23', 'GALAXY_Z_FOLD_5', 'GALAXY_Z_FLIP_5', 'GALAXY_S22_ULTRA', 'GALAXY_S22_PLUS', 'GALAXY_S22', 'GALAXY_A54_5G', 'GALAXY_A34_5G', 'GALAXY_A14_5G', 'GALAXY_A04S'],
+        MOTOROLA: ['MOTOROLA_EDGE_40_PRO', 'MOTOROLA_EDGE_40', 'MOTOROLA_EDGE_30_ULTRA', 'MOTOROLA_EDGE_30_FUSION', 'MOTO_G73_5G', 'MOTO_G53_5G', 'MOTO_G23', 'MOTO_G13', 'MOTO_E22', 'MOTO_E32'],
+        GENERICO: []
+    };
+
+    // Función para obtener el parámetro de la URL
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const categoriaId = params.get('categoria');
+        const searchQuery = params.get('search');  // Capturamos el valor de búsqueda
+        const productoId = params.get('productoId'); // Capturamos el id del producto si existe
+
+        if (categoriaId) {
+            setFiltros((prevFiltros) => ({ ...prevFiltros, categoriaId }));
+        }
+
+        if (searchQuery) {
+            setFiltros((prevFiltros) => ({ ...prevFiltros, nombre: searchQuery }));
+            handleFiltrarProductos(searchQuery); // Llamamos a la función para filtrar por nombre
+        }
+
+        // Si existe un productoId en la URL, abrimos automáticamente el detalle del producto
+        if (productoId) {
+            handleVerDetalleProducto(productoId);
+        }
+    }, [location]);
 
     useEffect(() => {
         const fetchProductos = async () => {
@@ -34,11 +68,43 @@ const ProductCatalog = () => {
         fetchProductos();
     }, []);
 
+    const handleMarcaChange = (e) => {
+        const marcaSeleccionada = e.target.value;
+        setFiltros({ ...filtros, marca: marcaSeleccionada, modelo: '' });
+        setModelos(modelosPorMarca[marcaSeleccionada] || []);
+    };
+
+    const handleFiltrarProductos = async (nombreProducto = '') => {
+        setLoading(true);
+        try {
+            const filtrosAEnviar = {
+                ...(nombreProducto && { nombre: nombreProducto }),  // Filtramos solo por nombre cuando se usa el botón de búsqueda
+                ...(filtros.categoriaId && { categoriaId: filtros.categoriaId }),
+                ...(filtros.precioMinimo && { precioMinimo: parseFloat(filtros.precioMinimo) }),
+                ...(filtros.precioMaximo && { precioMaximo: parseFloat(filtros.precioMaximo) }),
+                ...(filtros.marca && { marca: filtros.marca.toUpperCase() }),
+                ...(filtros.modelo && { modelo: filtros.modelo.toUpperCase() })
+            };
+
+            const dataFiltrada = await filtrarProductos(filtrosAEnviar);
+            setProductos(dataFiltrada);
+
+            if (dataFiltrada.length === 0) {
+                setMessage(`No se han encontrado productos para los criterios seleccionados.`);
+            } else {
+                setMessage(null);
+            }
+        } catch (error) {
+            setError(`Error al filtrar productos: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleVerDetalleProducto = async (productoId) => {
         setLoading(true);
         try {
             const detalle = await obtenerDetalleProducto(productoId);
-            
             setProductoSeleccionado(detalle);
         } catch (error) {
             setError(`Error al obtener el detalle del producto: ${error.message}`);
@@ -61,178 +127,158 @@ const ProductCatalog = () => {
         }
     };
 
-    const handleFiltrarProductos = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const filtrosAEnviar = {
-                ...(filtros.nombre && { nombre: filtros.nombre }), 
-                ...(filtros.categoriaId && { categoriaId: filtros.categoriaId }),
-                ...(filtros.precioMinimo && { precioMinimo: parseFloat(filtros.precioMinimo) }),
-                ...(filtros.precioMaximo && { precioMaximo: parseFloat(filtros.precioMaximo) }),
-                ...(filtros.marca && { marca: filtros.marca }),
-                ...(filtros.modelo && { modelo: filtros.modelo }),
-            };
-
-            const dataFiltrada = await filtrarProductos(filtrosAEnviar);
-            setProductos(dataFiltrada);
-        } catch (error) {
-            setError(`Error al filtrar productos: ${error.message}`);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Función para agregar productos al carrito
     const addToCart = (product, quantity) => {
-        console.log(product);  // Verificar el contenido del producto
         const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
         const productInCart = currentCart.find(item => item.id === product.id);
 
-
-        // Verificar si hay descuento y calcular el precio final
         const finalPrice = product.descuento > 0 
-          ? (product.precio * (1 - product.descuento / 100))  // Precio con descuento
-          : product.precio;  // Precio original si no hay descuento
+          ? (product.precio * (1 - product.descuento / 100))  
+          : product.precio;  
 
         if (productInCart) {
-            // Si ya está en el carrito, aumenta la cantidad
             const totalQuantity = productInCart.quantity + quantity;
 
             if (totalQuantity <= product.stock) {
-            productInCart.quantity = totalQuantity; // Actualizar la cantidad en el carrito
+                productInCart.quantity = totalQuantity; 
             } else {
-            console.log(`No hay suficiente stock disponible para ${product.nombre}.`);
-            alert(`No puedes agregar más de ${product.stock} unidades en total para ${product.nombre}.`);
-            return;
+                alert(`No puedes agregar más de ${product.stock} unidades en total para ${product.nombre}.`);
+                return;
             }
         } else {
-            // Agrega el producto al carrito con toda la información necesaria, incluyendo el precio correcto
             currentCart.push({ 
                 id: product.id,
-                name: product.nombre, // Usamos 'nombre' en lugar de 'name'
-                price: finalPrice, // Precio final con descuento si aplica
-                originalPrice: product.precio, // Precio original
-                image: `data:image/jpeg;base64,${product.imagen}`, // Imagen del producto en formato base64
-                discount: product.descuento, // Descuento si aplica
-                quantity: quantity, // Cantidad seleccionada
-                stock: product.stock // Stock disponible
+                name: product.nombre, 
+                price: finalPrice, 
+                originalPrice: product.precio, 
+                image: `data:image/jpeg;base64,${product.imagen}`, 
+                discount: product.descuento, 
+                quantity: quantity, 
+                stock: product.stock 
               });
         }
 
-        // Guarda en el localStorage
         localStorage.setItem('cart', JSON.stringify(currentCart));
 
-        console.log("Producto agregado al carrito con precio:", finalPrice);  // Para depurar
-
-        // Mostrar mensaje de éxito
         setShowSuccessMessage(true);
         setTimeout(() => {
-            setShowSuccessMessage(false);  // Oculta el mensaje después de 3 segundos
+            setShowSuccessMessage(false);
         }, 3000);
     };
 
     return (
         <div className="product-catalog">
-            <div className="header-container">
-                <h2>Catálogo de Productos</h2>
-                <div className="filter-icon" onClick={() => setMostrarFiltro(!mostrarFiltro)}>
-                    <FaFilter />
-                    <span className="filter-text">Filtrar Productos</span>
+            <div className="catalog-layout">
+                <div className="filter-sidebar">
+                    <form className="filter-form" onSubmit={(e) => {
+                        e.preventDefault();
+                        handleFiltrarProductos(filtros.nombre);
+                    }}>
+                        <input
+                            type="text"
+                            placeholder="Nombre del Producto"
+                            value={filtros.nombre}
+                            onChange={(e) => setFiltros({ ...filtros, nombre: e.target.value })}
+                        />
+                        <select
+                            value={filtros.categoriaId}
+                            onChange={(e) => setFiltros({ ...filtros, categoriaId: e.target.value })}
+                        >
+                            <option value="">Selecciona una categoría</option>
+                            <option value="1">Fundas</option>
+                            <option value="2">Vidrios</option>
+                            <option value="3">Cargadores</option>
+                            <option value="4">Auriculares</option>
+                        </select>
+                        <input
+                            type="number"
+                            placeholder="Precio Mínimo"
+                            value={filtros.precioMinimo}
+                            onChange={(e) => setFiltros({ ...filtros, precioMinimo: e.target.value })}
+                        />
+                        <input
+                            type="number"
+                            placeholder="Precio Máximo"
+                            value={filtros.precioMaximo}
+                            onChange={(e) => setFiltros({ ...filtros, precioMaximo: e.target.value })}
+                        />
+                        <select
+                            value={filtros.marca}
+                            onChange={handleMarcaChange}
+                        >
+                            <option value="">Selecciona una marca</option>
+                            {marcas.map((marca) => (
+                                <option key={marca} value={marca}>
+                                    {marca}
+                                </option>
+                            ))}
+                        </select>
+                        <select
+                            value={filtros.modelo}
+                            onChange={(e) => setFiltros({ ...filtros, modelo: e.target.value })}
+                            disabled={!filtros.marca || filtros.marca === 'GENERICO'}
+                        >
+                            <option value="">Selecciona un modelo</option>
+                            {modelos.map((modelo) => (
+                                <option key={modelo} value={modelo}>
+                                    {modelo.replace(/_/g, ' ')}
+                                </option>
+                            ))}
+                        </select>
+                        <button type="submit">Filtrar</button>
+                    </form>
+                </div>
+
+                <div className="product-list">
+                    {loading ? (
+                        <p>Cargando productos...</p>
+                    ) : error ? (
+                        <p>Error: {error}</p>
+                    ) : message ? (
+                        <p className="no-results-message">{message}</p>
+                    ) : (
+                        productos.length > 0 ? (
+                            productos.map((producto) => (
+                                <div key={producto.id} className="product-item">
+                                    <img
+                                        src={`data:image/jpeg;base64,${producto.imagen}`}
+                                        alt={producto.nombre}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = 'path/to/placeholder/image.jpg';
+                                        }}
+                                    />
+                                    <h3>{producto.nombre}</h3>
+                                    <p>{producto.descripcion}</p>
+
+                                    {producto.descuento > 0 ? (
+                                        <>
+                                            <p className="product-price">
+                                                <span style={{ color: 'gray', textDecoration: 'line-through' }}>
+                                                    ${producto.precio}
+                                                </span>{' '}
+                                                - {producto.descuento}% OFF
+                                            </p>
+                                            <p className="discounted-price">
+                                                ${((producto.precio * (100 - producto.descuento)) / 100).toFixed(2)}
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <p className="product-price">${producto.precio}</p>
+                                    )}
+
+                                    <div className="button-container">
+                                        <button onClick={() => handleVerDetalleProducto(producto.id)}>Comprar</button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No se encontraron productos que coincidan con tu búsqueda.</p>
+                        )
+                    )}
                 </div>
             </div>
 
-            {mostrarFiltro && (
-                <form className="filter-form" onSubmit={handleFiltrarProductos}>
-                    <input
-                        type="text"
-                        placeholder="Nombre del Producto"
-                        value={filtros.nombre}
-                        onChange={(e) => setFiltros({ ...filtros, nombre: e.target.value })}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Categoría"
-                        value={filtros.categoriaId}
-                        onChange={(e) => setFiltros({ ...filtros, categoriaId: e.target.value })}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Precio Mínimo"
-                        value={filtros.precioMinimo}
-                        onChange={(e) => setFiltros({ ...filtros, precioMinimo: e.target.value })}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Precio Máximo"
-                        value={filtros.precioMaximo}
-                        onChange={(e) => setFiltros({ ...filtros, precioMaximo: e.target.value })}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Marca"
-                        value={filtros.marca}
-                        onChange={(e) => setFiltros({ ...filtros, marca: e.target.value })}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Modelo"
-                        value={filtros.modelo}
-                        onChange={(e) => setFiltros({ ...filtros, modelo: e.target.value })}
-                    />
-                    <button type="submit">Filtrar</button>
-                </form>
-            )}
-
-            {loading ? (
-                <p>Cargando productos...</p>
-            ) : error ? (
-                <p>Error: {error}</p>
-            ) : (
-                <div className="product-list">
-                    {productos.length > 0 ? (
-                        productos.map((producto) => (
-                            <div key={producto.id} className="product-item">
-                                <img
-                                    src={`data:image/jpeg;base64,${producto.imagen}`}
-                                    alt={producto.nombre}
-                                    onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = 'path/to/placeholder/image.jpg';
-                                    }}
-                                />
-                                <h3>{producto.nombre}</h3>
-                                <p>{producto.descripcion}</p>
-
-                                {producto.descuento > 0 ? (
-                                    <>
-                                        <p className="product-price">
-                                            <span style={{ color: 'gray', textDecoration: 'line-through' }}>
-                                                ${producto.precio}
-                                            </span>{' '}
-                                            - {producto.descuento}% OFF
-                                        </p>
-                                        <p className="discounted-price">
-                                            ${((producto.precio * (100 - producto.descuento)) / 100).toFixed(2)}
-                                        </p>
-                                    </>
-                                ) : (
-                                    <p className="product-price">${producto.precio}</p>
-                                )}
-
-                                <div className="button-container">
-                                    <button onClick={() => handleVerDetalleProducto(producto.id)}>Comprar</button>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No se encontraron productos que coincidan con tu búsqueda.</p>
-                    )}
-                </div>
-            )}
-
             {productoSeleccionado && (
-                
                 <div className="product-detail-overlay">
                     <div className="product-detail-container">
                         <button className="close-icon" onClick={handleCloseDetail} aria-label="Cerrar detalle">
@@ -289,14 +335,11 @@ const ProductCatalog = () => {
                                     <span>Agregar al Carrito</span>
                                 </button>
 
-                                
                                 <div style={{ height: '50px' }}>
-                                    {/* Mensaje de éxito cuando se agrega correctamente */}
                                     {showSuccessMessage && (
                                         <p className="success-message">¡Producto agregado con éxito!</p>
                                     )}
 
-                                    {/* Mostrar mensaje informativo de stock insuficiente */}
                                     {message && (
                                         <p className="info-message">
                                             {message}
