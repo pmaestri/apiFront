@@ -45,7 +45,7 @@ const Login = () => {
 
       const rolUsuario = await obtenerRolUsuario();
       if (rolUsuario === 'ADMIN') {
-        navigate('/admin-home'); // Redirige a la vista de administrador
+        navigate('/admin-home/usuarios'); // Redirige a la vista de administrador
       } else {
         navigate('/'); // Redirige a la vista general para compradores
       }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/products',
+  baseURL: 'http://localhost:8080/api/categorias',
 });
 
 // Función para establecer el token en las cabeceras de axios
@@ -12,115 +12,56 @@ export const setAuthToken = (token) => {
     delete api.defaults.headers.common['Authorization'];
   }
 };
-
-// Función para crear un producto
-export const createProduct = async (productData) => {
+// Crear una nueva categoría
+export const crearCategoria = async (categoria, token) => {
   try {
-    const response = await api.post('/create', productData);
-    return response.data;
+      const response = await api.post('', categoria, {
+          headers: {
+              Authorization: `Bearer ${token}`, // Enviar el token de autorización
+          },
+      });
+      return response.data; // Retorna la categoría creada
   } catch (error) {
-    throw new Error(`Error creating product: ${error.message}`);
+      throw new Error(`Error al crear la categoría: ${error.response?.data?.message || error.message}`);
   }
 };
 
-// Función para agregar imágenes a un producto
-export const addImagesToProduct = async (productId, images) => {
+// Eliminar una categoría por su ID
+export const eliminarCategoria = async (categoriaId, token) => {
   try {
-    const formData = new FormData();
-    images.forEach((image) => {
-      formData.append('images', image);
-    });
-    const response = await api.post(`/add-images`, formData, {
-      params: { productId },
-    });
-    return response.data;
+      // Configuración de encabezados para incluir el token
+      const config = {
+          headers: {
+              Authorization: `Bearer ${token}`, // Usar Bearer para el token
+          },
+      };
+      await api.delete(`/${categoriaId}`, config); // Incluir config en la solicitud
   } catch (error) {
-    throw new Error(`Error adding images: ${error.message}`);
+      throw new Error(`Error al eliminar la categoría: ${error.response?.data?.message || error.message}`);
   }
 };
 
-// Función para eliminar un producto (eliminación suave)
-export const softDeleteProduct = async (productId) => {
-  try {
-    const response = await api.put(`/delete/${productId}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error deleting product: ${error.message}`);
-  }
+
+// Obtener una categoría por su ID
+export const obtenerCategoria = async (categoriaId) => {
+    try {
+        const response = await axios.get(`${API_URL}/${categoriaId}`);
+        return response.data; // Retorna la categoría solicitada
+    } catch (error) {
+        throw new Error(`Error al obtener la categoría: ${error.response?.data?.message || error.message}`);
+    }
 };
 
-// Función para actualizar un producto
-export const updateProduct = async (productId, updatedData) => {
+// Obtener todas las categorías
+export const obtenerCategorias = async (token) => {
   try {
-    const response = await api.put(`/update/${productId}`, updatedData);
-    return response.data;
+      const response = await api.get('', {
+          headers: {
+              Authorization: `Bearer ${token}`, // Enviar el token de autorización
+          },
+      });
+      return response.data; // Retorna la lista de categorías
   } catch (error) {
-    throw new Error(`Error updating product: ${error.message}`);
-  }
-};
-
-// Función para obtener todos los productos
-export const fetchProductos = async () => {
-  try {
-    const response = await api.get('/get');
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error fetching products: ${error.message}`);
-  }
-};
-
-// Función para obtener un producto por ID
-export const fetchProductById = async (productId) => {
-  try {
-    const response = await api.get(`/get/${productId}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error fetching product by ID: ${error.message}`);
-  }
-};
-
-// Función para obtener productos por categoría
-export const fetchProductsByCategory = async (categoryId) => {
-  try {
-    const response = await api.get(`/get/cat/${categoryId}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error fetching products by category: ${error.message}`);
-  }
-};
-
-// Función para filtrar productos por precio
-export const filterProductsByPrice = async (minPrice, maxPrice) => {
-  try {
-    const response = await api.get('/get/filter', {
-      params: { minPrice, maxPrice },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error filtering products by price: ${error.message}`);
-  }
-};
-
-// Función para eliminar un tag de un producto
-export const removeTagFromProduct = async (productId, tag) => {
-  try {
-    const response = await api.delete(`/${productId}/removeTag`, {
-      params: { tag },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error removing tag from product: ${error.message}`);
-  }
-};
-
-// Función para eliminar una imagen de un producto
-export const removeImageFromProduct = async (productId, imageId) => {
-  try {
-    const response = await api.delete(`/${productId}/removeImage`, {
-      params: { imageId },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error removing image from product: ${error.message}`);
+      throw new Error(`Error al obtener las categorías: ${error.response?.data?.message || error.message}`);
   }
 };

@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
+
+
+/* Estilo del contenedor del formulario */
+.form-container {
+    display: flex;                 /* Activar flexbox */
+    justify-content: center;       /* Centrar horizontalmente */
+    align-items: center;           /* Centrar verticalmente */
+    flex-direction: column;        /* Colocar los elementos en columna */
+    margin: 20px;                 /* Espaciado alrededor del formulario */
+    padding: 20px;                /* Espaciado interno del formulario */
+    border-radius: 8px;           /* Bordes redondeados */
+    background-color: #fdeaf2;     /* Fondo del formulario */
+
+}
+.category-form .form-label {
+    color: #bd6f95; /* Cambia este color al que desees */
+    font-weight: 500; /* Opcional: ajusta el peso de la fuente */
+    margin-bottom: 5px; /* Espacio entre la etiqueta y el input */
+    text-align: left; /* Alinear el texto a la izquierda, si es necesario */
+}
+
+
+/* Estilo del título */
+.form-container .title {
+    color: #bd6f95; /* Color del título */
+    font-size: 28px; 
+    font-weight: 700; /* Título con peso de fuente más alto */
+    margin-bottom: 20px; /* Espacio entre el título y el formulario */
+    text-align: center; /* Centrar el texto */
+}
+
+/* Estilo del formulario */
+.category-form {
+    width: 100%;                   /* Ocupación total del ancho */
+    max-width: 500px;             /* Ancho máximo para el formulario */
+    display: flex;                 /* Activar flexbox en el formulario */
+    flex-direction: column;        /* Colocar elementos en columna */
+    text-align: center;            /* Centrar el texto dentro del formulario */
+}
+
+/* Estilo para los inputs */
+.category-form input[type="text"] {
+    padding: 10px;                /* Espaciado interno */
+    margin: 10px 0;              /* Espaciado alrededor */
+    border: 1px solid #ccc;       /* Borde gris */
+    border-radius: 4px;           /* Bordes redondeados */
+    font-size: 1rem;              /* Tamaño de fuente */
+    outline: none;                 /* Evitar el borde predeterminado */
+    color: #333;                  /* Color del texto gris */
+    background-color: white;      /* Fondo blanco */
+    margin-left: 10%;             /* Margen izquierdo */
+    margin-right: 10%;            /* Margen derecho */
+}
+
+/* Estilo para el enfoque en los inputs */
+.category-form input[type="text"]:focus {
+    border: 2px solid #bd6f95;    /* Borde rosa al hacer foco */
+    box-shadow: 0 0 5px rgba(189, 111, 149, 0.5); /* Sombra suave al hacer foco */
+}
+
+/* Estilo para el botón de envío */
+.category-form .submit-button {
+    padding: 10px;
+    margin-top: 10px;             /* Margen superior */
+    background-color: #bd6f95;    /* Color de fondo del botón */
+    color: #fff;                  /* Color del texto */
+    border: none;                 /* Sin borde */
+    border-radius: 4px;          /* Bordes redondeados */
+    font-size: 1rem;              /* Tamaño de fuente */
+    cursor: pointer;              /* Cursor de puntero al pasar por encima */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+    width: 90%;                   /* Ocupación del 90% del ancho */
+    margin-left: 5%;              /* Margen izquierdo */
+    margin-bottom: 15px;          /* Margen inferior */
+}
+
+/* Estilo del botón al pasar el ratón */
+.category-form .submit-button:hover {
+    background-color: #fdeaf2;     /* Color del botón al pasar el ratón */
+}
+
+/* Estilos para mensajes de error y éxito */
+.error-message {
+    color: #bd6f95;                   /* Color para mensajes de error */
+    text-align: center;           /* Centrar el mensaje de error */
+}
+
+.success-message {
+    color: #bd6f95;                 /* Color para mensajes de éxito */
+    text-align: center;           /* Centrar el mensaje de éxito */
+}
+/* Estilos para el botón de mostrar/ocultar categorías */
+
+.submit-button-create {
+    margin-top: 20px; /* Espaciado superior */
+    width: 80%; /* Ancho completo */
+    padding: 10px 20px; /* Relleno del botón */
+    background-color: #bd6f95; /* Color de fondo */
+    border: none; /* Eliminar el borde */
+    color: #fff; /* Color del texto */
+    cursor: pointer; /* Cambiar el cursor al puntero al pasar */
+    font-size: 16px; /* Tamaño del texto */
+    border-radius: 4px; /* Bordes redondeados */
+    transition: background-color 0.3s ease; /* Transición suave en el hover */
+    margin-left: 10%;
+}
+
+
+/* Efecto hover para el botón */
+.submit-button-create:hover {
+    background-color: #a7547d; /* Un color más oscuro al pasar el ratón */
+}
+/* CategoryAdmin.css */
+
+.form-input::placeholder {
+    font-size: 0.8rem; /* Ajusta el tamaño según tus preferencias */
+    color: #888; /* Puedes ajustar el color del texto también */
+}
+
+.submit-button-category {
+    background-color: #bd6f95; /* Color de fondo del botón */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 4px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar cursor al puntero al pasar por encima */
+    font-size: 16px; /* Tamaño de fuente */
+    width: 30%; /* Ancho completo */
+    height: 30px; /* Altura fija para igualar */
+    margin-top: 20px; /* Espaciado superior */
+    transition: background-color 0.3s ease; /* Transición suave al cambiar color */
+}
+
+/* Cambiar color del botón al pasar el ratón */
+.submit-button-category:hover {
+    background-color:#fdeaf2; /* Un tono más oscuro al hacer hover */
+}
+.categories-container {
+    margin-top: 20px;
+}
+.categories-container h3 {
+    margin-top: 20px;
+    color:#bd6f95;
+}
+
+.categories-list {
+    list-style-type: none; /* Eliminar viñetas */
+    padding: 0; /* Eliminar padding */
+}
+
+.category-item {
+    background-color: #e7f1f2; /* Color de fondo para los elementos de categoría */
+    border: 1px solid #bd6f95; /* Borde */
+    border-radius: 4px; /* Bordes redondeados */
+    margin: 5px 0; /* Margen entre categorías */
+    padding: 10px; /* Espaciado interno */
+    transition: transform 0.2s; /* Efecto de transformación */
+    color:#bd6f95;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.category-item:hover {
+    transform: scale(1.02); /* Efecto de aumento al pasar el ratón */
+}
+.delete-button {
+    background: none;
+    border: none;
+    color:#bd6f95; /* Cambia el color según tus preferencias */
+    cursor: pointer;
+    margin-left: 10px; /* Espaciado entre el nombre de la categoría y el ícono */
+}
+
+.delete-button:hover {
+    color: #bd6f95; /* Cambia el color al pasar el mouse */
+}

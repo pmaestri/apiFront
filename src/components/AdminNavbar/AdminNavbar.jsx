@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './AdminNavbar.css';
-import { FaUser, FaClipboardList, FaBoxOpen } from 'react-icons/fa'; // Importa los íconos que desees
+import { FaUser, FaClipboardList, FaBoxOpen, FaTags } from 'react-icons/fa'; // Importa los íconos que desees
 
 const AdminNavbar = () => {
   return (
@@ -28,6 +28,11 @@ const AdminNavbar = () => {
           <li>
             <Link to="/admin-home/productos">
               <FaBoxOpen /> Productos
+            </Link>
+          </li>
+          <li>
+            <Link to ="/admin-home/categorias">
+              < FaTags /> Categorías
             </Link>
           </li>
         </ul>

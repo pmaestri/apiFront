@@ -110,8 +110,8 @@
     transition: transform 0.2s;
     width: 80%; /* Reducir el ancho de la tarjeta */
     height: auto; /* Ajustar la altura automáticamente */
-    margin-left: 10%; /* Centrarlas reduciendo el margen */
-    margin-right: 10%;
+    margin-left: 5%; /* Centrarlas reduciendo el margen */
+    margin-right: 5%;
 }
 
 

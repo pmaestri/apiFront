@@ -22,6 +22,7 @@ import AdminHome from './components/AdminHome/AdminHome.jsx'; // Importa tu comp
 import UserAdmin from './components/UserAdmin/UserAdmin.jsx'; // Importa el componente UserAdmin
 import ProductsAdmin from './components/ProductsAdmin/ProductsAdmin.jsx'; // Importa el componente ProductsAdmin
 import OrdersAdmin from './components/OrdersAdmin/OrdersAdmin.jsx'; // Importa el componente OrdersAdmin
+import CategoryAdmin from './components/CategoryAdmin/CategoryAdmin.jsx';
 
 function App() {
   return (
@@ -99,6 +100,7 @@ function MainContent() {
         <Route path="/admin-home/usuarios" element={<UserAdmin />} />
         <Route path="/admin-home/ordenes" element={<OrdersAdmin />} />
         <Route path="/admin-home/productos" element={<ProductsAdmin />} />
+        <Route path="/admin-home/categorias" element={<CategoryAdmin />} />
       </Routes>
 
       {/* Muestra el Footer solo si no estás en la ruta de AdminHome o sus subcomponentes */}
