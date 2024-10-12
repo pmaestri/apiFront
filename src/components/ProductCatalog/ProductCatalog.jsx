@@ -18,7 +18,6 @@ const ProductCatalog = () => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [message, setMessage] = useState(null);
     const [modelos, setModelos] = useState([]);
-
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -233,8 +232,6 @@ const ProductCatalog = () => {
                         <p>Cargando productos...</p>
                     ) : error ? (
                         <p>Error: {error}</p>
-                    ) : message ? (
-                        <p className="no-results-message">{message}</p>
                     ) : (
                         productos.length > 0 ? (
                             productos.map((producto) => (
@@ -326,8 +323,8 @@ const ProductCatalog = () => {
                                         } else {
                                             addToCart(productoSeleccionado, cantidad);
                                             setError(null);
-                                            setShowSuccessMessage(true);
-                                            setTimeout(() => setShowSuccessMessage(false), 3000);
+                                           // setShowSuccessMessage(true);
+                                           // setTimeout(() => setShowSuccessMessage(false), 3000);
                                         }
                                     }}
                                 >

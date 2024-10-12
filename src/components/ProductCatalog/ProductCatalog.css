@@ -18,6 +18,7 @@
   border-right: 2px solid #bd6f95;
   box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1); /* Sombra a la derecha */
   border-radius: 10px; /* Bordes suaves */
+  height:30%;
 }
 
 .filter-form {
