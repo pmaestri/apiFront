@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
-import { obtenerUsuarioAdmin, obtenerUsuariosVisualDtos, eliminarUsuarioAdmin , setAuthToken} from '../../api/UserApi.jsx'; // Importa la función eliminarUsuario
+import { obtenerUsuarioAdmin, obtenerUsuariosVisualDtos, eliminarUsuarioAdmin, setAuthToken, obtenerRolUsuario } from '../../api/UserApi.jsx'; // Importa las funciones necesarias
 import './UserAdmin.css';
-
 
 const UserAdmin = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -12,18 +11,32 @@ const UserAdmin = () => {
   const [usuarioBuscado, setUsuarioBuscado] = useState(null);
   const [verTodosVisible, setVerTodosVisible] = useState(false);
   const [verPedidos, setVerPedidos] = useState({});
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [rolUsuario, setRolUsuario] = useState(null);
+  const [token, setToken] = useState(null);
+  const [mensajeVisible, setMensajeVisible] = useState(false);
   const navigate = useNavigate(); // Inicializar navigate
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setAuthToken(token); // Configura el token en las solicitudes
+      setAuthToken(token);
+      setToken(token);
+      const fetchRole = async () => {
+        const rol = await obtenerRolUsuario();
+        setRolUsuario(rol);
+        if (rol !== 'ADMIN') {
+          navigate('/');
+        } else {
+          setIsAdmin(true);
+        }
+      };
+      fetchRole();
     } else {
-      // Redirige al usuario a la página de login si no hay token
       navigate('/login');
     }
   }, [navigate]);
-  
+
   // Función para obtener todos los usuarios
   const fetchUsuarios = async () => {
     try {
@@ -42,8 +55,14 @@ const UserAdmin = () => {
         setUsuarioBuscado(usuario);
         setUsuarios([]); // Limpiar la lista de usuarios cuando se busca un ID específico
         setVerTodosVisible(false); // Asegurarse de que no se muestre la lista de usuarios al buscar por ID
+        setError(null); // Limpiar cualquier error anterior
       } catch (err) {
-        setError(`Error al buscar usuario: ${err.message}`);
+        setError(`Usuario ID invalido`);
+        setMensajeVisible(true); // Mostrar el mensaje de error
+        setTimeout(() => {
+          setError(null); // Ocultar el mensaje de error
+          setMensajeVisible(false); // Ocultar el mensaje visual
+        }, 3000); // 3000 ms = 3 segundos
       }
     }
   };
@@ -83,12 +102,16 @@ const UserAdmin = () => {
     }));
   };
 
+  if (!isAdmin) return null;
+
   return (
     <div className="container">
       <AdminNavbar />
       <div className="header">
         <h1 className="title">Administración de Usuarios</h1>
-        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+        {mensajeVisible && error && (
+          <p className="error-message-User"> {error}</p>
+        )}
       </div>
       
       <div className="search-bar-user">
@@ -204,12 +227,13 @@ const UserAdmin = () => {
                   )}
                 </div>
               ) : (
-                <p>Este usuario no tiene pedidos.</p> // Mensaje si no hay pedidos
+                <p>No hay pedidos para este usuario.</p>
               )}
             </div>
           </div>
         ))
       )}
+      
     </div>
   );
 };

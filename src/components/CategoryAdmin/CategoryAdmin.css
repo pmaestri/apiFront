@@ -81,17 +81,19 @@
     background-color: #fdeaf2;     /* Color del botón al pasar el ratón */
 }
 
-/* Estilos para mensajes de error y éxito */
-.error-message {
-    color: #bd6f95;                   /* Color para mensajes de error */
-    text-align: center;           /* Centrar el mensaje de error */
+.error-message-User{
+    position: absolute; /* O utilizar fixed para que esté siempre visible */
+    top: 10px; /* Ajusta la posición según sea necesario */
+    left: 50%;
+    transform: translateX(-50%); /* Centrar horizontalmente */
+    z-index: 1000; /* Asegurarse de que esté por encima de otros elementos */
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #ffffff; /* Fondo de error */
+    color:#a7547d; /* Color del texto de error */
 }
 
-.success-message {
-    color: #bd6f95;                 /* Color para mensajes de éxito */
-    text-align: center;           /* Centrar el mensaje de éxito */
-}
-/* Estilos para el botón de mostrar/ocultar categorías */
+
 
 .submit-button-create {
     margin-top: 20px; /* Espaciado superior */

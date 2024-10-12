@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // 
+import React, { useState, useEffect } from 'react'; // Importar useEffect
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
@@ -13,6 +13,16 @@ import imagen3 from '../../assets/images/imagen3.png';
 const Home = () => {
   const navigate = useNavigate();
   const sliderRef = React.useRef(null);
+
+  const [nombreUsuario, setNombreUsuario] = useState(''); // Estado para el nombre de usuario
+
+  // Recuperar nombre de usuario del localStorage al montar el componente
+  useEffect(() => {
+    const storedNombreUsuario = localStorage.getItem('nombreUsuario');
+    if (storedNombreUsuario) {
+      setNombreUsuario(storedNombreUsuario);
+    }
+  }, []);
 
   const images = [imagen1, imagen2, imagen3];
   const imageDescriptions = [
@@ -79,8 +89,12 @@ const Home = () => {
 
   return (
     <div className="home">
+      {/* Mostrar mensaje de bienvenida según el estado del usuario */}
+      <div className="Bienvenido-message-home">
+        <h2>¡Bienvenido{nombreUsuario ? ` ${nombreUsuario}` : ''} a Top Cases!</h2>
+      </div>
+
       <div className="intro-text">
-        <h1>¡Bienvenido a Top Cases!</h1>
         <p>Accesorios para celulares con estilo y protección</p>
       </div>
 

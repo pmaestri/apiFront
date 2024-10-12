@@ -142,3 +142,23 @@
     font-size: 16px; /* Tamaño de la fuente */
     margin-top: 10px; /* Espacio arriba */
 }
+.error-message-category,
+.success-message-category {
+    position: absolute; /* O utilizar fixed para que esté siempre visible */
+    top: 10px; /* Ajusta la posición según sea necesario */
+    left: 50%;
+    transform: translateX(-50%); /* Centrar horizontalmente */
+    z-index: 1000; /* Asegurarse de que esté por encima de otros elementos */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.error-message-category {
+    background-color: #ffffff; /* Fondo de error */
+    color:#a7547d; /* Color del texto de error */
+}
+
+.success-message-category {
+    background-color: #ffffff; /* Fondo de éxito */
+    color:#a7547d; /* Color del texto de éxito */
+}

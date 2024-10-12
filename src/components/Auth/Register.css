@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center; /* Centrar verticalmente */
     align-items: center; /* Centrar horizontalmente */
-    height: 50%; /* Altura completa de la ventana */
+    height: 70%; /* Altura completa de la ventana */
   }
   
   .registration h2 {
@@ -21,7 +21,7 @@
     border-radius: 10px; /* Bordes redondeados */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
     width: 400px; /* Ancho del formulario */
-    height: 100%; /* Altura automática */
+    height: 120%; /* Altura automática */
   }
   
 
@@ -41,8 +41,8 @@
     text-align: center;
     padding: 10px;
     margin-top: 10px;
-    border-radius: 8px;
-    width: 100%; /* Ancho completo para los mensajes */
+    border-radius: 10px;
+    width: 30%; /* Ancho completo para los mensajes */
     font-size: 20px;
   }
   

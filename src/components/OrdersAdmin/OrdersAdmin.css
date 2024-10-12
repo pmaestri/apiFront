@@ -72,3 +72,15 @@
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Sombra más destacada */
   }
   
+  .error-message-Orders{
+    position: absolute; /* O utilizar fixed para que esté siempre visible */
+    top: 10px; /* Ajusta la posición según sea necesario */
+    left: 50%;
+    transform: translateX(-50%); /* Centrar horizontalmente */
+    z-index: 1000; /* Asegurarse de que esté por encima de otros elementos */
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #ffffff; /* Fondo de error */
+    color:#a7547d; /* Color del texto de error */
+}
+
