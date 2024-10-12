@@ -32,9 +32,9 @@ const Home = () => {
   ];
 
   const buttons = [
-    { text: "Explorar Fundas", action: () => navigate('/categories/fundas/vertodo') },
-    { text: "Ver Auriculares", action: () => navigate('/categories/auriculares/vertodo') },
-    { text: "Ver Más", action: () => navigate('/categories/fundas/iphone/modelos') },
+    { text: "Ver Más", action: () => navigate('/ProductCatalog') },
+    { text: "Ver Más", action: () => navigate('/ProductCatalog') },
+    { text: "Ver Más", action: () => navigate('/ProductCatalog') },
   ];
 
   const settings = {

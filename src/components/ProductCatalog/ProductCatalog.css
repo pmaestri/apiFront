@@ -8,17 +8,20 @@
 .catalog-layout {
   display: flex;
   width: 100%;
-  position: relative; /* Mantener la página fija */
+  position: relative;
 }
 
 .filter-sidebar {
-  width: 25%; /* Un poco más amplio para darle espacio a los filtros */
-  background-color: #f3aacb; /* Fondo más llamativo para el filtrado */
+  width: 25%; 
+  background-color: #f3aacb;
   padding: 25px;
   border-right: 2px solid #bd6f95;
-  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1); /* Sombra a la derecha */
-  border-radius: 10px; /* Bordes suaves */
-  height:30%;
+  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  height: auto; 
+  position: sticky; /* Fijamos el filtro en su posición */
+  top: 10px; /* Espacio desde la parte superior */
+  align-self: flex-start;
 }
 
 .filter-form {
@@ -39,14 +42,14 @@
   border: 1px solid #bd6f95;
   border-radius: 8px;
   font-size: 14px;
-  transition: all 0.3s ease; /* Transición suave al interactuar */
+  transition: all 0.3s ease;
 }
 
 .filter-form input:focus,
 .filter-form select:focus {
   outline: none;
-  border-color: #c8799f; /* Cambia el color al hacer foco */
-  box-shadow: 0 0 8px rgba(200, 121, 159, 0.7); /* Efecto de resplandor */
+  border-color: #c8799f;
+  box-shadow: 0 0 8px rgba(200, 121, 159, 0.7);
 }
 
 .filter-form button {
@@ -63,18 +66,18 @@
 
 .filter-form button:hover {
   background-color: #a35c7a;
-  transform: translateY(-5px); /* Efecto de "subir" al pasar el mouse */
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Sombra al hacer hover */
+  transform: translateY(-5px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .filter-form input:hover,
 .filter-form select:hover {
-  background-color: #fbd5e5; /* Color suave al pasar el mouse */
+  background-color: #fbd5e5;
 }
 
 .filter-form select {
-  background-color: #ffffff; /* Fondo más claro para el select */
-  color: #bd6f95; /* Texto en color de la paleta */
+  background-color: #ffffff;
+  color: #bd6f95;
   font-weight: bold;
 }
 
@@ -88,18 +91,15 @@
   color: #bd6f95;
 }
 
-/* Lista de productos desplazable */
 .product-list {
   flex-grow: 1;
-  width: 75%; /* Reducido para aumentar el espacio de la barra de filtros */
+  width: 75%; 
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Tres productos por fila */
-  gap: 30px; /* Espaciado entre los productos */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 30px;
   justify-items: center;
   padding: 20px;
   box-sizing: border-box;
-  overflow-y: auto; /* Hacer la lista de productos desplazable */
-  max-height: calc(100vh - 150px); /* Ajustar la altura máxima disponible para que la barra de productos baje */
 }
 
 .product-item {
@@ -107,19 +107,19 @@
   border: 2px solid #bd6f95;
   border-radius: 10px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  width: 180px; /* Ajustado para ser más pequeño */
+  width: 180px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 350px; /* Ajustado a un tamaño más pequeño */
+  height: 350px;
 }
 
 .product-item img {
   width: 60%;
-  height: 150px; /* Imagen más pequeña */
+  height: 150px;
   border: 2px solid #e6c6d0;
   border-radius: 8px;
   object-fit: cover;
@@ -128,11 +128,11 @@
 
 .product-item h3 {
   color: #d484aa;
-  font-size: 1.1em; /* Tamaño ajustado */
+  font-size: 1.1em;
   margin-top: 15px;
   margin-bottom: 15px;
   text-align: center;
-  height: 50px; /* Ajuste de altura */
+  height: 50px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -162,7 +162,7 @@
   background-color: #bd6f95;
   color: white;
   border: none;
-  padding: 8px 15px; /* Botón ajustado */
+  padding: 8px 15px;
   border-radius: 8px;
   cursor: pointer;
   margin-bottom: 15px;
@@ -177,7 +177,7 @@
 
 .product-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Mayor sombra en hover */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .success-message, .info-message {
