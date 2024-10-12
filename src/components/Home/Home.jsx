@@ -9,12 +9,14 @@ import { faShippingFast, faTag, faUndoAlt } from '@fortawesome/free-solid-svg-ic
 import imagen1 from '../../assets/images/imagen1.png';
 import imagen2 from '../../assets/images/imagen2.png';
 import imagen3 from '../../assets/images/imagen3.png';
+import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi'; // Asegúrate de que la ruta sea correcta
 
 const Home = () => {
   const navigate = useNavigate();
   const sliderRef = React.useRef(null);
 
   const [nombreUsuario, setNombreUsuario] = useState(''); // Estado para el nombre de usuario
+  const [featuredProducts, setFeaturedProducts] = useState([]); // Estado para productos destacados
 
   // Recuperar nombre de usuario del localStorage al montar el componente
   useEffect(() => {
@@ -22,6 +24,22 @@ const Home = () => {
     if (storedNombreUsuario) {
       setNombreUsuario(storedNombreUsuario);
     }
+  }, []);
+
+  // Obtener productos desde el backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const productos = await obtenerProductosDisponiblesConDetalles();
+        // Seleccionar 5 productos aleatorios
+        const randomProducts = productos.sort(() => 0.5 - Math.random()).slice(0, 5);
+        setFeaturedProducts(randomProducts);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   const images = [imagen1, imagen2, imagen3];
@@ -46,46 +64,6 @@ const Home = () => {
     autoplay: true,
     autoplaySpeed: 3000,
   };
-
-  const [featuredProducts] = useState([
-    {
-      id: 1,
-      name: "Funda de Silicona para Samsung",
-      description: "Protección suave y flexible para tu Samsung.",
-      price: "$5.000",
-      img: "https://via.placeholder.com/600x400",
-    },
-    {
-      id: 2,
-      name: "Cargador Inalámbrico Universal",
-      description: "Carga rápida y segura para cualquier dispositivo.",
-      price: "$9.500",
-      img: "https://via.placeholder.com/600x400",
-    },
-    {
-      id: 3,
-      name: "Funda Antigolpes para iPhone",
-      description: "Resistencia máxima a golpes y caídas.",
-      price: "$6.000",
-      discount: "-15% OFF",
-      originalPrice: "$7.000",
-      img: "https://via.placeholder.com/600x400",
-    },
-    {
-      id: 4,
-      name: "Auriculares Bluetooth Inalámbricos",
-      description: "Conectividad Bluetooth y diseño ergonómico.",
-      price: "$12.000",
-      img: "https://via.placeholder.com/600x400",
-    },
-    {
-      id: 5,
-      name: "Protector de Pantalla 3D",
-      description: "Protección total para la pantalla curva de tu móvil.",
-      price: "$3.900",
-      img: "https://via.placeholder.com/600x400",
-    },
-  ]);
 
   return (
     <div className="home">
@@ -135,25 +113,31 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Productos Destacados */} 
+      {/* Productos Destacados */}
       <div className="featured-products">
         <h2>Productos Destacados</h2>
         <div className="product-grid">
-          {featuredProducts.map((product) => (
-            <div key={product.id} className="product-card">
-              <img src={product.img} alt={product.name} />
-              <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              <p className="product-price">
-                {product.discount && <span className="product-discount">{product.discount}</span>}
-                {product.price}
-                {product.originalPrice && (
-                  <span className="original-price">{product.originalPrice}</span>
-                )}
-              </p>
-              <button>Comprar</button>
-            </div>
-          ))}
+          {featuredProducts.length === 0 ? ( // Verifica si hay productos
+            <p>Cargando productos...</p>
+          ) : (
+            featuredProducts.map((product) => (
+              <div key={product.id} className="product-card">
+                <img src={`data:image/jpeg;base64,${product.imagen}`} alt={product.nombre} /> {/* Asegúrate de que 'imagen' esté bien definido */}
+                <h3>{product.nombre}</h3> {/* Asegúrate de que 'nombre' esté bien definido */}
+                <p>{product.descripcion}</p> {/* Asegúrate de que 'descripcion' esté bien definido */}
+                <p className="product-price">
+                  {product.descuento > 0 && ( // Verifica si hay descuento
+                    <span className="product-discount">-{product.descuento}%</span>
+                  )}
+                  ${product.precio} {/* Asegúrate de que 'precio' esté bien definido */}
+                  {product.precioOriginal && ( // Asegúrate de que 'precioOriginal' esté bien definido
+                    <span className="original-price">${product.precioOriginal}</span>
+                  )}
+                </p>
+                <button>Comprar</button>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

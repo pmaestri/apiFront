@@ -205,6 +205,12 @@ p {
   transform: translateY(-5px);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
 }
+.product-card img {
+  width: 80%; /* Ajusta el porcentaje según necesites, 80% es un ejemplo */
+  height: auto; /* Mantiene la proporción de la imagen */
+  max-width: 150px; /* Opcional: establece un ancho máximo para las imágenes */
+}
+
 
 /* Dots (tres puntitos debajo del slider) */
 .slick-dots {
