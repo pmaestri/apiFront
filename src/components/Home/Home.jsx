@@ -91,7 +91,11 @@ const Home = () => {
     <div className="home">
       {/* Mostrar mensaje de bienvenida según el estado del usuario */}
       <div className="Bienvenido-message-home">
-        <h2>¡Bienvenido{nombreUsuario ? ` ${nombreUsuario}` : ''} a Top Cases!</h2>
+        <h2>
+          {nombreUsuario === 'topCases' 
+            ? '¡Bienvenido Admin a Top Cases!' 
+            : `¡Bienvenido${nombreUsuario ? ` ${nombreUsuario}` : ''} a Top Cases!`}
+        </h2>
       </div>
 
       <div className="intro-text">
@@ -131,7 +135,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Productos Destacados */} {/* --- SECCIÓN AGREGADA */}
+      {/* Productos Destacados */} 
       <div className="featured-products">
         <h2>Productos Destacados</h2>
         <div className="product-grid">
