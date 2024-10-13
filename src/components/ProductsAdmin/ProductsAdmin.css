@@ -27,6 +27,9 @@
     flex-direction: column;
     background-color: #fdeaf2;
     text-align: center;
+    border: 2px solid #bd6f95; /* Color y grosor del borde */
+    border-radius: 8px; /* Bordes redondeados */
+    
 }
 
 /* Estilo para los inputs */
@@ -43,6 +46,7 @@
     background-color: white; /* Fondo blanco */
     margin-left: 10%;
     margin-right: 10%;
+    margin-top: 20px;;
 }
 
 .ProductsAdmin input:focus,
@@ -74,9 +78,10 @@
     font-size: 1rem;
     cursor: pointer; /* Cursor de puntero al pasar por encima */
     transition: background-color 0.3s; /* Transición suave para el color de fondo */
-    width:90%;
-    margin-left: 5%;
-    margin-bottom: 15px;
+    width:50%;
+    margin: 10px auto; /* Centramos el botón */
+    display: block; /* Hacer que el botón sea un bloque para centrarlo */
+    margin-bottom: 15px; /* Margen inferior */
 }
 
 .ProductsAdmin button:hover {
@@ -104,14 +109,12 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 10px; /* Reducir espaciado interno */
-    margin: 5px 0; /* Reducir el espaciado entre productos */
+    margin: 5px auto; /* Centramos las tarjetas con márgenes automáticos */
     background-color: #fdeaf2;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
-    width: 80%; /* Reducir el ancho de la tarjeta */
+    width: 80%; /* Ancho de la tarjeta */
     height: auto; /* Ajustar la altura automáticamente */
-    margin-left: 5%; /* Centrarlas reduciendo el margen */
-    margin-right: 5%;
 }
 
 

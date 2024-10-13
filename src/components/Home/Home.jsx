@@ -121,19 +121,19 @@ const Home = () => {
 
               return (
                 <div key={product.id} className="product-card">
-                  <img src={`data:image/jpeg;base64,${product.imagen}`} alt={product.nombre} className="Product-image" />
+                  <img src={`data:image/jpeg;base64,${product.imagen}`} alt={product.nombre} className="Product-image-home" />
                   <h3>{product.nombre}</h3> 
                   <p>{product.descripcion}</p> 
-                  <div className="product-price">
+                  <div className="product-price-home">
                     {product.descuento > 0 && (
                       <div className="price-row">
-                        <span className="product-discount">-{product.descuento}%</span>
-                        <span className="original-prices">${product.precio.toFixed(2)}</span>
+                        <strong><span className="product-discount">-{product.descuento}%</span></strong>
+                        <strong><span className="original-prices">${product.precio.toFixed(2)}</span></strong>
                       </div>
                     )}
-                    <p className="final-price">${precioFinal.toFixed(2)}</p>
+                    <p className="final-price-home"><strong>${precioFinal.toFixed(2)}</strong></p>
                   </div>
-                  <button className="btn-comprar-home">Comprar</button>
+                  <button className="btn-comprar-home" onClick={() => navigate('/ProductCatalog')}>Ver Más</button>
                 </div>
               );
             })

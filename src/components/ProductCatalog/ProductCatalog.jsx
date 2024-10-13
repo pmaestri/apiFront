@@ -269,7 +269,7 @@ const ProductCatalog = () => {
                                 </div>
                             ))
                         ) : (
-                            <p>No se encontraron productos que coincidan con tu búsqueda.</p>
+                            <p className="no-products-message-PD">No se encontraron productos que coincidan con tu búsqueda.</p>
                         )
                     )}
                 </div>

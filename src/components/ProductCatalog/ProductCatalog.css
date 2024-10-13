@@ -100,6 +100,7 @@
   justify-items: center;
   padding: 20px;
   box-sizing: border-box;
+  min-height: 100vh;
 }
 
 .product-item {
@@ -200,4 +201,44 @@
   font-size: 1.4em;
   text-align: center;
   margin-top: 50px;
+}
+
+/* Estilos para el detalle del producto */
+.product-detail {
+  display: flex; /* Usar flexbox para la distribución */
+  width: 100%; /* Asegurarse de que ocupe todo el ancho */
+  justify-content: space-between; /* Espacio entre los elementos */
+}
+
+.product-image {
+  flex: 1; /* Permitir que la imagen ocupe un espacio igual */
+  padding: 20px; /* Añadir espacio alrededor de la imagen */
+}
+
+.product-image img {
+  width: 100%; /* Hacer que la imagen ocupe todo el ancho */
+  height: auto; /* Ajustar la altura automáticamente */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-info {
+  flex: 1; /* Permitir que la información ocupe un espacio igual */
+  padding: 20px; /* Espacio alrededor de la información */
+  display: flex;
+  flex-direction: column; /* Asegurarse de que los elementos se apilen verticalmente */
+  justify-content: center; /* Centrar el contenido verticalmente */
+}
+
+.product-info h2{
+  color:#bd6f95;
+}
+.no-products-message-PD{
+  white-space: nowrap; /* Impide que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta cualquier desbordamiento */
+  text-overflow: ellipsis; /* Agrega "..." si el texto es demasiado largo */
+  font-size: 1.2rem; /* Cambia el tamaño de la fuente si lo deseas */
+  text-align: center; /* Centra el texto */
+  margin-top: 20px; /* Espaciado superior para separarlo del contenido anterior */
+  margin-left:80%;
 }
