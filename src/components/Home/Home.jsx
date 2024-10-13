@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Importar useEffect
+import React, { useState, useEffect } from 'react';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
@@ -9,16 +9,15 @@ import { faShippingFast, faTag, faUndoAlt } from '@fortawesome/free-solid-svg-ic
 import imagen1 from '../../assets/images/imagen1.png';
 import imagen2 from '../../assets/images/imagen2.png';
 import imagen3 from '../../assets/images/imagen3.png';
-import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi'; // Asegúrate de que la ruta sea correcta
+import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi';
 
 const Home = () => {
   const navigate = useNavigate();
   const sliderRef = React.useRef(null);
 
-  const [nombreUsuario, setNombreUsuario] = useState(''); // Estado para el nombre de usuario
-  const [featuredProducts, setFeaturedProducts] = useState([]); // Estado para productos destacados
+  const [nombreUsuario, setNombreUsuario] = useState('');
+  const [featuredProducts, setFeaturedProducts] = useState([]);
 
-  // Recuperar nombre de usuario del localStorage al montar el componente
   useEffect(() => {
     const storedNombreUsuario = localStorage.getItem('nombreUsuario');
     if (storedNombreUsuario) {
@@ -26,12 +25,10 @@ const Home = () => {
     }
   }, []);
 
-  // Obtener productos desde el backend
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const productos = await obtenerProductosDisponiblesConDetalles();
-        // Seleccionar 5 productos aleatorios
         const randomProducts = productos.sort(() => 0.5 - Math.random()).slice(0, 5);
         setFeaturedProducts(randomProducts);
       } catch (error) {
@@ -67,7 +64,6 @@ const Home = () => {
 
   return (
     <div className="home">
-      {/* Mostrar mensaje de bienvenida según el estado del usuario */}
       <div className="Bienvenido-message-home">
         <h2>
           {nombreUsuario === 'topCases' 
@@ -94,7 +90,6 @@ const Home = () => {
         ))}
       </Slider>
 
-      {/* Servicios destacados */}
       <div className="services">
         <div className="service-item">
           <FontAwesomeIcon icon={faShippingFast} size="2x" style={{ marginBottom: '10px' }} />
@@ -113,30 +108,35 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Productos Destacados */}
       <div className="featured-products">
         <h2>Productos Destacados</h2>
         <div className="product-grid">
-          {featuredProducts.length === 0 ? ( // Verifica si hay productos
+          {featuredProducts.length === 0 ? (
             <p>Cargando productos...</p>
           ) : (
-            featuredProducts.map((product) => (
-              <div key={product.id} className="product-card">
-                <img src={`data:image/jpeg;base64,${product.imagen}`} alt={product.nombre} /> {/* Asegúrate de que 'imagen' esté bien definido */}
-                <h3>{product.nombre}</h3> {/* Asegúrate de que 'nombre' esté bien definido */}
-                <p>{product.descripcion}</p> {/* Asegúrate de que 'descripcion' esté bien definido */}
-                <p className="product-price">
-                  {product.descuento > 0 && ( // Verifica si hay descuento
-                    <span className="product-discount">-{product.descuento}%</span>
-                  )}
-                  ${product.precio} {/* Asegúrate de que 'precio' esté bien definido */}
-                  {product.precioOriginal && ( // Asegúrate de que 'precioOriginal' esté bien definido
-                    <span className="original-price">${product.precioOriginal}</span>
-                  )}
-                </p>
-                <button>Comprar</button>
-              </div>
-            ))
+            featuredProducts.map((product) => {
+              const precioFinal = product.descuento > 0
+                ? product.precio - (product.precio * product.descuento) / 100
+                : product.precio;
+
+              return (
+                <div key={product.id} className="product-card">
+                  <img src={`data:image/jpeg;base64,${product.imagen}`} alt={product.nombre} className="Product-image" />
+                  <h3>{product.nombre}</h3> 
+                  <p>{product.descripcion}</p> 
+                  <div className="product-price">
+                    {product.descuento > 0 && (
+                      <div className="price-row">
+                        <span className="product-discount">-{product.descuento}%</span>
+                        <span className="original-prices">${product.precio.toFixed(2)}</span>
+                      </div>
+                    )}
+                    <p className="final-price">${precioFinal.toFixed(2)}</p>
+                  </div>
+                  <button className="btn-comprar-home">Comprar</button>
+                </div>
+              );
+            })
           )}
         </div>
       </div>

@@ -291,7 +291,7 @@ const ProductCatalog = () => {
                             </div>
                             <div className="product-info">
                                 <h2>{productoSeleccionado.nombre}</h2>
-                                <p className="product-price">${productoSeleccionado.precio}</p>
+                                <p className="product-price">Precio: ${productoSeleccionado.precio}</p>
 
                                 {productoSeleccionado.descuento > 0 && (
                                     <p className="discounted-price">
@@ -299,7 +299,7 @@ const ProductCatalog = () => {
                                         {((productoSeleccionado.precio * (100 - productoSeleccionado.descuento)) / 100).toFixed(2)}
                                     </p>
                                 )}
-                                <p>{productoSeleccionado.descripcion}</p>
+                                <p><strong>Descripción:</strong> {productoSeleccionado.descripcion}</p>
 
                                 <p><strong>Estado:</strong> {productoSeleccionado.disponible ? 'Disponible' : 'No disponible'}</p>
                                 <p><strong>Categoría:</strong> {productoSeleccionado.nombreCategoria}</p>

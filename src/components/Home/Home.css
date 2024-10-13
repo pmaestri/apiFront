@@ -24,7 +24,11 @@ p {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Estilos para el Slider */
+.intro-text {
+  font-size: 20px;
+}
+
+/* Slider Styles */
 .slick-slider {
   margin: 20px auto;
   width: 70vw;
@@ -39,7 +43,7 @@ p {
 .image-container {
   position: relative;
   width: 100%;
-  height: 340px; /* Aumentamos un poco la altura para que las imágenes se vean mejor */
+  height: 340px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -52,7 +56,6 @@ p {
   border-radius: 12px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
-
 
 .overlay {
   position: absolute;
@@ -89,46 +92,47 @@ p {
 .overlay button:hover {
   background-color: #a35c7a;
 }
-/* Servicios */
+
+/* Service Styles */
 .services {
   display: flex;
   justify-content: space-around;
-  margin-top: 50px; /* Aumenta el margen superior para separarlo del slider */
+  margin-top: 50px;
 }
 
 .service-item {
   text-align: center;
-  max-width: 190px; /* Reducimos el ancho máximo */
-  color: #bd6f95; /* Color principal para el texto */
-  background-color: #fdeaf2; /* Fondo claro */
-  border: 2px solid #bd6f95; /* Borde con color principal */
-  padding: 10px; /* Reducimos el padding */
-  border-radius: 8px; /* Ajustamos la curvatura */
+  max-width: 190px;
+  color: #bd6f95;
+  background-color: #fdeaf2;
+  border: 2px solid #bd6f95;
+  padding: 10px;
+  border-radius: 8px;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 }
 
 .service-item h3 {
-  font-size: 1.1em; /* Reducimos el tamaño del título */
-  color: #d484aa; /* Color secundario */
+  font-size: 1.1em;
+  color: #d484aa;
 }
 
 .service-item p {
-  font-size: 0.9em; /* Reducimos el tamaño del texto descriptivo */
-  color: #c8799f; /* Color del texto descriptivo */
+  font-size: 0.9em;
+  color: #c8799f;
 }
 
 .service-item:hover {
-  transform: translateY(-3px); /* Reducción de movimiento al hacer hover */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Ajuste del efecto de sombra */
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Estilos para Productos Destacados */
+/* Featured Products Styles */
 .featured-products {
   margin: 50px 0;
 }
 
 .featured-products h2 {
-  color: #bd6f95; /* Color principal para el título de productos destacados */
+  color: #bd6f95;
   font-size: 1.8em;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   margin-bottom: 30px;
@@ -141,78 +145,91 @@ p {
 }
 
 .product-card {
-  background-color: #fdeaf2; /* Fondo claro */
-  border: 2px solid #bd6f95; /* Borde del producto */
+  display: flex; /* Usar flexbox para la tarjeta del producto */
+  flex-direction: column; /* Apilar los elementos verticalmente */
+  justify-content: space-between; /* Alinear el contenido para que el botón esté al final */
+  background-color: #fdeaf2;
+  border: 2px solid #bd6f95;
   border-radius: 8px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  max-width: 220px;
-  margin: 20px;
+  max-width: 200px;
+  margin: 10px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.product-card img {
-  width: 100%;
-  border-bottom: 2px solid #bd6f95; /* Línea de separación */
-  border-radius: 8px 8px 0 0; /* Curva solo en la parte superior */
-}
-
-.product-card h3 {
-  color: #d484aa;
-  font-size: 1.2em;
-  margin: 10px 0;
-}
-
-.product-card p {
-  color: #a95f80;
-  font-size: 0.9em;
-  margin: 5px 10px;
-}
-
-.product-price {
-  font-size: 1.1em;
-  color: #bd6f95;
-  margin: 15px 0;
-}
-
-.product-discount {
-  color: #ff4c61;
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.original-price {
-  text-decoration: line-through;
-  color: #c8799f;
-}
-
-.product-card button {
-  background-color: #bd6f95;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 15px;
-  transition: background-color 0.3s ease;
-}
-
-.product-card button:hover {
-  background-color: #a35c7a;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
 }
-.product-card img {
-  width: 80%; /* Ajusta el porcentaje según necesites, 80% es un ejemplo */
-  height: auto; /* Mantiene la proporción de la imagen */
-  max-width: 150px; /* Opcional: establece un ancho máximo para las imágenes */
+
+.product-image {
+  width: 50%;
+  height: auto; /* Cambiado de 5% a auto para mantener proporciones */
+  max-width: 100px;
+  border-bottom: 2px solid #bd6f95;
+  border-radius: 8px 8px 0 0;
+}
+
+.product-card h3 {
+  color: #d484aa;
+  font-size: 1.2em;
+  margin: 10px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-card p {
+  color: #a95f80;
+  font-size: 0.9em;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-price {
+  font-size: 1.1em;
+  color: #bd6f95;
+  margin: 15px 0;
+  margin-top: 20px;
+}
+
+.price-row {
+  margin-top: 25px;
+}
+
+.original-prices {
+  color: #808080; /* Cambia el color a gris */
+  text-decoration: line-through; /* Opcional: agrega una línea sobre el precio original */
 }
 
 
-/* Dots (tres puntitos debajo del slider) */
+.final-price {
+  margin-bottom: 50px;
+}
+
+.btn-comprar-home {
+  background-color: #bd6f95;
+  color: white;
+  border: none;
+  padding: 10px; /* Aumentar el padding para un botón más consistente */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.9em;
+  margin-top: auto; /* Empujar el botón al final de la tarjeta */
+  margin-bottom: 15px;
+  width: 100%; /* Asegura que el botón ocupe todo el ancho */
+}
+
+.product-card button:hover {
+  background-color: #a35c7a;
+}
+
+/* Slider Dots */
 .slick-dots {
   position: absolute;
   bottom: -20px;
@@ -251,7 +268,10 @@ p {
   opacity: 1;
   background-color: #a35c7a;
 }
-.Bienvenido-message-home{
-  color:#bd6f95;
-  size: 50px;
+
+/* Bienvenido message */
+.Bienvenido-message-home {
+  color: #bd6f95;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
