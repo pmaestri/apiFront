@@ -52,20 +52,23 @@ export const deleteImagen = async (imagenId) => {
   }
 };
 
-// Función para actualizar una imagen
-export const updateImagen = async (productoId, solicitud) => {
+export const updateImagen = async (productoId, archivo, nombre,token) => {
   try {
     const formData = new FormData();
-    formData.append('archivo', solicitud.archivo);
-    formData.append('nombre', solicitud.nombre);
+    formData.append('archivo', archivo); // Asegúrate de que este nombre coincida con el del modelo
+    formData.append('nombre', nombre); // Asegúrate de incluir este campo si es necesario
 
-    const response = await api.put(`/imagen/${productoId}`, formData, {
+    const response = await api.put(`imagen/${productoId}`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+    
       },
     });
-    return response.data;
+
+    return response.data; // Devuelve la respuesta del servidor
   } catch (error) {
-    throw new Error(`Error updating imagen: ${error.message}`);
+    console.error('Error al actualizar la imagen:', error);
+    throw new Error('Error actualizando la imagen del producto: ${error.message}');
   }
 };

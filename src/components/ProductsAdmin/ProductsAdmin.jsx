@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
 import { crearProducto, actualizarProducto, obtenerProductos, eliminarProducto } from '../../api/ProductApi.jsx';
+import { updateImagen } from '../../api/ImageApi.jsx';
 import { useNavigate } from 'react-router-dom';
 import { obtenerRolUsuario, setAuthToken } from '../../api/UserApi.jsx';
 import './ProductsAdmin.css';
@@ -97,6 +98,11 @@ const ProductsAdmin = () => {
 
     try {
       await actualizarProducto(productoData.productoId, updatedData, token); // Enviar solo los campos actualizados
+       // Si se ha proporcionado un archivo, llamar a updateImagen
+       if (productoData.archivo) {
+        await updateImagen(productoData.productoId, productoData.archivo, nombreArchivo,token);
+      }
+
       alert('Producto actualizado con éxito');
       setShowUpdateForm(false);
     } catch (error) {
@@ -198,7 +204,15 @@ const ProductsAdmin = () => {
             <input className="ProductsAdmin__input" type="text" name="modelo" placeholder="Modelo" onChange={handleChange} />
             <input className="ProductsAdmin__input" type="number" name="descuento" placeholder="Descuento" onChange={handleChange} />
             <input className="ProductsAdmin__input" type="number" name="catalogo" placeholder="Catálogo ID" onChange={handleChange} />
-
+            <input type="file" name="archivo" id="archivoUpdate" onChange={handleFileChange} style={{ display: 'none' }} />
+            <input
+              className="ProductsAdmin__input"
+              type="text"
+              placeholder="Subir Archivo"
+              value={nombreArchivo}
+              readOnly
+              onClick={() => document.getElementById('archivoUpdate').click()}
+            />
             <button className="ProductsAdmin__button" type="submit">Actualizar Producto</button>
           </form>
         )}
