@@ -80,6 +80,12 @@ const ProductsAdmin = () => {
       await crearProducto(formData, token);
       alert('Producto creado con éxito');
       setShowCreateForm(false);
+      // Restablecer archivo e input de imagen después de crear
+      setProductoData((prevData) => ({
+        ...prevData,
+        archivo: null,
+      }));
+      setNombreArchivo('');
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
@@ -105,6 +111,12 @@ const ProductsAdmin = () => {
 
       alert('Producto actualizado con éxito');
       setShowUpdateForm(false);
+      // Restablecer archivo e input de imagen después de actualizar
+      setProductoData((prevData) => ({
+        ...prevData,
+        archivo: null,
+      }));
+      setNombreArchivo('');
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
