@@ -16,12 +16,36 @@ const Navbar = () => {
   // Verificar si el usuario está logeado al montar el componente
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
-      setIsLoggedIn(true);
+    setIsLoggedIn(!!token); // Verifica si hay un token
+
+    const fetchProductos = async () => {
+      if (searchQuery.length > 1) {
+        const productos = await obtenerProductosDisponiblesConDetalles();
+        const sugeridos = productos.filter(producto => 
+          producto.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setProductosSugeridos(sugeridos);
+      } else {
+        setProductosSugeridos([]);
+      }
+    };
+
+    const timeoutId = setTimeout(fetchProductos, 300);
+
+    return () => clearTimeout(timeoutId); // Limpia el timeout al desmontar
+  }, [searchQuery, location]); // Dependencias del efecto
+
+  const handleCatalogClick = () => {
+    // Verifica si ya estás en la página de catálogo
+    if (location.pathname === '/ProductCatalog') {
+      // Recarga la página
+      window.location.reload();
     } else {
-      setIsLoggedIn(false);
+      // Navega a la página de catálogo
+      navigate('/ProductCatalog');
     }
-  }, [location]); // Volvemos a verificar cada vez que cambie la ruta
+  };
+
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -62,7 +86,7 @@ const Navbar = () => {
         </div>
 
         <div className="catalogo">
-          <Link to="/ProductCatalog">Catálogo</Link>
+        <a href="#" onClick={handleCatalogClick}>Catálogo</a>
         </div>
 
         <ul className="navbar-links">
