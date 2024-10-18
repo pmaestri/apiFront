@@ -88,13 +88,6 @@ const Navbar = () => {
         <div className="catalogo">
         <a href="#" onClick={handleCatalogClick}>Catálogo</a>
         </div>
-
-        <ul className="navbar-links">
-          <li><Link to="/ProductCatalog?categoria=1">Fundas</Link></li>
-          <li><Link to="/ProductCatalog?categoria=2">Vidrios</Link></li>
-          <li><Link to="/ProductCatalog?categoria=3">Cargadores</Link></li>
-          <li><Link to="/ProductCatalog?categoria=4">Auriculares</Link></li>
-        </ul>
       </div>
 
       <div className="search-and-icons">
