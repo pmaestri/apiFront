@@ -1,32 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaSearch, FaShoppingCart, FaUser } from 'react-icons/fa';
+import { FaSearch, FaShoppingCart, FaUser, FaSignOutAlt } from 'react-icons/fa'; // FaSignOutAlt para cerrar sesión
 import Cart from '../Cart/Cart.jsx';
-import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi';  // API para obtener productos
+import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi';
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [productosSugeridos, setProductosSugeridos] = useState([]);
   const [showCart, setShowCart] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para verificar si está logeado
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Verificar si el usuario está logeado al montar el componente
   useEffect(() => {
-    const timeoutId = setTimeout(async () => {
-      if (searchQuery.length > 1) {
-        const productos = await obtenerProductosDisponiblesConDetalles();
-        const sugeridos = productos.filter(producto => 
-          producto.nombre.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setProductosSugeridos(sugeridos);
-      } else {
-        setProductosSugeridos([]);
-      }
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery]);
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [location]); // Volvemos a verificar cada vez que cambie la ruta
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -39,16 +34,22 @@ const Navbar = () => {
     }
   };
 
-  // Redirige al detalle del producto cuando el usuario selecciona una sugerencia
   const handleSelectProduct = (producto) => {
-    // Navegamos al catálogo y pasamos el id del producto como parámetro en la URL
     navigate(`/ProductCatalog?productoId=${producto.id}`);
-    setSearchQuery('');  // Limpiamos la barra de búsqueda
-    setProductosSugeridos([]);  // Ocultamos las sugerencias
+    setSearchQuery('');
+    setProductosSugeridos([]);
   };
 
   const toggleCart = () => {
     setShowCart(!showCart);
+  };
+
+  // Función para cerrar sesión
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('nombreUsuario');
+    setIsLoggedIn(false);
+    navigate('/login'); // Redirigir al home después de cerrar sesión
   };
 
   return (
@@ -106,11 +107,17 @@ const Navbar = () => {
           <FaShoppingCart className="nav-icon" onClick={toggleCart} title="Carrito" />
         </div>
 
-        <div className="icon-container">
-          <Link to="/login">
-            <FaUser className="nav-icon" title="Iniciar sesión" />
-          </Link>
-        </div>
+        {isLoggedIn ? (
+          <div className="icon-container" onClick={handleLogout}>
+            <FaSignOutAlt className="nav-icon" title="Cerrar sesión" />
+          </div>
+        ) : (
+          <div className="icon-container">
+            <Link to="/login">
+              <FaUser className="nav-icon" title="Iniciar sesión" />
+            </Link>
+          </div>
+        )}
       </div>
 
       {showCart && <Cart onClose={toggleCart} />}

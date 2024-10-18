@@ -14,11 +14,11 @@ const Login = () => {
   // Recuperar valores de localStorage al montar el componente
   useEffect(() => {
     const storedNombreUsuario = localStorage.getItem('nombreUsuario');
-    const storedContrasenia = localStorage.getItem('contrasenia');
+   // const storedContrasenia = localStorage.getItem('contrasenia');
     const token = localStorage.getItem('token');
 
-    if (storedNombreUsuario) setNombreUsuario(storedNombreUsuario);
-    if (storedContrasenia) setContrasenia(storedContrasenia);
+   if (storedNombreUsuario) setNombreUsuario(storedNombreUsuario);
+   // if (storedContrasenia) setContrasenia(storedContrasenia);
     if (token) {
       setAuthToken(token); // Configurar el token para futuras solicitudes
       setIsLoggedIn(true);
@@ -39,7 +39,7 @@ const Login = () => {
       console.log(token);
 
       localStorage.setItem('nombreUsuario', nombreUsuario);
-      localStorage.setItem('contrasenia', contrasenia);
+      //localStorage.setItem('contrasenia', contrasenia);
 
       setIsLoggedIn(true);
 
@@ -62,8 +62,8 @@ const Login = () => {
 
     setAuthToken(null); // Eliminar el token de las cabeceras de axios
     setIsLoggedIn(false);
-    setNombreUsuario('');
-    setContrasenia('');
+    //setNombreUsuario('');
+    //setContrasenia('');
   };
 
   const handleRegister = () => {

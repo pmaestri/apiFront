@@ -104,6 +104,7 @@ const Orders = () => {
           <div className="orders-card-title">Pedido ID: {pedidoBuscado.id}</div>
           <div className="orders-card-content">
             <p>Total: ${pedidoBuscado.total?.toFixed(2) || 0}</p>
+            <p>Usuario: {pedidoBuscado.nombreUsuario}</p>
             {Array.isArray(pedidoBuscado.fecha) && pedidoBuscado.fecha.length >= 3 ? (
               <p>Fecha: {new Date(
                 pedidoBuscado.fecha[0], 
@@ -139,6 +140,7 @@ const Orders = () => {
             <div className="orders-card-title">Pedido ID: {pedido.id}</div>
             <div className="orders-card-content">
               <p>Total: ${pedido.total.toFixed(2)}</p>
+              <p>nombreUsuario: {pedido.nombreUsuario}</p>
               {Array.isArray(pedido.fecha) && pedido.fecha.length >= 3 ? (
                 <p>Fecha: {new Date(
                   pedido.fecha[0], 
@@ -154,11 +156,13 @@ const Orders = () => {
                   <div style={{ display: 'flex', alignItems: 'flex-start' }}>
                     <p style={{ marginRight: '10px', marginTop: '0' }}><strong>Detalle Pedido:</strong></p>
                     <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+
                       {pedido.detallePedidoDto.map((detalle) => (
                         <li key={detalle.id} className="detalle-pedido-item" style={{ marginBottom: '10px' }}>
                           <div><strong>Producto:</strong> {detalle.producto.nombre}</div>
                           <div><strong>Cantidad:</strong> {detalle.cantidad}</div>
                           <div><strong>Precio Unitario:</strong> ${detalle.precio.toFixed(2)}</div>
+
                         </li>
                       ))}
                     </ul>

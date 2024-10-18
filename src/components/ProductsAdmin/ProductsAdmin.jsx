@@ -232,6 +232,7 @@ const ProductsAdmin = () => {
                   />
                   <div className="ProductsAdmin__product-info">
                     <h3>{producto.nombre}</h3>
+                    <p>ID producto: {producto.id}</p>
                     <p>Descripción: {producto.descripcion}</p>
                     <p>Marca: {producto.marca}</p>
                     <p>Precio: ${producto.precio}</p>
