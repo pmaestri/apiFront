@@ -133,6 +133,7 @@ const UserAdmin = () => {
         <div className="card">
           <div className="card-title">{`${usuarioBuscado.nombre} ${usuarioBuscado.apellido}`}</div>
           <div className="card-content">
+            <p>ID usuario: {usuarioBuscado.id}</p>
             <p>Nombre de Usuario: {usuarioBuscado.nombreUsuario}</p>
             <p>Email: {usuarioBuscado.mail}</p>
             <button 
@@ -183,6 +184,7 @@ const UserAdmin = () => {
           <div className="card" key={index}>
             <div className="card-title">{`${usuario.nombre} ${usuario.apellido}`}</div>
             <div className="card-content">
+              <p>ID usuario: {usuario.id}</p>
               <p>Nombre de Usuario: {usuario.nombreUsuario}</p>
               <p>Email: {usuario.mail}</p>
               <button 
