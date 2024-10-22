@@ -5,8 +5,7 @@ import { updateImagen } from '../../api/ImageApi.jsx';
 import { useNavigate } from 'react-router-dom';
 import { obtenerRolUsuario, setAuthToken } from '../../api/UserApi.jsx';
 import './ProductsAdmin.css';
-import { FaTrashAlt } from 'react-icons/fa';
-
+import { FaTrashAlt, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 
 const ProductsAdmin = () => {
   const navigate = useNavigate();
@@ -25,12 +24,10 @@ const ProductsAdmin = () => {
   });
   const [nombreArchivo, setNombreArchivo] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  const [rolUsuario, setRolUsuario] = useState(null);
   const [token, setToken] = useState(null);
+  const [productos, setProductos] = useState([]);
+  const [editMode, setEditMode] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [showUpdateForm, setShowUpdateForm] = useState(false);
-  const [productos, setProductos] = useState([]); // Estado para los productos
-  const [showProductos, setShowProductos] = useState(false); // Estado para controlar la visualización de productos
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -39,7 +36,6 @@ const ProductsAdmin = () => {
       setToken(token);
       const fetchRole = async () => {
         const rol = await obtenerRolUsuario();
-        setRolUsuario(rol);
         if (rol !== 'ADMIN') {
           navigate('/');
         } else {
@@ -51,6 +47,20 @@ const ProductsAdmin = () => {
       navigate('/login');
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const fetchProductos = async () => {
+      if (isAdmin) {
+        try {
+          const productosObtenidos = await obtenerProductos(token);
+          setProductos(productosObtenidos);
+        } catch (error) {
+          alert(`Error: ${error.message}`);
+        }
+      }
+    };
+    fetchProductos();
+  }, [isAdmin, token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -86,6 +96,8 @@ const ProductsAdmin = () => {
         archivo: null,
       }));
       setNombreArchivo('');
+      const productosObtenidos = await obtenerProductos(token);
+      setProductos(productosObtenidos);
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
@@ -104,44 +116,60 @@ const ProductsAdmin = () => {
 
     try {
       await actualizarProducto(productoData.productoId, updatedData, token); // Enviar solo los campos actualizados
-       // Si se ha proporcionado un archivo, llamar a updateImagen
-       if (productoData.archivo) {
-        await updateImagen(productoData.productoId, productoData.archivo, nombreArchivo,token);
+      if (productoData.archivo) {
+        await updateImagen(productoData.productoId, productoData.archivo, nombreArchivo, token);
       }
-
       alert('Producto actualizado con éxito');
-      setShowUpdateForm(false);
-      // Restablecer archivo e input de imagen después de actualizar
-      setProductoData((prevData) => ({
-        ...prevData,
+      setEditMode(null);
+      setProductoData({
+        descripcion: '',
+        marca: '',
+        nombre: '',
+        precioUnitario: '',
+        stock: '',
+        categoriaId: '',
+        modelo: '',
+        descuento: '',
+        catalogoId: '',
         archivo: null,
-      }));
+        productoId: '',
+      });
       setNombreArchivo('');
+      const productosObtenidos = await obtenerProductos(token);
+      setProductos(productosObtenidos);
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
   };
 
-  const handleMostrarProductos = async () => {
-    if (!showProductos) {
-      // Solo obtener productos si no están ya mostrados
-      try {
-        const productosObtenidos = await obtenerProductos(token);
-        setProductos(productosObtenidos);
-      } catch (error) {
-        alert(`Error: ${error.message}`);
-      }
-    }
-    // Alternar entre mostrar y ocultar productos
-    setShowProductos(!showProductos);
+  const handleEditProducto = (producto) => {
+    setEditMode(producto.id);
+    setProductoData({ ...producto, productoId: producto.id });
   };
+
+  const handleCancelEdit = () => {
+    setEditMode(null);
+    setProductoData({
+      descripcion: '',
+      marca: '',
+      nombre: '',
+      precioUnitario: '',
+      stock: '',
+      categoriaId: '',
+      modelo: '',
+      descuento: '',
+      catalogoId: '',
+      archivo: null,
+      productoId: '',
+    });
+    setNombreArchivo('');
+  };
+
   const handleEliminarProducto = async (productoId) => {
     const confirmacion = window.confirm('¿Estás seguro de que deseas eliminar este producto?');
     if (confirmacion) {
-      const token = localStorage.getItem('token'); // Obtén el token desde localStorage
       try {
         await eliminarProducto(productoId, token);
-        // Actualizar la lista de productos después de eliminar
         const productosActualizados = productos.filter((producto) => producto.id !== productoId);
         setProductos(productosActualizados);
         alert('Producto eliminado con éxito');
@@ -150,125 +178,213 @@ const ProductsAdmin = () => {
       }
     }
   };
-  
-  
+
   if (!isAdmin) return null;
 
   return (
     <div className="ProductsAdmin">
       <AdminNavbar />
       <h1 className="ProductsAdmin__title">Administración de Productos</h1>
-      
+
       <button className="ProductsAdmin__toggle-button" onClick={() => setShowCreateForm(!showCreateForm)}>
         {showCreateForm ? 'Ocultar Formulario de Creación' : 'Crear Producto'}
       </button>
-      
-      <button className="ProductsAdmin__toggle-button" onClick={() => setShowUpdateForm(!showUpdateForm)}>
-        {showUpdateForm ? 'Ocultar Formulario de Actualización' : 'Actualizar Producto'}
-      </button>
 
-      <button className="ProductsAdmin__toggle-button" onClick={handleMostrarProductos}>
-        {showProductos ? 'Ocultar Productos' : 'Mostrar Todos los Productos'}
-      </button>
-
-
-
-      {/* Formulario para crear producto */}
-      <div className={`ProductsAdmin__form-container ${showCreateForm ? 'visible' : 'hidden'}`}>
-        {showCreateForm && (
+      {showCreateForm && (
+        <div className="ProductsAdmin__form-container visible">
           <form className="ProductsAdmin__form" onSubmit={handleSubmitCreate}>
-            <input className="ProductsAdmin__input" type="text" name="descripcion" placeholder="Descripción" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="text" name="marca" placeholder="Marca" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="text" name="nombre" placeholder="Nombre" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="number" name="precioUnitario" placeholder="Precio Unitario" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="number" name="stock" placeholder="Stock" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="number" name="categoria" placeholder="Categoría ID" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="text" name="modelo" placeholder="Modelo" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="number" name="descuento" placeholder="Descuento" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="number" name="catalogo" placeholder="Catálogo ID" onChange={handleChange} />
-
-            <input type="file" name="archivo" id="archivo" onChange={handleFileChange} style={{ display: 'none' }} />
-            <input
-              className="ProductsAdmin__input"
-              type="text"
-              placeholder="Subir Archivo"
-              value={nombreArchivo}
-              readOnly
-              onClick={() => document.getElementById('archivo').click()}
-            />
+            <label>
+              Nombre:
+              <input className="ProductsAdmin__input" type="text" name="nombre" onChange={handleChange} />
+            </label>
+            <label>
+              Descripción:
+              <input className="ProductsAdmin__input" type="text" name="descripcion" onChange={handleChange} />
+            </label>
+            <label>
+              Marca:
+              <input className="ProductsAdmin__input" type="text" name="marca" onChange={handleChange} />
+            </label>
+            <label>
+              Precio:
+              <input className="ProductsAdmin__input" type="text" name="precio" onChange={handleChange} />
+            </label>
+            <label>
+              Stock:
+              <input className="ProductsAdmin__input" type="text" name="stock" onChange={handleChange} />
+            </label>
+            <label>
+              Categoría:
+              <input className="ProductsAdmin__input" type="text" name="categoria" onChange={handleChange} />
+            </label>
+            <label>
+              Modelo:
+              <input className="ProductsAdmin__input" type="text" name="modelo" onChange={handleChange} />
+            </label>
+            <label>
+              Descuento:
+              <input className="ProductsAdmin__input" type="text" name="descuento" onChange={handleChange} />
+            </label>
+            <label>
+              Catálogo:
+              <input className="ProductsAdmin__input" type="text" name="catalogoId" onChange={handleChange} />
+            </label>
+            <label>
+              Subir Archivo:
+              <input type="file" name="archivo" id="archivo" onChange={handleFileChange} />
+            </label>
 
             <button className="ProductsAdmin__button" type="submit">Crear Producto</button>
           </form>
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* Formulario para actualizar producto */}
-      <div className={`ProductsAdmin__form-container ${showUpdateForm ? 'visible' : 'hidden'}`}>
-        {showUpdateForm && (
-          <form className="ProductsAdmin__form" onSubmit={handleSubmitUpdate}>
-            <input className="ProductsAdmin__input" type="text" name="productoId" placeholder="Producto ID" onChange={handleChange} required />
-            <input className="ProductsAdmin__input" type="text" name="descripcion" placeholder="Descripción" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="text" name="marca" placeholder="Marca" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="text" name="nombre" placeholder="Nombre" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="number" name="precioUnitario" placeholder="Precio Unitario" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="number" name="stock" placeholder="Stock" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="number" name="categoria" placeholder="Categoría ID" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="text" name="modelo" placeholder="Modelo" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="number" name="descuento" placeholder="Descuento" onChange={handleChange} />
-            <input className="ProductsAdmin__input" type="number" name="catalogo" placeholder="Catálogo ID" onChange={handleChange} />
-            <input type="file" name="archivo" id="archivoUpdate" onChange={handleFileChange} style={{ display: 'none' }} />
-            <input
-              className="ProductsAdmin__input"
-              type="text"
-              placeholder="Subir Archivo"
-              value={nombreArchivo}
-              readOnly
-              onClick={() => document.getElementById('archivoUpdate').click()}
-            />
-            <button className="ProductsAdmin__button" type="submit">Actualizar Producto</button>
-          </form>
-        )}
-      </div>
-
-      {showProductos && (
-        <div className="ProductsAdmin__product-list">
-          <h2>Lista de Productos</h2>
-          {productos.length > 0 ? (
-            <div className="ProductsAdmin__product-cards">
-              {productos.map((producto) => (
-                <div key={producto.id} className="ProductsAdmin__product-card">
+      <div className="ProductsAdmin__product-list">
+        <h2>Lista de Productos</h2>
+        {productos.length > 0 ? (
+          <div className="ProductsAdmin__product-cards">
+            {productos.map((producto) => (
+              <div key={producto.id} className="ProductsAdmin__product-card">
+                <div className="ProductsAdmin__product-image-container">
                   <img
                     src={`data:image/jpeg;base64,${producto.imagen}`}
                     alt={producto.nombre}
                     className="ProductsAdmin__product-image"
                   />
-                  <div className="ProductsAdmin__product-info">
-                    <h3>{producto.nombre}</h3>
-                    <p>ID producto: {producto.id}</p>
-                    <p>Descripción: {producto.descripcion}</p>
-                    <p>Marca: {producto.marca}</p>
-                    <p>Precio: ${producto.precio}</p>
-                    <p>Stock: {producto.stock}</p>
-                    <p>Modelo: {producto.modelo}</p>
-                    <p>Descuento: {producto.descuento}%</p>
-                    <p>Categoría: {producto.nombreCategoria}</p>
-                    <p>{producto.disponible ? 'Disponible' : 'No Disponible'}</p>
-                    <button
-                      className="ProductsAdmin__delete-button"
-                      onClick={() => handleEliminarProducto(producto.id)}
-                    >
-                      <FaTrashAlt /> Eliminar
-                    </button>
-                  </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p>No hay productos disponibles.</p>
-          )}
-        </div>
-      )}
-      
+                <div className="ProductsAdmin__product-info">
+                  {editMode === producto.id ? (
+                    <>
+                      <label>
+                        Nombre:
+                        <input
+                          className="ProductsAdmin__input"
+                          type="text"
+                          name="nombre"
+                          value={productoData.nombre}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <label>
+                        Descripción:
+                        <input
+                          className="ProductsAdmin__input"
+                          type="text"
+                          name="descripcion"
+                          value={productoData.descripcion}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <label>
+                        Marca:
+                        <input
+                          className="ProductsAdmin__input"
+                          type="text"
+                          name="marca"
+                          value={productoData.marca}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <label>
+                        Precio:
+                        <input
+                          className="ProductsAdmin__input"
+                          type="text"
+                          name="precioUnitario"
+                          value={productoData.precioUnitario}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <label>
+                        Stock:
+                        <input
+                          className="ProductsAdmin__input"
+                          type="text"
+                          name="stock"
+                          value={productoData.stock}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <label>
+                        Categoría:
+                        <input
+                          className="ProductsAdmin__input"
+                          type="text"
+                          name="categoria"
+                          value={productoData.categoriaId}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <label>
+                        Modelo:
+                        <input
+                          className="ProductsAdmin__input"
+                          type="text"
+                          name="modelo"
+                          value={productoData.modelo}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <label>
+                        Descuento:
+                        <input
+                          className="ProductsAdmin__input"
+                          type="text"
+                          name="descuento"
+                          value={productoData.descuento}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <label>
+                        Catálogo:
+                        <input
+                          className="ProductsAdmin__input"
+                          type="text"
+                          name="catalogoId"
+                          value={productoData.catalogoId}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <input type="file" name="archivo" id="archivoUpdate" onChange={handleFileChange} />
+                      <div className="ProductsAdmin__action-buttons">
+                        <button className="ProductsAdmin__save-button" onClick={handleSubmitUpdate}>
+                          <FaSave /> Guardar
+                        </button>
+                        <button className="ProductsAdmin__cancel-button" onClick={handleCancelEdit}>
+                          <FaTimes /> Cancelar
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <h3>{producto.nombre}</h3>
+                      <p>ID producto: {producto.id}</p>
+                      <p>Descripción: {producto.descripcion}</p>
+                      <p>Marca: {producto.marca}</p>
+                      <p>Precio: ${producto.precio}</p>
+                      <p>Stock: {producto.stock}</p>
+                      <p>Modelo: {producto.modelo}</p>
+                      <p>Descuento: {producto.descuento}%</p>
+                      <p>Categoría: {producto.nombreCategoria}</p>
+                      <p>{producto.disponible ? 'Disponible' : 'No Disponible'}</p>
+                      <div className="ProductsAdmin__action-buttons">
+                        <button className="ProductsAdmin__edit-button" onClick={() => handleEditProducto(producto)}>
+                          <FaEdit />
+                        </button>
+                        <button className="ProductsAdmin__delete-button" onClick={() => handleEliminarProducto(producto.id)}>
+                          <FaTrashAlt />
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No hay productos disponibles.</p>
+        )}
+      </div>
     </div>
   );
 };

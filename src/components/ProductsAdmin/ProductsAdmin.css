@@ -1,140 +1,175 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
 
-.ProductsAdmin__form-container{
-    display: flex;                 /* Activar flexbox */
-    justify-content: center;       /* Centrar horizontalmente */
-    align-items: center;           /* Centrar verticalmente */
-    flex-direction: column;        /* Colocar los elementos en columna */
-    margin: 10px;                 /* Espaciado alrededor del formulario */
-    padding: 20px;                /* Espaciado interno del formulario */
-    border-radius: 8px;           /* Bordes redondeados opcional */
+.ProductsAdmin__form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 8px;
 }
-/* Estilo del título */
+
 .ProductsAdmin h1 {
-    color: #bd6f95; /* Color del título */
+    color: #bd6f95;
     font-size: 28px;
-    font-weight: 700; /* Título con peso de fuente más alto */
+    font-weight: 700;
     margin-bottom: 20px;
     text-align: center;
 }
 
-
-/* Estilo del formulario */
 .ProductsAdmin form {
     width: 100%;
-    max-width: 500px; /* Ancho máximo para el formulario */
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     background-color: #fdeaf2;
     text-align: center;
-    border: 2px solid #bd6f95; /* Color y grosor del borde */
-    border-radius: 8px; /* Bordes redondeados */
-    
+    border: 2px solid #bd6f95;
+    border-radius: 8px;
 }
 
-/* Estilo para los inputs */
 .ProductsAdmin input[type="text"],
 .ProductsAdmin input[type="number"],
 .ProductsAdmin__file-label {
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #ccc; /* Borde gris */
-    border-radius: 4px; /* Bordes redondeados */
+    border: 1px solid #ccc;
+    border-radius: 4px;
     font-size: 1rem;
-    outline: none; /* Evitar el borde predeterminado */
-    color: #333; /* Color del texto gris */
-    background-color: white; /* Fondo blanco */
+    outline: none;
+    color: #333;
+    background-color: white;
     margin-left: 10%;
     margin-right: 10%;
-    margin-top: 20px;;
+    margin-top: 20px;
 }
 
 .ProductsAdmin input:focus,
 .ProductsAdmin__file-label:hover {
-    border: 2px solid #bd6f95; /* Borde rosa al hacer foco */
-    box-shadow: 0 0 5px rgba(189, 111, 149, 0.5); /* Sombra suave al hacer foco */
+    border: 2px solid #bd6f95;
+    box-shadow: 0 0 5px rgba(189, 111, 149, 0.5);
 }
 
-/* Estilo para ocultar el input de archivo */
 .ProductsAdmin__input-file {
-    display: none; /* Ocultar input de archivo */
+    display: none;
 }
 
-/* Estilo para la etiqueta del botón de archivo */
 .ProductsAdmin__file-label {
-    display: inline-block; /* Para que el margen se aplique correctamente */
-    cursor: pointer; /* Cursor de puntero al pasar por encima */
-    text-align: center; /* Centrar texto */
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
 }
 
-/* Estilo para el botón */
 .ProductsAdmin button {
     padding: 10px;
     margin-top: 10px;
-    background-color: #bd6f95; /* Color de fondo del botón */
-    color: #fff; /* Color del texto */
-    border: none; /* Sin borde */
-    border-radius: 4px; /* Bordes redondeados */
+    background-color: #bd6f95;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
     font-size: 1rem;
-    cursor: pointer; /* Cursor de puntero al pasar por encima */
-    transition: background-color 0.3s; /* Transición suave para el color de fondo */
-    width:50%;
-    margin: 10px auto; /* Centramos el botón */
-    display: block; /* Hacer que el botón sea un bloque para centrarlo */
-    margin-bottom: 15px; /* Margen inferior */
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 50%;
+    margin: 10px auto;
+    display: block;
+    margin-bottom: 15px;
 }
 
 .ProductsAdmin button:hover {
-    background-color: #fdeaf2; /* Color del botón al pasar el ratón */
+    background-color: #fdeaf2;
 }
 
-/* Estilo para la lista de productos */
 .ProductsAdmin__product-list {
-    margin-top: 20px; /* Espaciado superior */
+    margin-top: 20px;
 }
 
-/* Estilo para las tarjetas de productos */
 .ProductsAdmin__product-cards {
-    display: flex; /* Usar flexbox para organizar las tarjetas */
-    flex-direction: column; /* Colocar las tarjetas en columna */
-    align-items: stretch; /* Hacer que cada tarjeta use todo el ancho disponible */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
-.ProductsAdmin__product-list h2{
-    color:#bd6f95;
-    text-align: center;
 
+.ProductsAdmin__product-list h2 {
+    color: #bd6f95;
+    text-align: center;
 }
+
 .ProductsAdmin__product-card {
-    display: flex; /* Colocar la imagen y la información en una fila */
+    display: flex;
     border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 10px; /* Reducir espaciado interno */
-    margin: 5px auto; /* Centramos las tarjetas con márgenes automáticos */
+    padding: 10px;
+    margin: 5px auto;
     background-color: #fdeaf2;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
-    width: 80%; /* Ancho de la tarjeta */
-    height: auto; /* Ajustar la altura automáticamente */
+    width: 80%;
+    height: auto;
 }
 
-
-/* Efecto de hover para la tarjeta */
 .ProductsAdmin__product-card:hover {
-    transform: scale(1.02); /* Aumentar ligeramente el tamaño al pasar el mouse */
+    transform: scale(1.02);
 }
 
-/* Estilo para la imagen del producto */
 .ProductsAdmin__product-image {
-    width: 100%; /* Ancho completo del contenedor */
-    max-width: 200px; /* Ancho máximo de la imagen */
-    height: 30%; /* Altura automática para mantener la proporción */
-    margin-bottom: 10px; /* Espaciado inferior de la imagen */
-    margin-right:10px;
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 10px;
+    margin-right: 10px;
     margin-top: 3%;
 }
 
-/* Estilo para la información del producto */
 .ProductsAdmin__product-info {
-    text-align: left; /* Alinear el texto a la izquierda */
-    color:#bd6f95;
+    text-align: left;
+    color: #bd6f95;
+}
+
+.ProductsAdmin__action-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.ProductsAdmin__edit-button,
+.ProductsAdmin__delete-button,
+.ProductsAdmin__save-button,
+.ProductsAdmin__cancel-button {
+    background-color: #bd6f95;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.ProductsAdmin__edit-button:hover,
+.ProductsAdmin__delete-button:hover,
+.ProductsAdmin__save-button:hover,
+.ProductsAdmin__cancel-button:hover {
+    background-color: #fdeaf2;
+    color: #bd6f95;
+}
+
+.ProductsAdmin__toggle-button {
+    padding: 10px;
+    background-color: #bd6f95;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 20px auto;
+    display: block;
+    width: 50%;
+}
+
+.ProductsAdmin__toggle-button:hover {
+    background-color: #fdeaf2;
+    color: #bd6f95;
 }
