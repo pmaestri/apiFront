@@ -31,6 +31,7 @@ const ProductCatalog = () => {
 
     // Función para obtener el parámetro de la URL
     useEffect(() => {
+        console.log("Cargando parámetros de URL...");
         const params = new URLSearchParams(location.search);
         const categoriaId = params.get('categoria');
         const searchQuery = params.get('search');  // Capturamos el valor de búsqueda
@@ -38,26 +39,32 @@ const ProductCatalog = () => {
 
         if (categoriaId) {
             setFiltros((prevFiltros) => ({ ...prevFiltros, categoriaId }));
+            console.log("Categoría filtrada:", categoriaId);
         }
 
         if (searchQuery) {
             setFiltros((prevFiltros) => ({ ...prevFiltros, nombre: searchQuery }));
+            console.log("Búsqueda por nombre:", searchQuery);
             handleFiltrarProductos(searchQuery); // Llamamos a la función para filtrar por nombre
         }
 
         // Si existe un productoId en la URL, abrimos automáticamente el detalle del producto
         if (productoId) {
+            console.log("Producto seleccionado por ID:", productoId);
             handleVerDetalleProducto(productoId);
         }
     }, [location]);
 
     useEffect(() => {
+        console.log("Obteniendo productos...");
         const fetchProductos = async () => {
             setLoading(true);
             try {
                 const data = await obtenerProductosDisponiblesConDetalles();
+                console.log("Productos obtenidos:", data);
                 setProductos(data);
             } catch (error) {
+                console.error("Error al obtener productos:", error);
                 setError(`Error al obtener productos: ${error.message}`);
             } finally {
                 setLoading(false);
@@ -71,9 +78,11 @@ const ProductCatalog = () => {
         const marcaSeleccionada = e.target.value;
         setFiltros({ ...filtros, marca: marcaSeleccionada, modelo: '' });
         setModelos(modelosPorMarca[marcaSeleccionada] || []);
+        console.log("Marca seleccionada:", marcaSeleccionada);
     };
 
     const handleFiltrarProductos = async (nombreProducto = '') => {
+        console.log("Filtrando productos por:", filtros);
         setLoading(true);
         try {
             const filtrosAEnviar = {
@@ -86,6 +95,7 @@ const ProductCatalog = () => {
             };
 
             const dataFiltrada = await filtrarProductos(filtrosAEnviar);
+            console.log("Productos filtrados:", dataFiltrada);
             setProductos(dataFiltrada);
 
             if (dataFiltrada.length === 0) {
@@ -94,6 +104,7 @@ const ProductCatalog = () => {
                 setMessage(null);
             }
         } catch (error) {
+            console.error("Error al filtrar productos:", error);
             setError(`Error al filtrar productos: ${error.message}`);
         } finally {
             setLoading(false);
@@ -103,9 +114,12 @@ const ProductCatalog = () => {
     const handleVerDetalleProducto = async (productoId) => {
         setLoading(true);
         try {
+            console.log("Obteniendo detalles del producto:", productoId);
             const detalle = await obtenerDetalleProducto(productoId);
+            console.log("Detalle del producto:", detalle);
             setProductoSeleccionado(detalle);
         } catch (error) {
+            console.error("Error al obtener el detalle del producto:", error);
             setError(`Error al obtener el detalle del producto: ${error.message}`);
         } finally {
             setLoading(false);
@@ -113,52 +127,72 @@ const ProductCatalog = () => {
     };
 
     const handleCloseDetail = () => {
+        console.log("Cerrando detalle del producto.");
         setProductoSeleccionado(null);
+        setCantidad(1); // Reiniciar cantidad
     };
 
     const increaseQuantity = () => {
-        setCantidad(cantidad + 1);
+        console.log(`Intentando aumentar cantidad. Actual: ${cantidad}`);
+        if (cantidad < productoSeleccionado.stock) {
+            setCantidad(cantidad + 1);
+            console.log(`Cantidad aumentada a: ${cantidad + 1}`);
+        } else {
+            console.log(`No se puede aumentar, cantidad máxima alcanzada: ${productoSeleccionado.stock}`);
+            setMessage(`No puedes agregar más de ${productoSeleccionado.stock} unidades.`);
+            setTimeout(() => setMessage(''), 3000);
+        }
     };
 
     const decreaseQuantity = () => {
+        console.log(`Intentando disminuir cantidad. Actual: ${cantidad}`);
         if (cantidad > 1) {
             setCantidad(cantidad - 1);
+            console.log(`Cantidad disminuida a: ${cantidad - 1}`);
+        } else {
+            console.log("Cantidad mínima alcanzada, no se puede disminuir más.");
         }
     };
 
     const addToCart = (product, quantity) => {
+        console.log("Intentando agregar al carrito...");
         const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
         const productInCart = currentCart.find(item => item.id === product.id);
 
-        const finalPrice = product.descuento > 0 
-          ? (product.precio * (1 - product.descuento / 100))  
-          : product.precio;  
+        const finalPrice = product.descuento > 0
+            ? (product.precio * (1 - product.descuento / 100))
+            : product.precio;
 
         if (productInCart) {
             const totalQuantity = productInCart.quantity + quantity;
+            console.log(`Producto ya en el carrito. Cantidad actual: ${productInCart.quantity}, Total después de agregar: ${totalQuantity}`);
 
             if (totalQuantity <= product.stock) {
-                productInCart.quantity = totalQuantity; 
+                productInCart.quantity = totalQuantity;
+                console.log("Producto actualizado en el carrito.");
             } else {
+                console.log(`No se puede agregar más de ${product.stock} unidades en total para ${product.nombre}.`);
                 alert(`No puedes agregar más de ${product.stock} unidades en total para ${product.nombre}.`);
                 return;
             }
         } else {
-            currentCart.push({ 
+            console.log("Producto nuevo, agregando al carrito...");
+            currentCart.push({
                 id: product.id,
-                name: product.nombre, 
-                price: finalPrice, 
-                originalPrice: product.precio, 
-                image: `data:image/jpeg;base64,${product.imagen}`, 
-                discount: product.descuento, 
-                quantity: quantity, 
-                stock: product.stock 
-              });
+                name: product.nombre,
+                price: finalPrice,
+                originalPrice: product.precio,
+                image: `data:image/jpeg;base64,${product.imagen}`,
+                discount: product.descuento,
+                quantity: quantity,
+                stock: product.stock
+            });
         }
 
         localStorage.setItem('cart', JSON.stringify(currentCart));
 
         setShowSuccessMessage(true);
+        console.log("Producto agregado al carrito.");
         setTimeout(() => {
             setShowSuccessMessage(false);
         }, 3000);
@@ -317,14 +351,15 @@ const ProductCatalog = () => {
                                 <button
                                     className="add-to-cart-btn"
                                     onClick={() => {
+                                        console.log("Agregando al carrito desde el detalle...");
                                         if (cantidad > productoSeleccionado.stock) {
                                             setMessage(`No hay suficiente stock disponible. Stock actual: ${productoSeleccionado.stock}`);
+                                            console.log("No hay suficiente stock disponible.");
                                             setTimeout(() => setMessage(''), 3000);
                                         } else {
                                             addToCart(productoSeleccionado, cantidad);
                                             setError(null);
-                                           // setShowSuccessMessage(true);
-                                           // setTimeout(() => setShowSuccessMessage(false), 3000);
+                                            console.log("Producto agregado al carrito correctamente.");
                                         }
                                     }}
                                 >
