@@ -285,7 +285,7 @@ const ProductsAdmin = () => {
                       <input
                         type="text"
                         name="precioUnitario"
-                        value={productoData.precioUnitario}
+                        value={productoData.precio}
                         onChange={handleChange}
                         className="ProductsAdmin__input-edit-inline"
                       />
@@ -329,10 +329,21 @@ const ProductsAdmin = () => {
                     <p><strong>Categoría:</strong> 
                       <input
                         type="text"
-                        name="categoriaId"
-                        value={productoData.categoriaId}
+                        name="categoria"
+                        value={productoData.nombreCategoria}
                         onChange={handleChange}
                         className="ProductsAdmin__input-edit-inline"
+                      />
+                    </p>
+                    <p><strong>Subir archivo:</strong>
+                      <input type="file" name="archivo" id="archivoUpdate" onChange={handleFileChange} style={{ display: 'none' }} />
+                      <input
+                        className="ProductsAdmin__input"
+                        type="text"
+                        placeholder="Subir Archivo"
+                        value={nombreArchivo}
+                        readOnly
+                        onClick={() => document.getElementById('archivoUpdate').click()}
                       />
                     </p>
 
