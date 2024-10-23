@@ -90,7 +90,6 @@ const ProductsAdmin = () => {
       await crearProducto(formData, token);
       alert('Producto creado con éxito');
       setShowCreateForm(false);
-      // Restablecer archivo e input de imagen después de crear
       setProductoData((prevData) => ({
         ...prevData,
         archivo: null,
@@ -107,7 +106,6 @@ const ProductsAdmin = () => {
     e.preventDefault();
     const updatedData = {};
 
-    // Solo agregar campos que han sido cambiados
     Object.entries(productoData).forEach(([key, value]) => {
       if (key !== 'productoId' && value) {
         updatedData[key] = value;
@@ -115,7 +113,7 @@ const ProductsAdmin = () => {
     });
 
     try {
-      await actualizarProducto(productoData.productoId, updatedData, token); // Enviar solo los campos actualizados
+      await actualizarProducto(productoData.productoId, updatedData, token);
       if (productoData.archivo) {
         await updateImagen(productoData.productoId, productoData.archivo, nombreArchivo, token);
       }
@@ -207,7 +205,7 @@ const ProductsAdmin = () => {
             </label>
             <label>
               Precio:
-              <input className="ProductsAdmin__input" type="text" name="precio" onChange={handleChange} />
+              <input className="ProductsAdmin__input" type="text" name="precioUnitario" onChange={handleChange} />
             </label>
             <label>
               Stock:
@@ -215,7 +213,7 @@ const ProductsAdmin = () => {
             </label>
             <label>
               Categoría:
-              <input className="ProductsAdmin__input" type="text" name="categoria" onChange={handleChange} />
+              <input className="ProductsAdmin__input" type="text" name="categoriaId" onChange={handleChange} />
             </label>
             <label>
               Modelo:
@@ -253,120 +251,112 @@ const ProductsAdmin = () => {
                   />
                 </div>
                 <div className="ProductsAdmin__product-info">
-                  {editMode === producto.id ? (
+                {editMode === producto.id ? (
+                  <>
+                    <h3 className="ProductsAdmin__product-name"></h3>
+                    <p><strong>Nombre:</strong> 
+                      <input
+                        type="text"
+                        name="nombre"
+                        value={productoData.nombre}
+                        onChange={handleChange}
+                        className="ProductsAdmin__input-edit-inline"
+                      />
+                    </p>
+                    <p><strong>Descripción:</strong> 
+                      <input
+                        type="text"
+                        name="descripcion"
+                        value={productoData.descripcion}
+                        onChange={handleChange}
+                        className="ProductsAdmin__input-edit-inline"
+                      />
+                    </p>
+                    <p><strong>Marca:</strong> 
+                      <input
+                        type="text"
+                        name="marca"
+                        value={productoData.marca}
+                        onChange={handleChange}
+                        className="ProductsAdmin__input-edit-inline"
+                      />
+                    </p>
+                    <p><strong>Precio:</strong> 
+                      <input
+                        type="text"
+                        name="precioUnitario"
+                        value={productoData.precioUnitario}
+                        onChange={handleChange}
+                        className="ProductsAdmin__input-edit-inline"
+                      />
+                    </p>
+                    <p><strong>Stock:</strong> 
+                      <input
+                        type="text"
+                        name="stock"
+                        value={productoData.stock}
+                        onChange={handleChange}
+                        className="ProductsAdmin__input-edit-inline"
+                      />
+                    </p>
+                    <p><strong>Modelo:</strong> 
+                      <input
+                        type="text"
+                        name="modelo"
+                        value={productoData.modelo}
+                        onChange={handleChange}
+                        className="ProductsAdmin__input-edit-inline"
+                      />
+                    </p>
+                    <p><strong>Descuento:</strong> 
+                      <input
+                        type="text"
+                        name="descuento"
+                        value={productoData.descuento}
+                        onChange={handleChange}
+                        className="ProductsAdmin__input-edit-inline"
+                      />
+                    </p>
+                    <p><strong>Catálogo:</strong> 
+                      <input
+                        type="text"
+                        name="catalogoId"
+                        value={productoData.catalogoId}
+                        onChange={handleChange}
+                        className="ProductsAdmin__input-edit-inline"
+                      />
+                    </p>
+                    <p><strong>Categoría:</strong> 
+                      <input
+                        type="text"
+                        name="categoriaId"
+                        value={productoData.categoriaId}
+                        onChange={handleChange}
+                        className="ProductsAdmin__input-edit-inline"
+                      />
+                    </p>
+
+                    <div className="ProductsAdmin__action-buttons">
+                      <button className="ProductsAdmin__save-button" onClick={handleSubmitUpdate}>
+                        <FaSave /> Guardar
+                      </button>
+                      <button className="ProductsAdmin__cancel-button" onClick={handleCancelEdit}>
+                        <FaTimes /> Cancelar
+                      </button>
+                    </div>
+                  </>
+                ) : (
                     <>
-                      <label>
-                        Nombre:
-                        <input
-                          className="ProductsAdmin__input"
-                          type="text"
-                          name="nombre"
-                          value={productoData.nombre}
-                          onChange={handleChange}
-                        />
-                      </label>
-                      <label>
-                        Descripción:
-                        <input
-                          className="ProductsAdmin__input"
-                          type="text"
-                          name="descripcion"
-                          value={productoData.descripcion}
-                          onChange={handleChange}
-                        />
-                      </label>
-                      <label>
-                        Marca:
-                        <input
-                          className="ProductsAdmin__input"
-                          type="text"
-                          name="marca"
-                          value={productoData.marca}
-                          onChange={handleChange}
-                        />
-                      </label>
-                      <label>
-                        Precio:
-                        <input
-                          className="ProductsAdmin__input"
-                          type="text"
-                          name="precioUnitario"
-                          value={productoData.precioUnitario}
-                          onChange={handleChange}
-                        />
-                      </label>
-                      <label>
-                        Stock:
-                        <input
-                          className="ProductsAdmin__input"
-                          type="text"
-                          name="stock"
-                          value={productoData.stock}
-                          onChange={handleChange}
-                        />
-                      </label>
-                      <label>
-                        Categoría:
-                        <input
-                          className="ProductsAdmin__input"
-                          type="text"
-                          name="categoria"
-                          value={productoData.categoriaId}
-                          onChange={handleChange}
-                        />
-                      </label>
-                      <label>
-                        Modelo:
-                        <input
-                          className="ProductsAdmin__input"
-                          type="text"
-                          name="modelo"
-                          value={productoData.modelo}
-                          onChange={handleChange}
-                        />
-                      </label>
-                      <label>
-                        Descuento:
-                        <input
-                          className="ProductsAdmin__input"
-                          type="text"
-                          name="descuento"
-                          value={productoData.descuento}
-                          onChange={handleChange}
-                        />
-                      </label>
-                      <label>
-                        Catálogo:
-                        <input
-                          className="ProductsAdmin__input"
-                          type="text"
-                          name="catalogoId"
-                          value={productoData.catalogoId}
-                          onChange={handleChange}
-                        />
-                      </label>
-                      <input type="file" name="archivo" id="archivoUpdate" onChange={handleFileChange} />
-                      <div className="ProductsAdmin__action-buttons">
-                        <button className="ProductsAdmin__save-button" onClick={handleSubmitUpdate}>
-                          <FaSave /> Guardar
-                        </button>
-                        <button className="ProductsAdmin__cancel-button" onClick={handleCancelEdit}>
-                          <FaTimes /> Cancelar
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <h3>{producto.nombre}</h3>
-                      <p>ID producto: {producto.id}</p>
-                      <p>Descripción: {producto.descripcion}</p>
-                      <p>Marca: {producto.marca}</p>
-                      <p>Precio: ${producto.precio}</p>
-                      <p>Stock: {producto.stock}</p>
-                      <p>Modelo: {producto.modelo}</p>
-                      <p>Descuento: {producto.descuento}%</p>
-                      <p>Categoría: {producto.nombreCategoria}</p>
-                      <p>{producto.disponible ? 'Disponible' : 'No Disponible'}</p>
+                      <h3 className="ProductsAdmin__product-name">{producto.nombre}</h3>
+                      <p><strong>ID producto:</strong> <span className="ProductsAdmin__value">{producto.id}</span></p>
+                      <p><strong>Descripción:</strong> <span className="ProductsAdmin__value">{producto.descripcion}</span></p>
+                      <p><strong>Marca:</strong> <span className="ProductsAdmin__value">{producto.marca}</span></p>
+                      <p><strong>Precio:</strong> <span className="ProductsAdmin__value">${producto.precio}</span></p>
+                      <p><strong>Stock:</strong> <span className="ProductsAdmin__value">{producto.stock}</span></p>
+                      <p><strong>Modelo:</strong> <span className="ProductsAdmin__value">{producto.modelo}</span></p>
+                      <p><strong>Descuento:</strong> <span className="ProductsAdmin__value">{producto.descuento}%</span></p>
+                      <p><strong>Categoría:</strong> <span className="ProductsAdmin__value">{producto.nombreCategoria}</span></p>
+                      <p><strong>Estado:</strong> <span className="ProductsAdmin__value">{producto.disponible ? 'Disponible' : 'No Disponible'}</span></p>
                       <div className="ProductsAdmin__action-buttons">
                         <button className="ProductsAdmin__edit-button" onClick={() => handleEditProducto(producto)}>
                           <FaEdit />
