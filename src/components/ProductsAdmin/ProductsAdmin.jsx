@@ -111,7 +111,7 @@ const ProductsAdmin = () => {
         updatedData[key] = value;
       }
     });
-
+    console.log('Datos a actualizar:', updatedData);
     try {
       await actualizarProducto(productoData.productoId, updatedData, token);
       if (productoData.archivo) {
@@ -205,15 +205,15 @@ const ProductsAdmin = () => {
             </label>
             <label>
               Precio:
-              <input className="ProductsAdmin__input" type="text" name="precioUnitario" onChange={handleChange} />
+              <input className="ProductsAdmin__input" type="number" name="precioUnitario" onChange={handleChange} />
             </label>
             <label>
               Stock:
-              <input className="ProductsAdmin__input" type="text" name="stock" onChange={handleChange} />
+              <input className="ProductsAdmin__input" type="number" name="stock" onChange={handleChange} />
             </label>
             <label>
               Categoría:
-              <input className="ProductsAdmin__input" type="text" name="categoriaId" onChange={handleChange} />
+              <input className="ProductsAdmin__input" type="number" name="categoria" onChange={handleChange} />
             </label>
             <label>
               Modelo:
@@ -221,16 +221,33 @@ const ProductsAdmin = () => {
             </label>
             <label>
               Descuento:
-              <input className="ProductsAdmin__input" type="text" name="descuento" onChange={handleChange} />
+              <input className="ProductsAdmin__input" type="number" name="descuento" onChange={handleChange} />
             </label>
             <label>
               Catálogo:
-              <input className="ProductsAdmin__input" type="text" name="catalogoId" onChange={handleChange} />
+              <input className="ProductsAdmin__input" type="number" name="catalogo" onChange={handleChange} />
             </label>
-            <label>
-              Subir Archivo:
-              <input type="file" name="archivo" id="archivo" onChange={handleFileChange} />
-            </label>
+            <div className="ProductsAdmin__file-container">
+            <label className="ProductsAdmin__input_imagen">Imágen:</label>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <input 
+                className="ProductsAdmin__input ProductsAdmin__input-file" 
+                type="file" 
+                name="archivo" 
+                id="archivo" 
+                onChange={handleFileChange} 
+                accept="image/*" 
+                style={{ display: 'none' }} // Oculta el input file
+              />
+              <label 
+                className="ProductsAdmin__file-label" 
+                htmlFor="archivo" 
+                style={{ cursor: 'pointer', textAlign: 'center' }} // Cambia el cursor al pasar por encima
+              >
+                {nombreArchivo ? nombreArchivo : 'Subir imagen'}
+              </label>
+            </div>
+          </div>
 
             <button className="ProductsAdmin__button" type="submit">Crear Producto</button>
           </form>
@@ -283,16 +300,16 @@ const ProductsAdmin = () => {
                     </p>
                     <p><strong>Precio:</strong> 
                       <input
-                        type="text"
+                        type="number"
                         name="precioUnitario"
-                        value={productoData.precio}
+                        defaultValue={producto.precio}
                         onChange={handleChange}
                         className="ProductsAdmin__input-edit-inline"
                       />
                     </p>
                     <p><strong>Stock:</strong> 
                       <input
-                        type="text"
+                        type="number"
                         name="stock"
                         value={productoData.stock}
                         onChange={handleChange}
@@ -310,7 +327,7 @@ const ProductsAdmin = () => {
                     </p>
                     <p><strong>Descuento:</strong> 
                       <input
-                        type="text"
+                        type="number"
                         name="descuento"
                         value={productoData.descuento}
                         onChange={handleChange}
@@ -340,7 +357,7 @@ const ProductsAdmin = () => {
                       <input
                         className="ProductsAdmin__input"
                         type="text"
-                        placeholder="Subir Archivo"
+                        placeholder= "Cambiar Imágen"
                         value={nombreArchivo}
                         readOnly
                         onClick={() => document.getElementById('archivoUpdate').click()}

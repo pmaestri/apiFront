@@ -11,6 +11,7 @@
     background: linear-gradient(135deg, #f3aacb, #c8799f);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     font-family: 'Fredoka', sans-serif;
+    
 }
 
 .ProductsAdmin h1 {
@@ -27,7 +28,7 @@
     width: 100%;
     max-width: 600px;
     display: grid;
-    grid-template-columns: 1fr 2fr; /* Aumenta el espacio para los campos de entrada */
+    grid-template-columns: 1fr 1fr; /* Aumenta el espacio para los campos de entrada */
     gap: 15px;
     background-color: #ffffff;
     border: 3px solid #bd6f95;
@@ -35,7 +36,7 @@
     padding: 20px;
 }
 
-.ProductsAdmin label {
+.ProductsAdmin label:not(.ProductsAdmin__file-label){
     font-size: 1.2rem;
     color: #bd6f95;
     font-weight: bold;
@@ -44,10 +45,23 @@
     align-items: center; /* Asegura que el label y el input estén alineados verticalmente */
     font-family: 'Fredoka', sans-serif;
     margin-right: 30px;
+    display: block; /* Ocupa todo el ancho de la celda */
 }
 
 .ProductsAdmin input[type="text"],
-.ProductsAdmin input[type="number"],
+.ProductsAdmin input[type="number"]{
+    padding: 8px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+    color: #333;
+    background-color: #f9f9f9;
+    transition: box-shadow 0.3s;
+    font-family: 'Fredoka', sans-serif;
+    margin-left: 30px;
+    width: 80%; /* Cambiado para ocupar todo el ancho disponible */
+}
 .ProductsAdmin__file-label {
     padding: 8px;
     border: 2px solid #ccc;
@@ -57,25 +71,36 @@
     color: #333;
     background-color: #f9f9f9;
     transition: box-shadow 0.3s;
-    width: auto; /* Cambiado de 100% a auto */
     font-family: 'Fredoka', sans-serif;
+    margin-left: 30px;
+    width: 210px; 
+    display: block;
+    overflow: hidden; /* Oculta el desbordamiento del texto */
+    text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
 }
 
-.ProductsAdmin input:focus,
-.ProductsAdmin__file-label:hover {
-    border: 2px solid #bd6f95;
-    box-shadow: 0 0 10px rgba(189, 111, 149, 0.5);
+
+.ProductsAdmin__file-container {
+    font-size: 1.2rem;
+    color: #bd6f95;
+    font-weight: bold;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center; /* Asegura que el label y el input estén alineados verticalmente */
+    font-family: 'Fredoka', sans-serif;
+    margin-right: 30px;
+    display: block; /* Ocupa todo el ancho de la celda */
+    
 }
+
+
+
 
 .ProductsAdmin__input-file {
     display: none;
 }
 
-
-.ProductsAdmin__file-label:hover {
-    background-color: #bd6f95;
-    color: #ffffff;
-}
 
 .ProductsAdmin button {
     padding: 10px;
