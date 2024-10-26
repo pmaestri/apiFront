@@ -51,27 +51,33 @@ const CategoryAdmin = () => {
         fetchData(); // Llamar a la función para obtener los datos
     }, [token, navigate]); // Dependencias del useEffect
 
-    // Manejar la creación de una nueva categoría
-    const handleCreateCategory = async (event) => {
-        event.preventDefault(); 
+// Manejar la creación de una nueva categoría
+const handleCreateCategory = async (event) => {
+    event.preventDefault(); 
 
-        const newCategory = {
-            nombre: categoryName,
-        };
+    if (!categoryName.trim()) { // Validación manual
+        setErrorMessage("Por favor ingrese una categoría");
+        return;
+    }
 
-        try {
-            const createdCategory = await crearCategoria(newCategory, token); // Crear la categoría con el token
-            setSuccessMessage(`Categoría creada: ${createdCategory.nombre}`);
-            setCategoryName(''); // Limpiar el campo de entrada
-            setErrorMessage(''); // Limpiar mensajes de error
-            // Re-fetch categories to update the list
-            const response = await obtenerCategorias(token);
-            setCategories(response);
-        } catch (error) {
-            setErrorMessage(`Error: ${error.message}`);
-            setSuccessMessage(''); // Limpiar mensajes de éxito anteriores
-        }
+    const newCategory = {
+        nombre: categoryName,
     };
+
+    try {
+        const createdCategory = await crearCategoria(newCategory, token); // Crear la categoría con el token
+        setSuccessMessage(`Categoría creada: ${createdCategory.nombre}`);
+        setCategoryName(''); // Limpiar el campo de entrada
+        setErrorMessage(''); // Limpiar mensajes de error
+        // Re-fetch categories to update the list
+        const response = await obtenerCategorias(token);
+        setCategories(response);
+    } catch (error) {
+        setErrorMessage(`Error: ${error.message}`);
+        setSuccessMessage(''); // Limpiar mensajes de éxito anteriores
+    }
+};
+
 
     // Manejar la eliminación de una categoría
     const handleDeleteCategory = async (categoriaId) => {
@@ -112,22 +118,22 @@ const CategoryAdmin = () => {
                 
                 {/* Formulario para crear una nueva categoría */}
                 <form onSubmit={handleCreateCategory} className="category-form">
-                    <div className="form-group">
-                        <label htmlFor="categoryName" className="form-label">Nombre Categoría:</label>
-                        <input
-                            type="text"
-                            id="categoryName"
-                            value={categoryName}
-                            onChange={(e) => setCategoryName(e.target.value)}
-                            required
-                            className="form-input"
-                            placeholder="Ingrese categoría a crear..." // Agregar placeholder aquí
-                        />
-                    </div>
-                    <button type="submit" className="submit-button-create">Crear Categoría</button>
+                <div className="form-group">
+                    <label htmlFor="categoryName" className="form-label">Nombre Categoría:</label>
+                    <input
+                        type="text"
+                        id="categoryName"
+                        value={categoryName}
+                        onChange={(e) => setCategoryName(e.target.value)}
+                        className="form-input"
+                        placeholder="Ingrese categoría a crear..." // Agregar placeholder aquí
+                    />
+                </div>
+                <button type="submit" className="submit-button-create">Crear Categoría</button>
                 </form>
                 {errorMessage && <p className="error-message-category">{errorMessage}</p>}
                 {successMessage && <p className="success-message-category">{successMessage}</p>}
+
                 
                 {/* Botón para mostrar/ocultar categorías */}
                 <button onClick={toggleCategories} className="submit-button-category">
