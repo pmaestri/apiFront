@@ -268,101 +268,107 @@ const ProductsAdmin = () => {
                   />
                 </div>
                 <div className="ProductsAdmin__product-info">
+                
                 {editMode === producto.id ? (
                   <>
                     <h3 className="ProductsAdmin__product-name"></h3>
-                    <p><strong>Nombre:</strong> 
-                      <input
-                        type="text"
-                        name="nombre"
-                        value={productoData.nombre}
-                        onChange={handleChange}
-                        className="ProductsAdmin__input-edit-inline"
-                      />
-                    </p>
-                    <p><strong>Descripción:</strong> 
-                      <input
-                        type="text"
-                        name="descripcion"
-                        value={productoData.descripcion}
-                        onChange={handleChange}
-                        className="ProductsAdmin__input-edit-inline"
-                      />
-                    </p>
-                    <p><strong>Marca:</strong> 
-                      <input
-                        type="text"
-                        name="marca"
-                        value={productoData.marca}
-                        onChange={handleChange}
-                        className="ProductsAdmin__input-edit-inline"
-                      />
-                    </p>
-                    <p><strong>Precio:</strong> 
-                      <input
-                        type="number"
-                        name="precioUnitario"
-                        defaultValue={producto.precio}
-                        onChange={handleChange}
-                        className="ProductsAdmin__input-edit-inline"
-                      />
-                    </p>
-                    <p><strong>Stock:</strong> 
-                      <input
-                        type="number"
-                        name="stock"
-                        value={productoData.stock}
-                        onChange={handleChange}
-                        className="ProductsAdmin__input-edit-inline"
-                      />
-                    </p>
-                    <p><strong>Modelo:</strong> 
-                      <input
-                        type="text"
-                        name="modelo"
-                        value={productoData.modelo}
-                        onChange={handleChange}
-                        className="ProductsAdmin__input-edit-inline"
-                      />
-                    </p>
-                    <p><strong>Descuento:</strong> 
-                      <input
-                        type="number"
-                        name="descuento"
-                        value={productoData.descuento}
-                        onChange={handleChange}
-                        className="ProductsAdmin__input-edit-inline"
-                      />
-                    </p>
-                    <p><strong>Catálogo:</strong> 
-                      <input
-                        type="text"
-                        name="catalogoId"
-                        value={productoData.catalogoId}
-                        onChange={handleChange}
-                        className="ProductsAdmin__input-edit-inline"
-                      />
-                    </p>
-                    <p><strong>Categoría:</strong> 
-                      <input
-                        type="text"
-                        name="categoria"
-                        value={productoData.nombreCategoria}
-                        onChange={handleChange}
-                        className="ProductsAdmin__input-edit-inline"
-                      />
-                    </p>
-                    <p><strong>Subir archivo:</strong>
-                      <input type="file" name="archivo" id="archivoUpdate" onChange={handleFileChange} style={{ display: 'none' }} />
-                      <input
-                        className="ProductsAdmin__input"
-                        type="text"
-                        placeholder= "Cambiar Imágen"
-                        value={nombreArchivo}
-                        readOnly
-                        onClick={() => document.getElementById('archivoUpdate').click()}
-                      />
-                    </p>
+                    <div className="ProductsAdmin__columns">
+                      <div className="ProductsAdmin__column">
+                        <p><strong>Nombre:</strong></p>
+                        <input
+                          type="text"
+                          name="nombre"
+                          value={productoData.nombre}
+                          onChange={handleChange}
+                          className="ProductsAdmin__input-edit-inline"
+                        />
+
+                        <p><strong>Descripción:</strong></p>
+                        <input
+                          type="text"
+                          name="descripcion"
+                          value={productoData.descripcion}
+                          onChange={handleChange}
+                          className="ProductsAdmin__input-edit-inline"
+                        />
+
+                        <p><strong>Marca:</strong></p>
+                        <input
+                          type="text"
+                          name="marca"
+                          value={productoData.marca}
+                          onChange={handleChange}
+                          className="ProductsAdmin__input-edit-inline"
+                        />
+
+                        <p><strong>Precio:</strong></p>
+                        <input
+                          type="number"
+                          name="precioUnitario"
+                          defaultValue={producto.precio}
+                          onChange={handleChange}
+                          className="ProductsAdmin__input-edit-inline"
+                        />
+
+                        <p><strong>Stock:</strong></p>
+                        <input
+                          type="number"
+                          name="stock"
+                          value={productoData.stock}
+                          onChange={handleChange}
+                          className="ProductsAdmin__input-edit-inline"
+                        />
+                      </div>
+
+                      <div className="ProductsAdmin__column">
+                        <p><strong>Modelo:</strong></p>
+                        <input
+                          type="text"
+                          name="modelo"
+                          value={productoData.modelo || "-"}
+                          onChange={handleChange}
+                          className="ProductsAdmin__input-edit-inline"
+                        />
+
+                        <p><strong>Descuento:</strong></p>
+                        <input
+                          type="number"
+                          name="descuento"
+                          value={productoData.descuento}
+                          onChange={handleChange}
+                          className="ProductsAdmin__input-edit-inline"
+                        />
+
+                        <p><strong>Catálogo:</strong></p>
+                        <input
+                          type="text"
+                          name="catalogoId"
+                          value={productoData.catalogoId}
+                          onChange={handleChange}
+                          className="ProductsAdmin__input-edit-inline"
+                        />
+
+                        <p><strong>Categoría:</strong></p>
+                        <input
+                          type="text"
+                          name="categoria"
+                          value={productoData.nombreCategoria}
+                          onChange={handleChange}
+                          className="ProductsAdmin__input-edit-inline"
+                        />
+
+                        <p><strong>Subir archivo:</strong></p>
+                        <input type="file" name="archivo" id="archivoUpdate" onChange={handleFileChange} style={{ display: 'none' }} />
+                        <input
+                          className="ProductsAdmin__input"
+                          type="text"
+                          placeholder="Cambiar Imágen"
+                          value={nombreArchivo}
+                          readOnly
+                          onClick={() => document.getElementById('archivoUpdate').click()}
+                        />
+                      </div>
+                    </div>
 
                     <div className="ProductsAdmin__action-buttons">
                       <button className="ProductsAdmin__save-button" onClick={handleSubmitUpdate}>
@@ -381,10 +387,10 @@ const ProductsAdmin = () => {
                       <p><strong>Marca:</strong> <span className="ProductsAdmin__value">{producto.marca}</span></p>
                       <p><strong>Precio:</strong> <span className="ProductsAdmin__value">${producto.precio}</span></p>
                       <p><strong>Stock:</strong> <span className="ProductsAdmin__value">{producto.stock}</span></p>
-                      <p><strong>Modelo:</strong> <span className="ProductsAdmin__value">{producto.modelo}</span></p>
+                      <p><strong>Modelo:</strong> <span className="ProductsAdmin__value">{producto.modelo || "-"}</span></p>
                       <p><strong>Descuento:</strong> <span className="ProductsAdmin__value">{producto.descuento}%</span></p>
                       <p><strong>Categoría:</strong> <span className="ProductsAdmin__value">{producto.nombreCategoria}</span></p>
-                      <p><strong>Estado:</strong> <span className="ProductsAdmin__value">{producto.disponible ? 'Disponible' : 'No Disponible'}</span></p>
+                  
                       <div className="ProductsAdmin__action-buttons">
                         <button className="ProductsAdmin__edit-button" onClick={() => handleEditProducto(producto)}>
                           <FaEdit />

@@ -48,6 +48,7 @@
     display: block; /* Ocupa todo el ancho de la celda */
 }
 
+
 .ProductsAdmin input[type="text"],
 .ProductsAdmin input[type="number"]{
     padding: 8px;
@@ -61,6 +62,12 @@
     font-family: 'Fredoka', sans-serif;
     margin-left: 30px;
     width: 80%; /* Cambiado para ocupar todo el ancho disponible */
+}
+/* Estilo al hacer clic o enfocarse */
+.ProductsAdmin input[type="text"]:focus,
+.ProductsAdmin input[type="number"]:focus {
+    border-color: #bd6f95;/* Rosa */
+    box-shadow: 0 0 5px rgba(255, 102, 178, 0.5); /* Sombra rosa suave */
 }
 .ProductsAdmin__file-label {
     padding: 8px;
@@ -79,6 +86,13 @@
     text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
     white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
 }
+/* Estilo al hacer clic o enfocarse */
+.ProductsAdmin__file-label:active,
+.ProductsAdmin__file-label:focus {
+    border-color: #bd6f95; /* Rosa */
+    box-shadow: 0 0 5px rgba(255, 102, 178, 0.5); /* Sombra rosa suave */
+}
+
 
 
 .ProductsAdmin__file-container {
@@ -262,4 +276,18 @@
     background-color: #fdeaf2;
     color: #bd6f95;
     transform: scale(1.1);
+
 }
+.ProductsAdmin__columns {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .ProductsAdmin__column {
+    width: 48%;
+  }
+  
+  .ProductsAdmin__column p {
+    margin-bottom: 5px;
+  }
+  
