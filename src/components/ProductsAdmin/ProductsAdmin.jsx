@@ -77,6 +77,7 @@ const ProductsAdmin = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
     setProductoData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -374,15 +375,19 @@ const ProductsAdmin = () => {
                           onChange={handleChange}
                           className="ProductsAdmin__input-edit-inline"
                         />
-
-                        <p><strong>Categoría:</strong></p>
-                        <input
-                          type="text"
-                          name="categoria"
-                          value={productoData.nombreCategoria}
-                          onChange={handleChange}
-                          className="ProductsAdmin__input-edit-inline"
-                        />
+                          <p><strong>Categoría:</strong></p>
+                          <select
+                            name="categoria"
+                            onChange={handleChange}
+                            value={productoData.categoria || ''} // Asegúrate de que el valor actual sea el ID de la categoría
+                          >
+                            <option value="" disabled>{producto.nombreCategoria}</option> 
+                            {categorias.map((categoria) => (
+                              <option key={categoria.id} value={categoria.id}>
+                                {categoria.nombre}
+                              </option>
+                            ))}
+                          </select>
 
                         <p><strong>Subir archivo:</strong></p>
                         <input type="file" name="archivo" id="archivoUpdate" onChange={handleFileChange} style={{ display: 'none' }} />
