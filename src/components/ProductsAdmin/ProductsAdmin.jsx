@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
 import { crearProducto, actualizarProducto, obtenerProductos, eliminarProducto } from '../../api/ProductApi.jsx';
 import { updateImagen } from '../../api/ImageApi.jsx';
+import { obtenerCategorias } from '../../api/CategoryApi.jsx'; 
 import { useNavigate } from 'react-router-dom';
 import { obtenerRolUsuario, setAuthToken } from '../../api/UserApi.jsx';
 import './ProductsAdmin.css';
@@ -15,7 +16,7 @@ const ProductsAdmin = () => {
     nombre: '',
     precioUnitario: '',
     stock: '',
-    categoriaId: '',
+    categoria: '',
     modelo: '',
     descuento: '',
     catalogoId: '',
@@ -28,6 +29,7 @@ const ProductsAdmin = () => {
   const [productos, setProductos] = useState([]);
   const [editMode, setEditMode] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [categorias, setCategorias] = useState([]); 
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -47,6 +49,17 @@ const ProductsAdmin = () => {
       navigate('/login');
     }
   }, [navigate]);
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const categoriasObtenidas = await obtenerCategorias(token); // Obtener categorías
+        setCategorias(categoriasObtenidas);
+      } catch (error) {
+        console.error(`Error al obtener las categorías: ${error.message}`);
+      }
+    };
+    if (token) fetchCategorias();
+  }, [token]);
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -125,7 +138,7 @@ const ProductsAdmin = () => {
         nombre: '',
         precioUnitario: '',
         stock: '',
-        categoriaId: '',
+        categoria: '',
         modelo: '',
         descuento: '',
         catalogoId: '',
@@ -153,7 +166,7 @@ const ProductsAdmin = () => {
       nombre: '',
       precioUnitario: '',
       stock: '',
-      categoriaId: '',
+      categoria: '',
       modelo: '',
       descuento: '',
       catalogoId: '',
@@ -211,10 +224,24 @@ const ProductsAdmin = () => {
               Stock:
               <input className="ProductsAdmin__input" type="number" name="stock" onChange={handleChange} />
             </label>
+            <div className="ProductsAdmin__select-container">
             <label>
-              Categoría:
-              <input className="ProductsAdmin__input" type="number" name="categoria" onChange={handleChange} />
-            </label>
+            Categoría:
+            <select
+              name="categoria" // Almacena el ID
+              onChange={handleChange}
+              value={productoData.categoria} // Muestra el ID seleccionado
+            >
+              <option value="">Selecciona una categoría</option>
+              {categorias.map((categoria) => (
+                <option key={categoria.id} value={categoria.id}>
+                  {categoria.nombre} {/* Muestra el nombre */}
+                </option>
+              ))}
+            </select>
+          </label>
+          </div>
+
             <label>
               Modelo:
               <input className="ProductsAdmin__input" type="text" name="modelo" onChange={handleChange} />

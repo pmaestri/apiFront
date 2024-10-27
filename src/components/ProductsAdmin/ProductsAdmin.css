@@ -291,3 +291,41 @@
     margin-bottom: 5px;
   }
   
+  .ProductsAdmin__select-container {
+    font-size: 1.2rem;
+    color: #bd6f95;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Fredoka', sans-serif;
+}
+
+.ProductsAdmin__select-container label {
+    margin-bottom: 5px;
+}
+
+.ProductsAdmin select {
+    padding: 8px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    outline: none;
+    color: #333;
+    background-color: #f9f9f9;
+    transition: box-shadow 0.3s;
+    font-family: 'Fredoka', sans-serif;
+    margin-left: 30px;
+    width: 87%; /* Cambiado para ocupar todo el ancho disponible */
+}
+
+
+.ProductsAdmin select:focus {
+    box-shadow: 0 0 5px rgba(255, 102, 178, 0.5);
+    border-color: #d484aa;
+}
+
+.ProductsAdmin option {
+    color: #333;
+    font-family: 'Fredoka', sans-serif;
+}
