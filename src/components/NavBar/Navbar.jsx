@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaSearch, FaShoppingCart, FaUser, FaSignOutAlt } from 'react-icons/fa'; // FaSignOutAlt para cerrar sesión
 import Cart from '../Cart/Cart.jsx';
 import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi';
+import { vaciarCarrito } from '../../api/CartApi.jsx';
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -68,13 +69,24 @@ const Navbar = () => {
     setShowCart(!showCart);
   };
 
-  // Función para cerrar sesión
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('nombreUsuario');
-    setIsLoggedIn(false);
-    navigate('/login'); // Redirigir al home después de cerrar sesión
-  };
+// Función para cerrar sesión
+const handleLogout = async () => {
+  const token = localStorage.getItem('token'); // Obtener el token del almacenamiento local
+  if (token) {
+    try {
+      await vaciarCarrito(token); // Vaciar el carrito
+      console.log('Carrito vaciado exitosamente.');
+    } catch (error) {
+      console.error('Error al vaciar el carrito:', error.message);
+    }
+  }
+
+  localStorage.removeItem('token');
+  localStorage.removeItem('nombreUsuario');
+  setIsLoggedIn(false);
+  navigate('/login'); // Redirigir al home después de cerrar sesión
+};
+
 
   return (
     <nav className="navbar">

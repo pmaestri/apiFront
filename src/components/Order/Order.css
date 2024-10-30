@@ -89,11 +89,11 @@
 }
 
 /* Precio normal si no hay descuento */
-.product-price {
+/*.product-price {
     font-size: 16px;
     color: #bd6f95; 
     font-weight: 600;
-}
+}/*
 
 /* Contenedor para la confirmación del pedido */
 .order-confirmation-container {

@@ -7,6 +7,7 @@ import {
     filtrarProductos
 } from '../../api/ProductCatalogApi';
 import { FaTimes, FaShoppingCart } from 'react-icons/fa';
+import {agregarProducto} from '../../api/CartApi';
 
 const ProductCatalog = () => {
     const [productos, setProductos] = useState([]);
@@ -36,6 +37,7 @@ const ProductCatalog = () => {
         const categoriaId = params.get('categoria');
         const searchQuery = params.get('search');  // Capturamos el valor de búsqueda
         const productoId = params.get('productoId'); // Capturamos el id del producto si existe
+        console.log(productoId);
 
         if (categoriaId) {
             setFiltros((prevFiltros) => ({ ...prevFiltros, categoriaId }));
@@ -153,51 +155,38 @@ const ProductCatalog = () => {
             console.log("Cantidad mínima alcanzada, no se puede disminuir más.");
         }
     };
-
-    const addToCart = (product, quantity) => {
+    const addToCart = async (productoId,cantidad) => {
         console.log("Intentando agregar al carrito...");
-        const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
-        const productInCart = currentCart.find(item => item.id === product.id);
 
-        const finalPrice = product.descuento > 0
-            ? (product.precio * (1 - product.descuento / 100))
-            : product.precio;
-
-        if (productInCart) {
-            const totalQuantity = productInCart.quantity + quantity;
-            console.log(`Producto ya en el carrito. Cantidad actual: ${productInCart.quantity}, Total después de agregar: ${totalQuantity}`);
-
-            if (totalQuantity <= product.stock) {
-                productInCart.quantity = totalQuantity;
-                console.log("Producto actualizado en el carrito.");
-            } else {
-                console.log(`No se puede agregar más de ${product.stock} unidades en total para ${product.nombre}.`);
-                alert(`No puedes agregar más de ${product.stock} unidades en total para ${product.nombre}.`);
-                return;
-            }
-        } else {
-            console.log("Producto nuevo, agregando al carrito...");
-            currentCart.push({
-                id: product.id,
-                name: product.nombre,
-                price: finalPrice,
-                originalPrice: product.precio,
-                image: `data:image/jpeg;base64,${product.imagen}`,
-                discount: product.descuento,
-                quantity: quantity,
-                stock: product.stock
-            });
+        
+        const token = localStorage.getItem('token'); // Obtén el token desde localStorage
+    
+        if (!token) {
+            alert("Por favor, inicia sesión para agregar productos al carrito.");
+            return;
         }
-
-        localStorage.setItem('cart', JSON.stringify(currentCart));
-
-        setShowSuccessMessage(true);
-        console.log("Producto agregado al carrito.");
-        setTimeout(() => {
-            setShowSuccessMessage(false);
-        }, 3000);
+    
+        try {
+            
+            // Llama a la función que realiza la petición al backend para agregar el producto al carrito
+            console.log(productoId, cantidad);
+            const response = await agregarProducto(productoId, cantidad, token);
+            console.log(response); // Mensaje de éxito del backend
+            
+    
+            // Muestra un mensaje de éxito temporal
+            setShowSuccessMessage(true);
+            console.log("Producto agregado al carrito.");
+            setTimeout(() => {
+                setShowSuccessMessage(false);
+            }, 3000);
+    
+        } catch (error) {
+            console.error(error.message);
+            alert(error.message);
+        }
     };
-
+    
     return (
         <div className="product-catalog">
             <div className="catalog-layout">
@@ -357,7 +346,8 @@ const ProductCatalog = () => {
                                             console.log("No hay suficiente stock disponible.");
                                             setTimeout(() => setMessage(''), 3000);
                                         } else {
-                                            addToCart(productoSeleccionado, cantidad);
+                                            console.log(productoSeleccionado.id);
+                                            addToCart(productoSeleccionado.id, cantidad);
                                             setError(null);
                                             console.log("Producto agregado al carrito correctamente.");
                                         }

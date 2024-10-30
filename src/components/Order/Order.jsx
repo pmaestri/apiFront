@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { crearPedido, setAuthToken, obtenerPedido } from '../../api/OrderApi.jsx';
+import { crearPedido, setAuthToken, obtenerPedido} from '../../api/OrderApi.jsx';
 import { crearDetallePedido } from '../../api/OrderDetailApi.jsx';
+import { obtenerCarrito, vaciarCarrito} from '../../api/CartApi.jsx';
 import './Order.css';
 
 const Popup = ({ detalles, onClose }) => {
@@ -12,30 +13,37 @@ const Popup = ({ detalles, onClose }) => {
         <p>El pedido se ha efectuado exitosamente! Muchas gracias por confiar en nosotros.</p>
         <h3>Detalles del Pedido:</h3>
         <ul>
-          {detalles.detallePedidoDto.map(detalle => (
-            <li key={detalle.id}>
-              <p>Producto: {detalle.producto.nombre}</p>
-              <p>Cantidad: {detalle.cantidad}</p>
-              <p>Precio: ${detalle.precio.toFixed(2)}</p>
-            </li>
-          ))}
+        {detalles && detalles.detallePedidoDto.length > 0 ? (
+            detalles.detallePedidoDto.map(detalle => (
+              <li key={detalle.id}>
+                <p>Producto: {detalle.producto.nombre}</p>
+                <p>Cantidad: {detalle.cantidad}</p>
+                <p>Precio Unitario: ${detalle.producto.precioUnitario.toFixed(2)}</p>
+                <p>Subtotal: ${(detalle.precio).toFixed(2)}</p> {/* Usa 'detalle.precio' si el precio total está en 'detalle' */}
+              </li>
+            ))
+          ) : (
+            <li>No hay detalles del pedido disponibles.</li>
+          )}
         </ul>
-        <p>Método de Pago: {detalles.metodoPagoEnum}</p>
-        <p className="total-highlight">Total: ${detalles.total.toFixed(2)}</p>
+        <p>Método de Pago: {detalles ? detalles.metodoPagoEnum : 'N/A'}</p>
+        <p className="total-highlight">Total: ${detalles ? detalles.total.toFixed(2) : 'N/A'}</p>
         <button onClick={onClose} className="close-button">Cerrar</button>
       </div>
     </div>
   );
 };
 
+
 const Pedido = () => {
   const [metodoPago, setMetodoPago] = useState('');
   const [cuotas, setCuotas] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [pedidoDetalles, setPedidoDetalles] = useState(null);
+  const [cartItems, setCartItems] = useState([]); // Estado para el carrito
+  const [totalCarrito, setTotalCarrito] = useState(0); // Estado para el total del carrito
   const location = useLocation();
   const navigate = useNavigate();
-  const { cartItems, totalCarrito } = location.state || { cartItems: [], totalCarrito: 0 };
 
   // Obtener el token desde el almacenamiento local
   useEffect(() => {
@@ -43,6 +51,18 @@ const Pedido = () => {
     if (token) {
       setAuthToken(token);
       console.log('Token obtenido de localStorage:', token);
+      // Obtener el carrito del usuario
+      const fetchCart = async () => {
+        try {
+          const carritoData = await obtenerCarrito(token);
+          setCartItems(carritoData.productos); // Asegúrate de que esta propiedad sea correcta
+          console.log(carritoData);
+          setTotalCarrito(carritoData.total); // Asegúrate de que esta propiedad sea correcta
+        } catch (error) {
+          console.error('Error al obtener el carrito:', error.message);
+        }
+      };
+      fetchCart();
     } else {
       console.error('No se encontró un token de autenticación en localStorage');
     }
@@ -51,15 +71,15 @@ const Pedido = () => {
   // Función para manejar la confirmación del pedido
   const handleConfirmarPedido = async () => {
     try {
-      // Crear el objeto del pedido con metodoPago y cuotas
       const nuevoPedido = await crearPedido({ metodoPago, cuotas: metodoPago === 'CREDITO' ? cuotas : undefined });
       console.log('Pedido creado:', nuevoPedido);
 
       const detalles = await Promise.all(
-        cartItems.map(async (item) => {
+        cartItems.map(async (productos) => {
           const detalleData = {
-            productoId: item.id,
-            cantidad: item.quantity,
+            productoId: productos.productoId,
+            cantidad: productos.cantidad,
+            
           };
 
           return await crearDetallePedido(nuevoPedido.id, detalleData);
@@ -69,13 +89,25 @@ const Pedido = () => {
 
       const pedidoConfirmado = await obtenerPedido(nuevoPedido.id);
       console.log('Pedido confirmado:', pedidoConfirmado);
-
-      // Mostrar el pop-up con los detalles del pedido
+      
       setPedidoDetalles(pedidoConfirmado);
       setShowPopup(true);
     } catch (error) {
       console.error('Error al crear el pedido:', error.message);
     }
+  };
+  const handleClosePopup = async () => {
+    const token = localStorage.getItem('token'); // Obtiene el token del almacenamiento local
+    if (token) {
+      try {
+        await vaciarCarrito(token); // Vaciar el carrito
+        console.log('Carrito vaciado exitosamente.');
+      } catch (error) {
+        console.error('Error al vaciar el carrito:', error.message);
+      }
+    }
+    setShowPopup(false); // Ocultar el popup
+    navigate('/'); // Redirigir al home
   };
 
   // Calcular el total con descuento
@@ -100,21 +132,22 @@ const Pedido = () => {
               {cartItems.map((item) => (
                 <li className="pedido-list-item" key={item.id}>
                   <div className="cart-product">
-                    <img src={item.image} alt={item.name} />
+                    <img src={`data:image/jpeg;base64,${item.imagen}`} alt={item.nombreProducto} />
                     <div className="cart-product-details">
-                      <h3>{item.name}</h3>
+                      <h3>{item.nombreProducto}</h3>
                       {item.discount > 0 ? (
                         <>
                           <p className="original-price">
-                            <span style={{ textDecoration: 'line-through' }}>Precio: ${item.originalPrice}</span>
+                            <span style={{ textDecoration: 'line-through' }}>Precio: ${item.subtotal}</span>
                           </p>
-                          <p className="discounted-price">Precio con Descuento: ${item.price.toFixed(2)}</p>
+                          
                         </>
                       ) : (
-                        <p className="product-price">Precio: ${item.price.toFixed(2)}</p>
+                        <p className="product-price-order">Precio: ${item.subtotal.toFixed(2)}</p>
                       )}
-                      <p>Cantidad: {item.quantity}</p>
-                      <p>Subtotal: ${(item.price * item.quantity).toFixed(2)}</p>
+                      <p>Cantidad: {item.cantidad}</p>
+                      <p><strong>Subtotal:</strong> ${item.total}</p>
+
                     </div>
                   </div>
                 </li>
@@ -167,10 +200,8 @@ const Pedido = () => {
       {showPopup && (
         <Popup 
           detalles={pedidoDetalles} 
-          onClose={() => { 
-            setShowPopup(false); 
-            navigate('/'); // Redirigir al home
-          }} 
+          onClose={handleClosePopup}
+          
         />
       )}
     </div>
