@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css';
 import { FaTrashAlt, FaTimes } from 'react-icons/fa';
-import { obtenerCarrito, disminuirProductoEnCarrito, eliminarProducto } from '../../api/CartApi';
+import { obtenerCarrito, disminuirProductoEnCarrito, eliminarProducto, agregarProducto } from '../../api/CartApi';
 
 const Cart = ({ onClose }) => {
     const [cartItems, setCartItems] = useState([]);
@@ -12,6 +12,7 @@ const Cart = ({ onClose }) => {
     const [stockMessage, setStockMessage] = useState('');
     const [loginMessage, setLoginMessage] = useState('');
     const navigate = useNavigate();
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
         const fetchCartItems = async () => {
@@ -34,15 +35,48 @@ const Cart = ({ onClose }) => {
         fetchCartItems();
     }, []);
 
-    const updateItemQuantity = async (productoId, incrementar) => {
+    const addToCart = async (productoId, cantidad) => {
+        console.log("Intentando agregar al carrito...");
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            alert("Por favor, inicia sesión para agregar productos al carrito.");
+            return;
+        }
+
+        try {
+            console.log(productoId, cantidad);
+            const response = await agregarProducto(productoId, cantidad, token);
+            console.log(response);
+
+            // Mostrar mensaje de éxito temporal
+            setShowSuccessMessage(true);
+            console.log("Producto agregado al carrito.");
+            setTimeout(() => {
+                setShowSuccessMessage(false);
+            }, 3000);
+
+            // Refrescar el carrito
+            const carritoData = await obtenerCarrito(token);
+            setCartItems(carritoData.productos || []);
+            setTotalCarrito(carritoData.total);
+        } catch (error) {
+            console.error(error.message);
+            alert(error.message);
+        }
+    };
+
+    const decreaseItemQuantity = async (productoId) => {
         const token = localStorage.getItem('token');
         try {
-            if (incrementar) {
-                // Lógica para incrementar cantidad (si ya tienes esta función)
-            } else {
-                const response = await disminuirProductoEnCarrito(productoId, 1, token);
-                console.log(response);
-            }
+            console.log(typeof(productoId))
+            const response = await disminuirProductoEnCarrito(productoId, 1, token);
+            console.log(response);
+
+            // Refrescar el carrito
+            const carritoData = await obtenerCarrito(token);
+            setCartItems(carritoData.productos || []);
+            setTotalCarrito(carritoData.total);
         } catch (error) {
             console.error(error.message);
         }
@@ -109,9 +143,9 @@ const Cart = ({ onClose }) => {
                                 <h3>{item.nombreProducto}</h3>
                                 <div className="quantity-control-container">
                                     <div className="quantity-control">
-                                        <button onClick={() => updateItemQuantity(item.productoId, false)}>-</button>
+                                    <button onClick={() => decreaseItemQuantity(item.productoId)}>-</button>
                                         <span>{item.cantidad}</span>
-                                        <button onClick={() => updateItemQuantity(item.productoId, true)} disabled={item.cantidad >= item.stock}>+</button>
+                                        <button onClick={() => addToCart(item.productoId, 1)} disabled={item.cantidad >= item.stock}>+</button>
                                     </div>
                                 </div>
 

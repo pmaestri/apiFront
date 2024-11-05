@@ -8,6 +8,7 @@ import {
 } from '../../api/ProductCatalogApi';
 import { FaTimes, FaShoppingCart } from 'react-icons/fa';
 import {agregarProducto} from '../../api/CartApi';
+import { obtenerCategorias } from '../../api/CategoryApi';
 
 const ProductCatalog = () => {
     const [productos, setProductos] = useState([]);
@@ -21,6 +22,8 @@ const ProductCatalog = () => {
     const [modelos, setModelos] = useState([]);
     const location = useLocation();
     const navigate = useNavigate();
+    const [categorias, setCategorias] = useState([]);
+
 
     const marcas = ['IPHONE', 'SAMSUNG', 'MOTOROLA', 'GENERICO'];
     const modelosPorMarca = {
@@ -75,6 +78,22 @@ const ProductCatalog = () => {
 
         fetchProductos();
     }, []);
+
+    useEffect(() => {
+        const fetchCategorias = async () => {
+          const token = localStorage.getItem('token'); // Obtener el token del almacenamiento local
+          if (token) {
+            try {
+              const categoriasObtenidas = await obtenerCategorias(token);
+              setCategorias(categoriasObtenidas); // Guardar las categorías en el estado
+            } catch (error) {
+              console.error('Error al obtener las categorías:', error.message);
+            }
+          }
+        };
+    
+        fetchCategorias();
+      }, []);
 
     const handleMarcaChange = (e) => {
         const marcaSeleccionada = e.target.value;
@@ -204,12 +223,13 @@ const ProductCatalog = () => {
                         <select
                             value={filtros.categoriaId}
                             onChange={(e) => setFiltros({ ...filtros, categoriaId: e.target.value })}
-                        >
+                            >
                             <option value="">Selecciona una categoría</option>
-                            <option value="1">Fundas</option>
-                            <option value="2">Vidrios</option>
-                            <option value="3">Cargadores</option>
-                            <option value="4">Auriculares</option>
+                            {categorias.map((categoria) => (
+                                <option key={categoria.id} value={categoria.id}>
+                                {categoria.nombre} {/* Asegúrate de que el nombre de la propiedad coincide con el de la API */}
+                                </option>
+                            ))}
                         </select>
                         <input
                             type="number"
