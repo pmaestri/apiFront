@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
-import { obtenerUsuarioAdmin, obtenerUsuariosVisualDtos, eliminarUsuarioAdmin, setAuthToken, obtenerRolUsuario } from '../../api/UserApi.jsx'; // Importa las funciones necesarias
+import { obtenerUsuarioAdmin, obtenerUsuariosVisualDtos, eliminarUsuarioAdmin, obtenerRolUsuario } from '../../api/UserApi.jsx'; // Importa las funciones necesarias
 import './UserAdmin.css';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -20,7 +20,6 @@ const UserAdmin = () => {
   const token = useSelector((state)=> state.auth.token);
   useEffect(() => {
     if (token) {
-      setAuthToken(token);
       const fetchRole = async () => {
         setRolUsuario(rol);
         if (rol !== 'ADMIN') {

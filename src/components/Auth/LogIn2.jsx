@@ -43,7 +43,6 @@ const Login = () => {
 
   const handleLogout = () => {
     dispatch(logout()); // Despacha la acción de logout
-    setAuthToken(null); // Elimina el token de las cabeceras de axios
     navigate('/login'); // Redirige a la página de login
   };
 

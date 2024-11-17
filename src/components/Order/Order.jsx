@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { crearPedido, setAuthToken, obtenerPedido} from '../../api/OrderApi.jsx';
-import { crearDetallePedido } from '../../api/OrderDetailApi.jsx';
-import { obtenerCarrito, vaciarCarrito} from '../../api/CartApi.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { crearNuevoPedido, obtenerPedidoPorId, crearNuevoDetalle, obtenerDetallePorId } from '../../api/OrderSlice.jsx';
+import { obtenerCarrito, vaciarCarrito } from '../../api/CartApi.jsx';
 import './Order.css';
 
-const Popup = ({ detalles, onClose }) => {
+const Popup = ({ onClose }) => {
+  const detalles = useSelector((state)=> state.pedidos.detalle);
+  console.log(detalles);
   return (
     <div className="popup-overlay">
       <div className="popup-content">
@@ -13,13 +15,13 @@ const Popup = ({ detalles, onClose }) => {
         <p>El pedido se ha efectuado exitosamente! Muchas gracias por confiar en nosotros.</p>
         <h3>Detalles del Pedido:</h3>
         <ul>
-        {detalles && detalles.detallePedidoDto.length > 0 ? (
+          {detalles && detalles.detallePedidoDto.length > 0 ? (
             detalles.detallePedidoDto.map(detalle => (
               <li key={detalle.id}>
                 <p>Producto: {detalle.producto.nombre}</p>
                 <p>Cantidad: {detalle.cantidad}</p>
                 <p>Precio Unitario: ${detalle.producto.precioUnitario.toFixed(2)}</p>
-                <p>Subtotal: ${(detalle.precio).toFixed(2)}</p> {/* Usa 'detalle.precio' si el precio total está en 'detalle' */}
+                <p>Subtotal: ${(detalle.precio).toFixed(2)}</p>
               </li>
             ))
           ) : (
@@ -34,7 +36,6 @@ const Popup = ({ detalles, onClose }) => {
   );
 };
 
-
 const Pedido = () => {
   const [metodoPago, setMetodoPago] = useState('');
   const [cuotas, setCuotas] = useState(1);
@@ -44,19 +45,17 @@ const Pedido = () => {
   const [totalCarrito, setTotalCarrito] = useState(0); // Estado para el total del carrito
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
 
   // Obtener el token desde el almacenamiento local
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (token) {
-      setAuthToken(token);
       console.log('Token obtenido de localStorage:', token);
-      // Obtener el carrito del usuario
       const fetchCart = async () => {
         try {
           const carritoData = await obtenerCarrito(token);
           setCartItems(carritoData.productos); // Asegúrate de que esta propiedad sea correcta
-          console.log(carritoData);
           setTotalCarrito(carritoData.total); // Asegúrate de que esta propiedad sea correcta
         } catch (error) {
           console.error('Error al obtener el carrito:', error.message);
@@ -66,38 +65,43 @@ const Pedido = () => {
     } else {
       console.error('No se encontró un token de autenticación en localStorage');
     }
-  }, []);
+  }, [token]);
 
   // Función para manejar la confirmación del pedido
   const handleConfirmarPedido = async () => {
     try {
-      const nuevoPedido = await crearPedido({ metodoPago, cuotas: metodoPago === 'CREDITO' ? cuotas : undefined });
-      console.log('Pedido creado:', nuevoPedido);
+      // Crear un nuevo pedido con Redux
+      const response = await dispatch(crearNuevoPedido({ metodoPago, cuotas: metodoPago === 'CREDITO' ? cuotas : undefined }));
+      console.log('Pedido creado:', response);
+      
+      // Obtener carrito actualizado
+      const carritoData = await obtenerCarrito(token);
 
+      // Crear detalles de pedido para cada producto en el carrito
       const detalles = await Promise.all(
-        cartItems.map(async (productos) => {
+        cartItems.map(async (producto) => {
           const detalleData = {
-            productoId: productos.productoId,
-            cantidad: productos.cantidad,
-            
+            productoId: producto.productoId,
+            cantidad: producto.cantidad,
           };
-
-          return await crearDetallePedido(nuevoPedido.id, detalleData);
+          // Aquí se pueden agregar funciones adicionales como setAuthToken, pero no es necesario si ya estás usando Redux
+          return await dispatch(crearNuevoDetalle({ pedidoId: carritoData.id, detalleData }));
         })
       );
       console.log('Detalles de pedido creados:', detalles);
 
-      const pedidoConfirmado = await obtenerPedido(nuevoPedido.id);
+      // Obtener el pedido por ID para mostrar la confirmación
+      const pedidoConfirmado = await dispatch(obtenerPedidoPorId(carritoData.id));
       console.log('Pedido confirmado:', pedidoConfirmado);
-      
+
       setPedidoDetalles(pedidoConfirmado);
       setShowPopup(true);
     } catch (error) {
       console.error('Error al crear el pedido:', error.message);
     }
   };
+
   const handleClosePopup = async () => {
-    const token = localStorage.getItem('token'); // Obtiene el token del almacenamiento local
     if (token) {
       try {
         await vaciarCarrito(token); // Vaciar el carrito
@@ -140,14 +144,12 @@ const Pedido = () => {
                           <p className="original-price">
                             <span style={{ textDecoration: 'line-through' }}>Precio: ${item.subtotal}</span>
                           </p>
-                          
                         </>
                       ) : (
                         <p className="product-price-order">Precio: ${item.subtotal.toFixed(2)}</p>
                       )}
                       <p>Cantidad: {item.cantidad}</p>
                       <p><strong>Subtotal:</strong> ${item.total}</p>
-
                     </div>
                   </div>
                 </li>
@@ -182,7 +184,6 @@ const Pedido = () => {
             Confirmar Pedido
           </button>
 
-          {/* Mostrar total debajo del botón Confirmar Pedido */}
           <div className="order-total">
             {metodoPago === 'EFECTIVO' || metodoPago === 'TRANSFERENCIA' ? (
               <>
@@ -201,7 +202,6 @@ const Pedido = () => {
         <Popup 
           detalles={pedidoDetalles} 
           onClose={handleClosePopup}
-          
         />
       )}
     </div>

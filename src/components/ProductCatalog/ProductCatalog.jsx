@@ -24,6 +24,7 @@ const ProductCatalog = () => {
     const location = useLocation();
     const Dispatch = useDispatch();
     const categorias = useSelector((state) => state.categorias.categorias);
+    const token = useSelector((state)=>state.auth.token);
     const marcas = ['IPHONE', 'SAMSUNG', 'MOTOROLA', 'GENERICO'];
     const modelosPorMarca = {
         IPHONE: ['IPHONE_15_PRO_MAX', 'IPHONE_15_PRO', 'IPHONE_15_PLUS', 'IPHONE_15', 'IPHONE_14_PRO_MAX', 'IPHONE_14_PRO', 'IPHONE_14_PLUS', 'IPHONE_14', 'IPHONE_13_PRO_MAX', 'IPHONE_13_PRO', 'IPHONE_13_MINI', 'IPHONE_13'],
@@ -164,9 +165,6 @@ const ProductCatalog = () => {
     };
     const addToCart = async (productoId,cantidad) => {
         console.log("Intentando agregar al carrito...");
-
-        
-        const token = localStorage.getItem('token'); // Obtén el token desde localStorage
     
         if (!token) {
             alert("Por favor, inicia sesión para agregar productos al carrito.");

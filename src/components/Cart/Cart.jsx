@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './Cart.css';
 import { FaTrashAlt, FaTimes } from 'react-icons/fa';
 import { obtenerCarrito, disminuirProductoEnCarrito, eliminarProducto, agregarProducto } from '../../api/CartApi';
+import { useSelector } from 'react-redux';
 
 const Cart = ({ onClose }) => {
     const [cartItems, setCartItems] = useState([]);
@@ -13,10 +14,10 @@ const Cart = ({ onClose }) => {
     const [loginMessage, setLoginMessage] = useState('');
     const navigate = useNavigate();
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const token = useSelector((state)=> state.auth.token);
 
     useEffect(() => {
         const fetchCartItems = async () => {
-            const token = localStorage.getItem('token');
             if (!token) {
                 setLoginMessage('Por favor, inicie sesión para continuar.');
                 return;
@@ -33,11 +34,9 @@ const Cart = ({ onClose }) => {
         };
 
         fetchCartItems();
-    }, []);
+    }, [token]);
 
     const addToCart = async (productoId, cantidad) => {
-        console.log("Intentando agregar al carrito...");
-        const token = localStorage.getItem('token');
         
         if (!token) {
             alert("Por favor, inicia sesión para agregar productos al carrito.");
@@ -67,7 +66,6 @@ const Cart = ({ onClose }) => {
     };
 
     const decreaseItemQuantity = async (productoId) => {
-        const token = localStorage.getItem('token');
         try {
             console.log(typeof(productoId))
             const response = await disminuirProductoEnCarrito(productoId, 1, token);
@@ -84,7 +82,6 @@ const Cart = ({ onClose }) => {
 
     // Eliminar producto del carrito
     const removeItemFromCart = async (itemId) => {
-        const token = localStorage.getItem('token');
         try {
             await eliminarProducto(itemId, token); // Llamar a la función para eliminar el producto
             // Después de eliminar el producto, vuelve a obtener el carrito actualizado
@@ -99,7 +96,6 @@ const Cart = ({ onClose }) => {
     };
 
     const handleConfirmCart = () => {
-        const token = localStorage.getItem('token');
         if (!token) {
             setLoginMessage('Por favor, inicie sesión para continuar.');
             setTimeout(() => navigate('/login'), 2000);
