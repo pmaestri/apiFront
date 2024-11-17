@@ -8,7 +8,8 @@ import {
 } from '../../api/ProductCatalogApi';
 import { FaTimes, FaShoppingCart } from 'react-icons/fa';
 import {agregarProducto} from '../../api/CartApi';
-import { obtenerCategorias } from '../../api/CategoryApi';
+import { fetchCategorias } from '../../api/CategorySlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ProductCatalog = () => {
     const [productos, setProductos] = useState([]);
@@ -21,10 +22,8 @@ const ProductCatalog = () => {
     const [message, setMessage] = useState(null);
     const [modelos, setModelos] = useState([]);
     const location = useLocation();
-    const navigate = useNavigate();
-    const [categorias, setCategorias] = useState([]);
-
-
+    const Dispatch = useDispatch();
+    const categorias = useSelector((state) => state.categorias.categorias);
     const marcas = ['IPHONE', 'SAMSUNG', 'MOTOROLA', 'GENERICO'];
     const modelosPorMarca = {
         IPHONE: ['IPHONE_15_PRO_MAX', 'IPHONE_15_PRO', 'IPHONE_15_PLUS', 'IPHONE_15', 'IPHONE_14_PRO_MAX', 'IPHONE_14_PRO', 'IPHONE_14_PLUS', 'IPHONE_14', 'IPHONE_13_PRO_MAX', 'IPHONE_13_PRO', 'IPHONE_13_MINI', 'IPHONE_13'],
@@ -32,7 +31,12 @@ const ProductCatalog = () => {
         MOTOROLA: ['MOTOROLA_EDGE_40_PRO', 'MOTOROLA_EDGE_40', 'MOTOROLA_EDGE_30_ULTRA', 'MOTOROLA_EDGE_30_FUSION', 'MOTO_G73_5G', 'MOTO_G53_5G', 'MOTO_G23', 'MOTO_G13', 'MOTO_E22', 'MOTO_E32'],
         GENERICO: []
     };
-
+    useEffect(() => {
+        const fetchData = async () => {
+            Dispatch(fetchCategorias()); // Llamamos a la acción para obtener las categorías
+        };
+        fetchData();
+    }, [Dispatch]);
     // Función para obtener el parámetro de la URL
     useEffect(() => {
         console.log("Cargando parámetros de URL...");
@@ -78,22 +82,6 @@ const ProductCatalog = () => {
 
         fetchProductos();
     }, []);
-
-    useEffect(() => {
-        const fetchCategorias = async () => {
-          const token = localStorage.getItem('token'); // Obtener el token del almacenamiento local
-          if (token) {
-            try {
-              const categoriasObtenidas = await obtenerCategorias(token);
-              setCategorias(categoriasObtenidas); // Guardar las categorías en el estado
-            } catch (error) {
-              console.error('Error al obtener las categorías:', error.message);
-            }
-          }
-        };
-    
-        fetchCategorias();
-      }, []);
 
     const handleMarcaChange = (e) => {
         const marcaSeleccionada = e.target.value;

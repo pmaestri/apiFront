@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
 import { crearProducto, actualizarProducto, obtenerProductos, eliminarProducto } from '../../api/ProductApi.jsx';
 import { updateImagen } from '../../api/ImageApi.jsx';
-import { obtenerCategorias } from '../../api/CategoryApi.jsx'; 
+import { fetchCategorias } from '../../api/CategorySlice.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import './ProductsAdmin.css';
@@ -29,11 +29,12 @@ const ProductsAdmin = () => {
   const [productos, setProductos] = useState([]);
   const [editMode, setEditMode] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [categorias, setCategorias] = useState([]); 
+  useDispatch(fetchCategorias());
 
   // Obtener token y rol desde Redux store
   const token = useSelector((state) => state.auth.token);
   const rol = useSelector((state) => state.usuarios.rol);
+  const categorias = useSelector((state) => state.categorias.categorias);
 
   useEffect(() => {
     if (token) {
@@ -46,18 +47,6 @@ const ProductsAdmin = () => {
       navigate('/login');
     }
   }, [navigate, token, rol, dispatch]);
-
-  useEffect(() => {
-    const fetchCategorias = async () => {
-      try {
-        const categoriasObtenidas = await obtenerCategorias(token); // Obtener categorías
-        setCategorias(categoriasObtenidas);
-      } catch (error) {
-        console.error(`Error al obtener las categorías: ${error.message}`);
-      }
-    };
-    if (token) fetchCategorias();
-  }, [token]);
 
   useEffect(() => {
     const fetchProductos = async () => {
