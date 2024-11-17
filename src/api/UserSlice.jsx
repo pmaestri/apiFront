@@ -261,4 +261,4 @@ const usuariosSlice = createSlice({
 });
 
 // Exporta el reducer
-export const usuariosReducer = usuariosSlice.reducer;
+export default usuariosSlice.reducer;

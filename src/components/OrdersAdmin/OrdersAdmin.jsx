@@ -2,39 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
 import { obtenerPedido, obtenerPedidos } from '../../api/OrderApi.jsx';
-import { obtenerRolUsuario, setAuthToken } from '../../api/UserApi.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRolUsuario } from '../../api/UserSlice.jsx'; // Importar la acción de la slice
 import './OrdersAdmin.css';
 
 const Orders = () => {
   const navigate = useNavigate();
-  const [pedidos, setPedidos] = useState([]);
+  const dispatch = useDispatch();
   const [pedidoId, setPedidoId] = useState('');
   const [pedidoBuscado, setPedidoBuscado] = useState(null);
+  const [pedidos, setPedidos] = useState([]);  // Agregado para manejar los pedidos
   const [verTodosVisible, setVerTodosVisible] = useState(false);
   const [error, setError] = useState(null);
-  const [token, setToken] = useState(null);
-  const [rolUsuario, setRolUsuario] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Obtenemos el estado de Redux
+  const { rol, loading, error: errorUsuario } = useSelector((state) => state.usuarios);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setAuthToken(token);
-      setToken(token);
-      const fetchRole = async () => {
-        const rol = await obtenerRolUsuario();
-        setRolUsuario(rol);
-        if (rol !== 'ADMIN') {
-          navigate('/');
-        } else {
-          setIsAdmin(true);
-        }
-      };
-      fetchRole();
-    } else {
-      navigate('/login');
+    if (!rol) {
+      dispatch(fetchRolUsuario()); // Obtener rol del usuario
+    } else if (rol !== 'ADMIN') {
+      navigate('/');
     }
-  }, [navigate]);
+  }, [rol, navigate, dispatch]);
 
   // Función para obtener un pedido específico por ID
   const buscarPedido = async () => {
@@ -42,8 +32,6 @@ const Orders = () => {
       try {
         const pedido = await obtenerPedido(pedidoId.trim());
         setPedidoBuscado(pedido);
-        setPedidos([]); // Limpiar la lista de pedidos cuando se busca un ID específico
-        setVerTodosVisible(false); // Asegurar que no se muestre la lista al buscar por ID
         setError(null); // Limpiar cualquier error anterior
       } catch (err) {
         setError(`Pedido no encontrado.`);
@@ -58,7 +46,7 @@ const Orders = () => {
   const fetchPedidos = async () => {
     try {
       const data = await obtenerPedidos();
-      setPedidos(data);
+      setPedidos(data);  // Aquí se actualiza el estado de los pedidos
     } catch (err) {
       setError(`Error al obtener los pedidos: ${err.message}`);
     }
@@ -74,8 +62,9 @@ const Orders = () => {
     setVerTodosVisible(!verTodosVisible); // Alternar la visibilidad
     setPedidoBuscado(null); // Limpiar cualquier búsqueda específica
   };
-  
-  if (!isAdmin) return null;
+
+  // Si aún se está cargando o si no es admin, no renderizamos el contenido
+  if (loading || rol !== 'ADMIN') return <div>Cargando...</div>;
 
   return (
     <div className="orders-container">

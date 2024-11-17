@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
 import { obtenerUsuarioAdmin, obtenerUsuariosVisualDtos, eliminarUsuarioAdmin, setAuthToken, obtenerRolUsuario } from '../../api/UserApi.jsx'; // Importa las funciones necesarias
 import './UserAdmin.css';
+import { useDispatch, useSelector } from 'react-redux';
 
 const UserAdmin = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -13,17 +14,14 @@ const UserAdmin = () => {
   const [verPedidos, setVerPedidos] = useState({});
   const [isAdmin, setIsAdmin] = useState(false);
   const [rolUsuario, setRolUsuario] = useState(null);
-  const [token, setToken] = useState(null);
   const [mensajeVisible, setMensajeVisible] = useState(false);
   const navigate = useNavigate(); // Inicializar navigate
-
+  const rol = useSelector((state)=> state.usuarios.rol);
+  const token = useSelector((state)=> state.auth.token);
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (token) {
       setAuthToken(token);
-      setToken(token);
       const fetchRole = async () => {
-        const rol = await obtenerRolUsuario();
         setRolUsuario(rol);
         if (rol !== 'ADMIN') {
           navigate('/');
@@ -35,7 +33,7 @@ const UserAdmin = () => {
     } else {
       navigate('/login');
     }
-  }, [navigate]);
+  }, [navigate, token]);
 
   // Función para obtener todos los usuarios
   const fetchUsuarios = async () => {

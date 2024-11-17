@@ -4,12 +4,13 @@ import { crearProducto, actualizarProducto, obtenerProductos, eliminarProducto }
 import { updateImagen } from '../../api/ImageApi.jsx';
 import { obtenerCategorias } from '../../api/CategoryApi.jsx'; 
 import { useNavigate } from 'react-router-dom';
-import { obtenerRolUsuario, setAuthToken } from '../../api/UserApi.jsx';
+import { useSelector, useDispatch } from 'react-redux';
 import './ProductsAdmin.css';
 import { FaTrashAlt, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 
 const ProductsAdmin = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [productoData, setProductoData] = useState({
     descripcion: '',
     marca: '',
@@ -25,30 +26,27 @@ const ProductsAdmin = () => {
   });
   const [nombreArchivo, setNombreArchivo] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  const [token, setToken] = useState(null);
   const [productos, setProductos] = useState([]);
   const [editMode, setEditMode] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [categorias, setCategorias] = useState([]); 
 
+  // Obtener token y rol desde Redux store
+  const token = useSelector((state) => state.auth.token);
+  const rol = useSelector((state) => state.usuarios.rol);
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (token) {
-      setAuthToken(token);
-      setToken(token);
-      const fetchRole = async () => {
-        const rol = await obtenerRolUsuario();
-        if (rol !== 'ADMIN') {
-          navigate('/');
-        } else {
-          setIsAdmin(true);
-        }
-      };
-      fetchRole();
+      if (rol !== 'ADMIN') {
+        navigate('/');
+      } else {
+        setIsAdmin(true);
+      }
     } else {
       navigate('/login');
     }
-  }, [navigate]);
+  }, [navigate, token, rol, dispatch]);
+
   useEffect(() => {
     const fetchCategorias = async () => {
       try {

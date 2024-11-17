@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authenticate, logout } from '../../api/AuthSlice'; // Importa las acciones de la slice
 import { setAuthToken } from '../../api/UserApi'; // Ajusta esta ruta según tu proyecto
+import { fetchRolUsuario } from '../../api/UserSlice';
 import './LogIn2.css';
 
 const Login = () => {
@@ -15,22 +16,25 @@ const Login = () => {
   // Obtener el token del estado global
   const { token, loading, error } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    // Si ya hay un token guardado en el estado global, configurar el token
-    if (token) {
-      setAuthToken(token);
-      navigate('/'); // O redirigir a la página deseada
-    }
-  }, [token, navigate]);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMessage(null);
     try {
       // Despacha la acción de autenticación
       await dispatch(authenticate({ nombreUsuario, contrasenia })).unwrap();
+      const response = await dispatch(fetchRolUsuario());
+      console.log(response.payload); // Esto debería ser el rol del usuario
 
-      navigate('/'); // Redirige a la página principal tras login
+      // Redirigir según el rol
+      if (response.payload === 'COMPRADOR') {
+        navigate('/'); // Redirigir a la página principal del comprador
+      } else if (response.payload === 'ADMIN') {
+        navigate('/admin-home/usuarios'); // Redirigir al home del administrador
+      } else {
+        // Redirigir a una página por defecto en caso de rol desconocido
+        console.log("ERROR") 
+      }
+
     } catch (error) {
       setErrorMessage('Error al iniciar sesión. Verifica tus credenciales.');
       console.error('Error en la autenticación:', error);
