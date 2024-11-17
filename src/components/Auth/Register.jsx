@@ -1,15 +1,20 @@
-import { registerUser } from "../../api/AuthApi";
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { register } from '../../api/AuthSlice'; // Asegúrate de ajustar la ruta de importación
 import './Register.css';
 
 const Registration = () => {
-  const [nombre, setNombre] = useState(''); 
-  const [apellido, setApellido] = useState(''); 
-  const [nombreUsuario, setNombreUsuario] = useState(''); 
-  const [email, setEmail] = useState(''); 
-  const [password, setPassword] = useState(''); 
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const dispatch = useDispatch();
+  
+  // Estado local para los campos del formulario
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
+  const [nombreUsuario, setNombreUsuario] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // Obtener el estado de Redux
+  const { loading, error, token } = useSelector((state) => state.auth);
 
   // Validación del email
   const handleEmailInvalid = (e) => {
@@ -18,57 +23,48 @@ const Registration = () => {
     } else if (!e.target.value.includes('@')) {
       e.target.setCustomValidity('Por favor, incluya un "@" en la dirección de correo electrónico.');
     } else {
-      e.target.setCustomValidity(''); // Limpia el mensaje si no hay error
+      e.target.setCustomValidity('');
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
 
     // Validaciones adicionales
     if (!email) {
-      setError('Por favor, complete este campo.');
+      alert('Por favor, complete este campo.');
       return;
     } else if (!email.includes('@')) {
-      setError('Por favor, incluya un "@" en la dirección de correo electrónico.');
+      alert('Por favor, incluya un "@" en la dirección de correo electrónico.');
       return;
     }
 
-    try {
-      const request = { 
-        nombre, 
-        apellido, 
-        nombreUsuario, 
-        mail: email, 
-        contrasenia: password 
-      };
-      await registerUser(request);
-      setSuccess('Usuario registrado correctamente!'); // Mensaje de éxito
-      
-      // Limpia los campos después del registro
-      setNombre('');
-      setApellido('');
-      setNombreUsuario('');
-      setEmail('');
-      setPassword('');
+    // Enviar la acción de registro a Redux
+    const request = {
+      nombre,
+      apellido,
+      nombreUsuario,
+      mail: email,
+      contrasenia: password,
+    };
 
-      // Temporizador para ocultar el mensaje de éxito después de 3 segundos
-      setTimeout(() => {
-        setSuccess(null);
-      }, 3000);
-    } catch (error) {
-      setError(error.message);
-    }
+    dispatch(register(request));
   };
 
+  // Verificar si el registro fue exitoso
+  if (token) {
+    setTimeout(() => {
+      // Redirigir o mostrar mensaje de éxito
+      alert('Usuario registrado correctamente!');
+    }, 1000);
+  }
+
   return (
-    <div className="registration"> 
+    <div className="registration">
       <h2>Registrar Usuario</h2>
       <div className="message-container">
         {error && <p className="error-message">{error}</p>}
-        {success && <p className="success-message">{success}</p>}
+        {loading && <p className="loading-message">Cargando...</p>}
       </div>
       <form onSubmit={handleSubmit}>
         <div>
@@ -79,8 +75,6 @@ const Registration = () => {
               value={nombre} 
               onChange={(e) => setNombre(e.target.value)} 
               required 
-              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
-              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
             />
           </div>
         </div>
@@ -92,8 +86,6 @@ const Registration = () => {
               value={apellido} 
               onChange={(e) => setApellido(e.target.value)} 
               required 
-              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
-              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
             />
           </div>
         </div>
@@ -105,8 +97,6 @@ const Registration = () => {
               value={nombreUsuario} 
               onChange={(e) => setNombreUsuario(e.target.value)} 
               required 
-              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
-              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
             />
           </div>
         </div>
@@ -130,12 +120,10 @@ const Registration = () => {
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               required 
-              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
-              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
             />
           </div>
         </div>
-        <button type="submit">Registrar</button>
+        <button type="submit" disabled={loading}>Registrar</button>
       </form>
     </div>
   );
