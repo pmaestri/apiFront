@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
-import { obtenerPedido, obtenerPedidos } from '../../api/OrderApi.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRolUsuario } from '../../api/UserSlice.jsx'; // Importar la acción de la slice
+import { obtenerPedidoPorId, obtenerPedidosDelAdmin } from '../../api/OrderSlice.jsx'; // Importar las acciones de la slice
+import { fetchRolUsuario } from '../../api/UserSlice.jsx';
 import './OrdersAdmin.css';
 
 const Orders = () => {
@@ -11,12 +11,12 @@ const Orders = () => {
   const dispatch = useDispatch();
   const [pedidoId, setPedidoId] = useState('');
   const [pedidoBuscado, setPedidoBuscado] = useState(null);
-  const [pedidos, setPedidos] = useState([]);  // Agregado para manejar los pedidos
   const [verTodosVisible, setVerTodosVisible] = useState(false);
   const [error, setError] = useState(null);
 
   // Obtenemos el estado de Redux
   const { rol, loading, error: errorUsuario } = useSelector((state) => state.usuarios);
+  const { pedidos, loading: loadingPedidos, error: errorPedidos } = useSelector((state) => state.pedidos);
 
   useEffect(() => {
     if (!rol) {
@@ -30,11 +30,19 @@ const Orders = () => {
   const buscarPedido = async () => {
     if (pedidoId.trim()) {
       try {
-        const pedido = await obtenerPedido(pedidoId.trim());
-        setPedidoBuscado(pedido);
-        setError(null); // Limpiar cualquier error anterior
+        dispatch(obtenerPedidoPorId(pedidoId)); // Usamos la acción de Redux
+        const pedidoEncontrado = pedidos.find(pedido => pedido.id === parseInt(pedidoId.trim()));
+                if (pedidoEncontrado) {
+          setPedidoBuscado(pedidoEncontrado); // Actualiza el pedido buscado con el estado de Redux
+          setError(null); // Limpiar cualquier error anterior
+        } else {
+          setError('Pedido no encontrado.');
+          setTimeout(() => {
+            setError(null); // Ocultar el mensaje de error después de 3 segundos
+          }, 3000);
+        }
       } catch (err) {
-        setError(`Pedido no encontrado.`);
+        setError('Error al buscar el pedido.');
         setTimeout(() => {
           setError(null); // Ocultar el mensaje de error después de 3 segundos
         }, 3000);
@@ -45,33 +53,27 @@ const Orders = () => {
   // Función para obtener todos los pedidos
   const fetchPedidos = async () => {
     try {
-      const data = await obtenerPedidos();
-      setPedidos(data);  // Aquí se actualiza el estado de los pedidos
+      await dispatch(obtenerPedidosDelAdmin()); // Usamos la acción de Redux para obtener todos los pedidos
     } catch (err) {
-      setError(`Error al obtener los pedidos: ${err.message}`);
+      setError('Error al obtener los pedidos.');
     }
   };
 
   // Función manejadora para el botón "Ver Todos"
   const handleVerTodos = () => {
-    if (verTodosVisible) {
-      setPedidos([]); // Ocultar la lista de pedidos si ya se están mostrando
-    } else {
-      fetchPedidos(); // Obtener todos los pedidos si no están visibles
-    }
-    setVerTodosVisible(!verTodosVisible); // Alternar la visibilidad
-    setPedidoBuscado(null); // Limpiar cualquier búsqueda específica
+    setVerTodosVisible(!verTodosVisible); // Alterna la visibilidad de la lista completa
+    setPedidoBuscado(null); // Limpiar la búsqueda
   };
 
   // Si aún se está cargando o si no es admin, no renderizamos el contenido
-  if (loading || rol !== 'ADMIN') return <div>Cargando...</div>;
+  if (loading || loadingPedidos) return <div>Cargando...</div>;
 
   return (
     <div className="orders-container">
       <AdminNavbar />
       <div className="orders-header">
         <h1 className="orders-title">Administración de Pedidos</h1>
-        {error && <p className="error-message-Orders">{error}</p>} {/* Mensaje de error en la parte superior */}
+        {error && <p className="error-message-Orders">{error}</p>}
       </div>
       
       <div className="orders-search-bar">
@@ -113,7 +115,7 @@ const Orders = () => {
                       <div><strong>Producto:</strong> {detalle.producto.nombre}</div>
                       <div><strong>Cantidad:</strong> {detalle.cantidad}</div>
                       <div><strong>Precio Unitario:</strong> ${detalle.precio.toFixed(2)}</div>
-                      <br /> {/* Forzar un salto de línea adicional */}
+                      <br />
                     </li>
                   ))}
                 </ul>
@@ -129,7 +131,7 @@ const Orders = () => {
             <div className="orders-card-title">Pedido ID: {pedido.id}</div>
             <div className="orders-card-content">
               <p>Total: ${pedido.total.toFixed(2)}</p>
-              <p>nombreUsuario: {pedido.nombreUsuario}</p>
+              <p>Usuario: {pedido.nombreUsuario}</p>
               {Array.isArray(pedido.fecha) && pedido.fecha.length >= 3 ? (
                 <p>Fecha: {new Date(
                   pedido.fecha[0], 
@@ -145,13 +147,11 @@ const Orders = () => {
                   <div style={{ display: 'flex', alignItems: 'flex-start' }}>
                     <p style={{ marginRight: '10px', marginTop: '0' }}><strong>Detalle Pedido:</strong></p>
                     <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
-
                       {pedido.detallePedidoDto.map((detalle) => (
                         <li key={detalle.id} className="detalle-pedido-item" style={{ marginBottom: '10px' }}>
                           <div><strong>Producto:</strong> {detalle.producto.nombre}</div>
                           <div><strong>Cantidad:</strong> {detalle.cantidad}</div>
                           <div><strong>Precio Unitario:</strong> ${detalle.precio.toFixed(2)}</div>
-
                         </li>
                       ))}
                     </ul>
