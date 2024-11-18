@@ -7,7 +7,7 @@ import {
     filtrarProductos
 } from '../../api/ProductCatalogApi';
 import { FaTimes, FaShoppingCart } from 'react-icons/fa';
-import {agregarProducto} from '../../api/CartApi';
+import {agregarProducto, setAuthToken} from '../../api/CartApi';
 import { fetchCategorias } from '../../api/CategorySlice';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -45,7 +45,6 @@ const ProductCatalog = () => {
         const categoriaId = params.get('categoria');
         const searchQuery = params.get('search');  // Capturamos el valor de búsqueda
         const productoId = params.get('productoId'); // Capturamos el id del producto si existe
-        console.log(productoId);
 
         if (categoriaId) {
             setFiltros((prevFiltros) => ({ ...prevFiltros, categoriaId }));
@@ -172,9 +171,10 @@ const ProductCatalog = () => {
         }
     
         try {
-            
+            console.log(token);
             // Llama a la función que realiza la petición al backend para agregar el producto al carrito
             console.log(productoId, cantidad);
+            setAuthToken(token);
             const response = await agregarProducto(productoId, cantidad, token);
             console.log(response); // Mensaje de éxito del backend
             

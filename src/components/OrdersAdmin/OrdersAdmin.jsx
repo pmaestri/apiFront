@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { obtenerPedidoPorId, obtenerPedidosDelAdmin } from '../../api/OrderSlice.jsx'; // Importar las acciones de la slice
+import { setAuthToken } from '../../api/OrderApi.jsx';
+import { obtenerPedidoPorId, obtenerTodosLosPedidos } from '../../api/OrderSlice.jsx'; // Importar las acciones de la slice
 import { fetchRolUsuario } from '../../api/UserSlice.jsx';
 import './OrdersAdmin.css';
 
@@ -15,8 +16,10 @@ const Orders = () => {
   const [error, setError] = useState(null);
 
   // Obtenemos el estado de Redux
+  const token = useSelector((state)=> state.auth.token);
   const { rol, loading, error: errorUsuario } = useSelector((state) => state.usuarios);
   const { pedidos, loading: loadingPedidos, error: errorPedidos } = useSelector((state) => state.pedidos);
+  setAuthToken(token);
 
   useEffect(() => {
     if (!rol) {
@@ -53,7 +56,7 @@ const Orders = () => {
   // Función para obtener todos los pedidos
   const fetchPedidos = async () => {
     try {
-      await dispatch(obtenerPedidosDelAdmin()); // Usamos la acción de Redux para obtener todos los pedidos
+      dispatch(obtenerTodosLosPedidos()); // Usamos la acción de Redux para obtener todos los pedidos
     } catch (err) {
       setError('Error al obtener los pedidos.');
     }
@@ -62,6 +65,7 @@ const Orders = () => {
   // Función manejadora para el botón "Ver Todos"
   const handleVerTodos = () => {
     setVerTodosVisible(!verTodosVisible); // Alterna la visibilidad de la lista completa
+    fetchPedidos();
     setPedidoBuscado(null); // Limpiar la búsqueda
   };
 
@@ -130,7 +134,7 @@ const Orders = () => {
           <div className="orders-card" key={index}>
             <div className="orders-card-title">Pedido ID: {pedido.id}</div>
             <div className="orders-card-content">
-              <p>Total: ${pedido.total.toFixed(2)}</p>
+              <p>Total: ${pedido.total}</p>
               <p>Usuario: {pedido.nombreUsuario}</p>
               {Array.isArray(pedido.fecha) && pedido.fecha.length >= 3 ? (
                 <p>Fecha: {new Date(
