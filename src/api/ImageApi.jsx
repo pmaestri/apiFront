@@ -4,15 +4,6 @@ const api = axios.create({
   baseURL: 'http://localhost:8080/api/imagenes',
 });
 
-// Función para establecer el token en las cabeceras de axios
-export const setAuthToken = (token) => {
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete api.defaults.headers.common['Authorization'];
-  }
-};
-
 // Función para mostrar una imagen por su ID
 export const fetchImagen = async (id) => {
   try {
@@ -54,6 +45,7 @@ export const deleteImagen = async (imagenId) => {
 
 export const updateImagen = async (productoId, archivo, nombre,token) => {
   try {
+    console.log(productoId)
     const formData = new FormData();
     formData.append('archivo', archivo); // Asegúrate de que este nombre coincida con el del modelo
     formData.append('nombre', nombre); // Asegúrate de incluir este campo si es necesario

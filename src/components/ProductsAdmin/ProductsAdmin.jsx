@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
-import { crearProducto, actualizarProducto, obtenerProductos, eliminarProducto } from '../../api/ProductApi.jsx';
-import { updateImagen } from '../../api/ImageApi.jsx';
 import { fetchCategorias } from '../../api/CategorySlice.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import './ProductsAdmin.css';
 import { FaTrashAlt, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
+import { updateProductoImagen, createProducto, updateProducto, deleteProducto, fetchProductos } from '../../api/ProductSlice.jsx';
 
 const ProductsAdmin = () => {
   const navigate = useNavigate();
@@ -26,15 +25,16 @@ const ProductsAdmin = () => {
   });
   const [nombreArchivo, setNombreArchivo] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  const [productos, setProductos] = useState([]);
   const [editMode, setEditMode] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  useDispatch(fetchCategorias());
+
+  useDispatch(fetchCategorias()); // Cargar categorías
 
   // Obtener token y rol desde Redux store
   const token = useSelector((state) => state.auth.token);
   const rol = useSelector((state) => state.usuarios.rol);
   const categorias = useSelector((state) => state.categorias.categorias);
+  const productos = useSelector((state) => state.producto.productos);
 
   useEffect(() => {
     if (token) {
@@ -46,25 +46,22 @@ const ProductsAdmin = () => {
     } else {
       navigate('/login');
     }
-  }, [navigate, token, rol, dispatch]);
+  }, [navigate, token, rol]);
 
   useEffect(() => {
-    const fetchProductos = async () => {
-      if (isAdmin) {
-        try {
-          const productosObtenidos = await obtenerProductos(token);
-          setProductos(productosObtenidos);
-        } catch (error) {
-          alert(`Error: ${error.message}`);
-        }
-      }
-    };
-    fetchProductos();
-  }, [isAdmin, token]);
+    if (isAdmin && token) {
+      dispatch(fetchProductos(token))
+      
+        .unwrap()
+        .catch((error) => {
+          alert(`Error: ${error}`);
+        });
+        dispatch(fetchCategorias()); // Cargar categorías
+    }
+  }, [isAdmin, token, dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
     setProductoData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -88,16 +85,21 @@ const ProductsAdmin = () => {
     });
 
     try {
-      await crearProducto(formData, token);
-      alert('Producto creado con éxito');
-      setShowCreateForm(false);
-      setProductoData((prevData) => ({
-        ...prevData,
-        archivo: null,
-      }));
-      setNombreArchivo('');
-      const productosObtenidos = await obtenerProductos(token);
-      setProductos(productosObtenidos);
+      dispatch(createProducto({ formData, token }))
+        .unwrap()
+        .then(() => {
+          alert('Producto creado con éxito');
+          setShowCreateForm(false);
+          setProductoData((prevData) => ({
+            ...prevData,
+            archivo: null,
+          }));
+          setNombreArchivo('');
+          dispatch(fetchProductos(token)); // Refrescar la lista de productos
+        })
+        .catch((error) => {
+          alert(`Error: ${error}`);
+        });
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
@@ -112,30 +114,51 @@ const ProductsAdmin = () => {
         updatedData[key] = value;
       }
     });
-    console.log('Datos a actualizar:', updatedData);
+
     try {
-      await actualizarProducto(productoData.productoId, updatedData, token);
-      if (productoData.archivo) {
-        await updateImagen(productoData.productoId, productoData.archivo, nombreArchivo, token);
-      }
-      alert('Producto actualizado con éxito');
       setEditMode(null);
-      setProductoData({
-        descripcion: '',
-        marca: '',
-        nombre: '',
-        precioUnitario: '',
-        stock: '',
-        categoria: '',
-        modelo: '',
-        descuento: '',
-        catalogoId: '',
-        archivo: null,
-        productoId: '',
-      });
-      setNombreArchivo('');
-      const productosObtenidos = await obtenerProductos(token);
-      setProductos(productosObtenidos);
+      dispatch(updateProducto({ productoId: productoData.productoId, productoData: updatedData, token }))
+        .unwrap()
+        .then(() => {
+          if (productoData.archivo) {
+            setEditMode(null);
+            dispatch(
+              updateProductoImagen({
+                productoId: productoData.productoId,
+                archivo: productoData.archivo,
+                nombre: nombreArchivo,
+                token,
+              })
+            )
+              .unwrap()
+              .then(() => {
+                alert('Producto actualizado con éxito');
+                setEditMode(null);
+                setProductoData({
+                  descripcion: '',
+                  marca: '',
+                  nombre: '',
+                  precioUnitario: '',
+                  stock: '',
+                  categoria: '',
+                  modelo: '',
+                  descuento: '',
+                  catalogoId: '',
+                  archivo: null,
+                  productoId: '',
+                });
+                setNombreArchivo('');
+                dispatch(fetchProductos(token)); // Refrescar la lista de productos
+                
+              })
+              .catch((error) => {
+                alert(`Error actualizando imagen: ${error}`);
+              });
+          }
+        })
+        .catch((error) => {
+          alert(`Error: ${error}`);
+        });
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
@@ -168,10 +191,15 @@ const ProductsAdmin = () => {
     const confirmacion = window.confirm('¿Estás seguro de que deseas eliminar este producto?');
     if (confirmacion) {
       try {
-        await eliminarProducto(productoId, token);
-        const productosActualizados = productos.filter((producto) => producto.id !== productoId);
-        setProductos(productosActualizados);
-        alert('Producto eliminado con éxito');
+        dispatch(deleteProducto({ productoId, token }))
+          .unwrap()
+          .then(() => {
+            dispatch(fetchProductos(token)); // Refrescar la lista de productos
+            alert('Producto eliminado con éxito');
+          })
+          .catch((error) => {
+            alert(`Error al eliminar el producto: ${error.message}`);
+          });
       } catch (error) {
         alert(`Error al eliminar el producto: ${error.message}`);
       }
