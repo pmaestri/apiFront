@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './ProductCatalog.css';
-import {
-    obtenerProductosDisponiblesConDetalles,
-    obtenerDetalleProducto,
-    filtrarProductos
-} from '../../api/ProductCatalogApi';
+import { fetchProductosDisponiblesConDetalles, filterProductos, fetchDetalleProducto } from '../../api/ProductCatalogSlice';
 import { FaTimes, FaShoppingCart } from 'react-icons/fa';
 import {agregarProducto, setAuthToken} from '../../api/CartApi';
 import { fetchCategorias } from '../../api/CategorySlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const ProductCatalog = () => {
-    const [productos, setProductos] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
@@ -25,6 +20,9 @@ const ProductCatalog = () => {
     const Dispatch = useDispatch();
     const categorias = useSelector((state) => state.categorias.categorias);
     const token = useSelector((state)=>state.auth.token);
+    const productos = useSelector((state) => state.catalogo.productosDisponibles);
+    const loading1 = useSelector((state) => state.catalogo.loading);
+    const error1 = useSelector((state) => state.catalogo.error);
     const marcas = ['IPHONE', 'SAMSUNG', 'MOTOROLA', 'GENERICO'];
     const modelosPorMarca = {
         IPHONE: ['IPHONE_15_PRO_MAX', 'IPHONE_15_PRO', 'IPHONE_15_PLUS', 'IPHONE_15', 'IPHONE_14_PRO_MAX', 'IPHONE_14_PRO', 'IPHONE_14_PLUS', 'IPHONE_14', 'IPHONE_13_PRO_MAX', 'IPHONE_13_PRO', 'IPHONE_13_MINI', 'IPHONE_13'],
@@ -65,23 +63,19 @@ const ProductCatalog = () => {
     }, [location]);
 
     useEffect(() => {
-        console.log("Obteniendo productos...");
         const fetchProductos = async () => {
-            setLoading(true);
-            try {
-                const data = await obtenerProductosDisponiblesConDetalles();
-                console.log("Productos obtenidos:", data);
-                setProductos(data);
-            } catch (error) {
-                console.error("Error al obtener productos:", error);
-                setError(`Error al obtener productos: ${error.message}`);
-            } finally {
-                setLoading(false);
-            }
+          Dispatch(fetchProductosDisponiblesConDetalles())
+            .unwrap() // Maneja la resolución de la promesa
+            .then((data) => {
+              console.log("Productos obtenidos:", data);
+            })
+            .catch((error) => {
+              console.error("Error al obtener productos:", error);
+            });
         };
-
+    
         fetchProductos();
-    }, []);
+      }, [Dispatch]); // Dependencia en dispatch, no es necesario agregar productos
 
     const handleMarcaChange = (e) => {
         const marcaSeleccionada = e.target.value;
@@ -92,8 +86,12 @@ const ProductCatalog = () => {
 
     const handleFiltrarProductos = async (nombreProducto = '') => {
         console.log("Filtrando productos por:", filtros);
-        setLoading(true);
+    
+        // Establecer el estado de carga en true
+        setLoading(true);  
+        setMessage(null);  // Restablece el mensaje
         try {
+            // Prepara los filtros para enviar
             const filtrosAEnviar = {
                 ...(nombreProducto && { nombre: nombreProducto }),  // Filtramos solo por nombre cuando se usa el botón de búsqueda
                 ...(filtros.categoriaId && { categoriaId: filtros.categoriaId }),
@@ -102,11 +100,12 @@ const ProductCatalog = () => {
                 ...(filtros.marca && { marca: filtros.marca.toUpperCase() }),
                 ...(filtros.modelo && { modelo: filtros.modelo.toUpperCase() })
             };
-
-            const dataFiltrada = await filtrarProductos(filtrosAEnviar);
+    
+            // Despacha el thunk para filtrar productos
+            const dataFiltrada = await Dispatch(filterProductos(filtrosAEnviar)).unwrap();
+    
             console.log("Productos filtrados:", dataFiltrada);
-            setProductos(dataFiltrada);
-
+    
             if (dataFiltrada.length === 0) {
                 setMessage(`No se han encontrado productos para los criterios seleccionados.`);
             } else {
@@ -116,22 +115,27 @@ const ProductCatalog = () => {
             console.error("Error al filtrar productos:", error);
             setError(`Error al filtrar productos: ${error.message}`);
         } finally {
-            setLoading(false);
+            setLoading(false);  // Se termina la carga
         }
     };
 
     const handleVerDetalleProducto = async (productoId) => {
-        setLoading(true);
+        setLoading(true);  // Establece el estado de carga a true
+        setError(null);  // Restablece el mensaje de error
+    
         try {
             console.log("Obteniendo detalles del producto:", productoId);
-            const detalle = await obtenerDetalleProducto(productoId);
+    
+            // Despacha el thunk para obtener el detalle del producto
+            const detalle = await Dispatch(fetchDetalleProducto(productoId)).unwrap();
+            
             console.log("Detalle del producto:", detalle);
-            setProductoSeleccionado(detalle);
+            setProductoSeleccionado(detalle);  // Guarda el detalle del producto en el estado local
         } catch (error) {
             console.error("Error al obtener el detalle del producto:", error);
             setError(`Error al obtener el detalle del producto: ${error.message}`);
         } finally {
-            setLoading(false);
+            setLoading(false);  // Termina el estado de carga
         }
     };
 
@@ -257,9 +261,9 @@ const ProductCatalog = () => {
                 </div>
 
                 <div className="product-list">
-                    {loading ? (
+                    {loading1 ? (
                         <p>Cargando productos...</p>
-                    ) : error ? (
+                    ) : error1 ? (
                         <p>Error: {error}</p>
                     ) : (
                         productos.length > 0 ? (

@@ -3,7 +3,7 @@ import './Navbar.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaSearch, FaShoppingCart, FaUser, FaSignOutAlt } from 'react-icons/fa'; // FaSignOutAlt para cerrar sesión
 import Cart from '../Cart/Cart.jsx';
-import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi';
+import { fetchProductosDisponiblesConDetalles } from '../../api/ProductCatalogSlice.jsx';
 import { vaciarCarrito } from '../../api/CartApi.jsx';
 import { useSelector, useDispatch } from 'react-redux';  // Importar useSelector para acceder al estado de Redux
 import { logout } from '../../api/AuthSlice.jsx'; // Acción de logout
@@ -25,21 +25,31 @@ const Navbar = () => {
     setIsLoggedIn(!!token); // Actualiza el estado según el token de Redux
   }, [token]); // Dependencia de token
   useEffect(() => {
-  const fetchProductos = async () => {
-    if (searchQuery.length > 1) {
-      const productos = await obtenerProductosDisponiblesConDetalles();
-      const sugeridos = productos.filter(producto =>
-        producto.nombre.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setProductosSugeridos(sugeridos);
-    } else {
-      setProductosSugeridos([]);
-    }
-  };
+    const fetchProductos = async () => {
+      if (searchQuery.length > 1) {
+        // Disparar la acción del thunk para obtener los productos
+        dispatch(fetchProductosDisponiblesConDetalles())
+          .unwrap()
+          .then((productos) => {
+            // Filtrar los productos sugeridos
+            const sugeridos = productos.filter((producto) =>
+              producto.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setProductosSugeridos(sugeridos);
+          })
+          .catch((error) => {
+            console.error('Error al obtener los productos:', error);
+            setProductosSugeridos([]);
+          });
+      } else {
+        setProductosSugeridos([]);
+      }
+    };
+
     const timeoutId = setTimeout(fetchProductos, 300);
 
     return () => clearTimeout(timeoutId); // Limpia el timeout al desmontar
-  }, [searchQuery, location]); // Dependencias del efecto
+  }, [searchQuery, location, dispatch]); // Añadido `dispatch` como dependencia
 
   const handleCatalogClick = () => {
     if (location.pathname === '/ProductCatalog') {
