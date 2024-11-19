@@ -7,7 +7,7 @@ import {
   crearNuevoDetalle,  
 } from '../../api/OrderSlice'; // Importa las acciones de tu slice
 import { setAuthToken } from '../../api/OrderApi';
-import { obtenerCarrito, vaciarCarrito } from '../../api/CartApi'; // Mantén esto para el manejo del carrito
+import { fetchCarrito, vaciarCarritoSlice } from '../../api/CartSilce';
 import './Order.css';
 
 const Popup = ({ detalles, onClose }) => {
@@ -44,31 +44,22 @@ const Pedido = () => {
   const [cuotas, setCuotas] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [pedidoDetalles, setPedidoDetalles] = useState(null);
-  const [cartItems, setCartItems] = useState([]);
-  const [totalCarrito, setTotalCarrito] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const token = useSelector((state) => state.auth.token); // Asegúrate de que el token esté en el estado `user`
-
+  const { carrito, loading, error } = useSelector((state) => state.carrito);
   useEffect(() => {
     if (token) {
-      // Obtener el carrito del usuario
-      const fetchCart = async () => {
-        try {
-          const carritoData = await obtenerCarrito(token);
-          setCartItems(carritoData.productos);
-          setTotalCarrito(carritoData.total);
-        } catch (error) {
-          console.error('Error al obtener el carrito:', error.message);
-        }
-      };
-      fetchCart();
+      dispatch(fetchCarrito(token));
     } else {
       console.error('No se encontró un token de autenticación');
     }
-  }, [token]);
+  }, [dispatch, token]);
+
+  if (loading) return <p>Cargando carrito...</p>;
+  if (error) return <p>Error al cargar el carrito: {error}</p>;
 
   const handleConfirmarPedido = async () => {
     try {
@@ -82,7 +73,7 @@ const Pedido = () => {
 
       // Crear detalles del pedido
       await Promise.all(
-        cartItems.map(async (item) => {
+        carrito.productos.map(async (item) => {
           const detalleData = { productoId: item.productoId, cantidad: item.cantidad };
           await dispatch(crearNuevoDetalle({ pedidoId: pedidoData.id, detalleData })).unwrap();
         })
@@ -102,7 +93,7 @@ const Pedido = () => {
   const handleClosePopup = async () => {
     if (token) {
       try {
-        await vaciarCarrito(token); // Vaciar el carrito
+        dispatch(vaciarCarritoSlice(token)); // Vaciar el carrito
         console.log('Carrito vaciado exitosamente.');
       } catch (error) {
         console.error('Error al vaciar el carrito:', error.message);
@@ -114,9 +105,9 @@ const Pedido = () => {
 
   const calcularTotalConDescuento = () => {
     if (metodoPago === 'EFECTIVO' || metodoPago === 'TRANSFERENCIA') {
-      return totalCarrito * 0.9; // 10% de descuento
+      return carrito.total * 0.9; // 10% de descuento
     }
-    return totalCarrito;
+    return carrito.total;
   };
 
   const totalConDescuento = calcularTotalConDescuento();
@@ -126,11 +117,11 @@ const Pedido = () => {
            <div className="pedido-content">
              <div className="cart-items-container">
                <h2>Productos en el Carrito</h2>
-               {cartItems.length === 0 ? (
+               {carrito.productos.length === 0 ? (
                 <p>El carrito está vacío.</p>
               ) : (
                 <ul className="pedido-list">
-                  {cartItems.map((item) => (
+                  {carrito.productos.map((item) => (
                     <li className="pedido-list-item" key={item.id}>
                       <div className="cart-product">
                         <img src={`data:image/jpeg;base64,${item.imagen}`} alt={item.nombreProducto} />
@@ -179,7 +170,7 @@ const Pedido = () => {
                   </select>
                 </div>
               )}
-              <button className="pedido-confirm-button" onClick={handleConfirmarPedido} disabled={!metodoPago || cartItems.length === 0}>
+              <button className="pedido-confirm-button" onClick={handleConfirmarPedido} disabled={!metodoPago || carrito.productos.length === 0}>
                 Confirmar Pedido
               </button>
     
@@ -187,11 +178,11 @@ const Pedido = () => {
               <div className="order-total">
                 {metodoPago === 'EFECTIVO' || metodoPago === 'TRANSFERENCIA' ? (
                   <>
-                    <p className="original-total-price">Total: ${totalCarrito.toFixed(2)}</p>
+                    <p className="original-total-price">Total: ${carrito.total.toFixed(2)}</p>
                     <p className="discounted-total-price">Total con Descuento: ${totalConDescuento.toFixed(2)}</p>
                   </>
                 ) : (
-                  <p className="total-price">Total: ${totalCarrito.toFixed(2)}</p>
+                  <p className="total-price">Total: ${carrito.total.toFixed(2)}</p>
                 )}
               </div>
             </div>

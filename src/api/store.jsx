@@ -4,7 +4,8 @@ import usuariosReducer from './UserSlice';
 import categoriasReducer from './CategorySlice';
 import pedidosReducer from './OrderSlice';
 import productoReducer from './ProductSlice';
-import catalogoReducer from './ProductCatalogSlice'; // Ajusta la ruta
+import catalogoReducer from './ProductCatalogSlice';
+import carritoReducer from './CartSilce'
 
 export const store = configureStore({
     reducer:{
@@ -14,5 +15,6 @@ export const store = configureStore({
         pedidos: pedidosReducer,
         producto: productoReducer,
         catalogo: catalogoReducer,
+        carrito: carritoReducer,
     },
 });
