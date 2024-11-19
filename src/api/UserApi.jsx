@@ -1,8 +1,4 @@
-import axios from 'axios';
-
-const api = axios.create({
-  baseURL: 'http://localhost:8080/api/usuarios',
-});
+import api from './AxiosConfig';
 
 // Función para establecer el token en las cabeceras de axios
 export const setAuthToken = (token) => {
@@ -12,11 +8,10 @@ export const setAuthToken = (token) => {
     delete api.defaults.headers.common['Authorization'];
   }
 };
-
 // Función para crear un nuevo usuario
 export const crearUsuario = async (usuario) => {
   try {
-    const response = await api.post('/', usuario);
+    const response = await api.post('/api/usuarios/', usuario);
     return response.data;
   } catch (error) {
     throw new Error(`Error creando el usuario: ${error.message}`);
@@ -26,7 +21,7 @@ export const crearUsuario = async (usuario) => {
 // Función para actualizar un usuario existente
 export const actualizarUsuario = async (atributo, nuevoValor) => {
   try {
-    const response = await api.put('/usuarioId', null, {
+    const response = await api.put('/api/usuarios/usuarioId', null, {
       params: { atributo, nuevoValor },
     });
     return response.data;
@@ -38,7 +33,7 @@ export const actualizarUsuario = async (atributo, nuevoValor) => {
 // Función para eliminar un usuario
 export const eliminarUsuario = async () => {
   try {
-    await api.delete('/usuarioId');
+    await api.delete('/api/usuarios/usuarioId');
   } catch (error) {
     throw new Error(`Error eliminando el usuario: ${error.message}`);
   }
@@ -47,7 +42,7 @@ export const eliminarUsuario = async () => {
 // Función para obtener un usuario por ID si sos el mismo
 export const obtenerUsuario = async () => {
   try {
-    const response = await api.get('/usuarioId');
+    const response = await api.get('/api/usuarios/usuarioId');
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo el usuario: ${error.message}`);
@@ -57,7 +52,7 @@ export const obtenerUsuario = async () => {
 // Función para obtener todos los usuarios
 export const obtenerUsuarios = async () => {
   try {
-    const response = await api.get('/admin/todos');
+    const response = await api.get('/api/usuarios/admin/todos');
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo los usuarios: ${error.message}`);
@@ -67,7 +62,7 @@ export const obtenerUsuarios = async () => {
 // Función para obtener UsuarioVisualDto por ID
 export const obtenerUsuarioVisualDto = async () => {
   try {
-    const response = await api.get('/visual/usuarioId');
+    const response = await api.get('/api/usuarios/visual/usuarioId');
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo el UsuarioVisualDto: ${error.message}`);
@@ -77,35 +72,38 @@ export const obtenerUsuarioVisualDto = async () => {
 // Función para obtener todos los UsuarioVisualDto
 export const obtenerUsuariosVisualDtos = async () => {
   try {
-    const response = await api.get('/admin/visual');
+    const response = await api.get('/api/usuarios/admin/visual');
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo los UsuarioVisualDto: ${error.message}`);
   }
 };
-// Nueva función para obtener el rol del usuario autenticado
+
+// Función para obtener el rol del usuario autenticado
 export const obtenerRolUsuario = async () => {
   try {
-    const response = await api.get('/rol');
+    const response = await api.get('/api/usuarios/rol');
     return response.data; // Devuelve el rol del usuario ('admin' o 'comprador')
   } catch (error) {
     throw new Error(`Error obteniendo el rol del usuario: ${error.message}`);
   }
 };
+
 // Función para obtener un usuario por ID si sos admin
 export const obtenerUsuarioAdmin = async (usuarioId) => {
   try {
     console.log(usuarioId);
-    const response = await api.get(`/${usuarioId}`); // Cambia esto para incluir el ID en la URL
+    const response = await api.get(`/api/usuarios/${usuarioId}`); // Cambia esto para incluir el ID en la URL
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo el usuario: ${error.message}`);
   }
 };
+
 // Función para eliminar un usuario
-export const eliminarUsuarioAdmin = async (usuarioId) => { // Agregué el argumento usuarioId
+export const eliminarUsuarioAdmin = async (usuarioId) => {
   try {
-    await api.delete(`/${usuarioId}`); // Uso el usuarioId en la URL
+    await api.delete(`/api/usuarios/${usuarioId}`); // Uso el usuarioId en la URL
   } catch (error) {
     throw new Error(`Error eliminando el usuario: ${error.message}`);
   }

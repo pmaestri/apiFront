@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { crearPedido, setAuthToken, obtenerPedido} from '../../api/OrderApi.jsx';
-import { crearDetallePedido } from '../../api/OrderDetailApi.jsx';
-import { obtenerCarrito, vaciarCarrito} from '../../api/CartApi.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { 
+  crearNuevoPedido, 
+  obtenerPedidoPorId, 
+  crearNuevoDetalle,  
+} from '../../api/OrderSlice'; // Importa las acciones de tu slice
+import { setAuthToken } from '../../api/OrderApi';
+import { fetchCarrito, vaciarCarritoSlice } from '../../api/CartSilce';
 import './Order.css';
 
 const Popup = ({ detalles, onClose }) => {
@@ -13,13 +18,13 @@ const Popup = ({ detalles, onClose }) => {
         <p>El pedido se ha efectuado exitosamente! Muchas gracias por confiar en nosotros.</p>
         <h3>Detalles del Pedido:</h3>
         <ul>
-        {detalles && detalles.detallePedidoDto.length > 0 ? (
+          {detalles && detalles.detallePedidoDto.length > 0 ? (
             detalles.detallePedidoDto.map(detalle => (
               <li key={detalle.id}>
                 <p>Producto: {detalle.producto.nombre}</p>
                 <p>Cantidad: {detalle.cantidad}</p>
                 <p>Precio Unitario: ${detalle.producto.precioUnitario.toFixed(2)}</p>
-                <p>Subtotal: ${(detalle.precio).toFixed(2)}</p> {/* Usa 'detalle.precio' si el precio total está en 'detalle' */}
+                <p>Subtotal: ${(detalle.precio).toFixed(2)}</p>
               </li>
             ))
           ) : (
@@ -34,178 +39,165 @@ const Popup = ({ detalles, onClose }) => {
   );
 };
 
-
 const Pedido = () => {
   const [metodoPago, setMetodoPago] = useState('');
   const [cuotas, setCuotas] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [pedidoDetalles, setPedidoDetalles] = useState(null);
-  const [cartItems, setCartItems] = useState([]); // Estado para el carrito
-  const [totalCarrito, setTotalCarrito] = useState(0); // Estado para el total del carrito
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  // Obtener el token desde el almacenamiento local
+  const token = useSelector((state) => state.auth.token); // Asegúrate de que el token esté en el estado `user`
+  const { carrito, loading, error } = useSelector((state) => state.carrito);
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (token) {
-      setAuthToken(token);
-      console.log('Token obtenido de localStorage:', token);
-      // Obtener el carrito del usuario
-      const fetchCart = async () => {
-        try {
-          const carritoData = await obtenerCarrito(token);
-          setCartItems(carritoData.productos); // Asegúrate de que esta propiedad sea correcta
-          console.log(carritoData);
-          setTotalCarrito(carritoData.total); // Asegúrate de que esta propiedad sea correcta
-        } catch (error) {
-          console.error('Error al obtener el carrito:', error.message);
-        }
-      };
-      fetchCart();
+      dispatch(fetchCarrito(token));
     } else {
-      console.error('No se encontró un token de autenticación en localStorage');
+      console.error('No se encontró un token de autenticación');
     }
-  }, []);
+  }, [dispatch, token]);
 
-  // Función para manejar la confirmación del pedido
+  if (loading) return <p>Cargando carrito...</p>;
+  if (error) return <p>Error al cargar el carrito: {error}</p>;
+
   const handleConfirmarPedido = async () => {
     try {
-      const nuevoPedido = await crearPedido({ metodoPago, cuotas: metodoPago === 'CREDITO' ? cuotas : undefined });
-      console.log('Pedido creado:', nuevoPedido);
+      // Crear un nuevo pedido
+      setAuthToken(token);
+      const pedidoData = await dispatch(
+        crearNuevoPedido({ metodoPago, cuotas: metodoPago === 'CREDITO' ? cuotas : undefined })
+      ).unwrap();
 
-      const detalles = await Promise.all(
-        cartItems.map(async (productos) => {
-          const detalleData = {
-            productoId: productos.productoId,
-            cantidad: productos.cantidad,
-            
-          };
+      console.log('Pedido creado:', pedidoData);
 
-          return await crearDetallePedido(nuevoPedido.id, detalleData);
+      // Crear detalles del pedido
+      await Promise.all(
+        carrito.productos.map(async (item) => {
+          const detalleData = { productoId: item.productoId, cantidad: item.cantidad };
+          await dispatch(crearNuevoDetalle({ pedidoId: pedidoData.id, detalleData })).unwrap();
         })
       );
-      console.log('Detalles de pedido creados:', detalles);
 
-      const pedidoConfirmado = await obtenerPedido(nuevoPedido.id);
+      // Obtener detalles completos del pedido
+      const pedidoConfirmado = await dispatch(obtenerPedidoPorId(pedidoData.id)).unwrap();
       console.log('Pedido confirmado:', pedidoConfirmado);
-      
+
       setPedidoDetalles(pedidoConfirmado);
       setShowPopup(true);
     } catch (error) {
       console.error('Error al crear el pedido:', error.message);
     }
   };
+
   const handleClosePopup = async () => {
-    const token = localStorage.getItem('token'); // Obtiene el token del almacenamiento local
     if (token) {
       try {
-        await vaciarCarrito(token); // Vaciar el carrito
+        dispatch(vaciarCarritoSlice(token)); // Vaciar el carrito
         console.log('Carrito vaciado exitosamente.');
       } catch (error) {
         console.error('Error al vaciar el carrito:', error.message);
       }
     }
-    setShowPopup(false); // Ocultar el popup
-    navigate('/'); // Redirigir al home
+    setShowPopup(false);
+    navigate('/');
   };
 
-  // Calcular el total con descuento
   const calcularTotalConDescuento = () => {
     if (metodoPago === 'EFECTIVO' || metodoPago === 'TRANSFERENCIA') {
-      return totalCarrito * 0.9; // 10% de descuento
+      return carrito.total * 0.9; // 10% de descuento
     }
-    return totalCarrito;
+    return carrito.total;
   };
 
   const totalConDescuento = calcularTotalConDescuento();
 
   return (
     <div className="pedido-container">
-      <div className="pedido-content">
-        <div className="cart-items-container">
-          <h2>Productos en el Carrito</h2>
-          {cartItems.length === 0 ? (
-            <p>El carrito está vacío.</p>
-          ) : (
-            <ul className="pedido-list">
-              {cartItems.map((item) => (
-                <li className="pedido-list-item" key={item.id}>
-                  <div className="cart-product">
-                    <img src={`data:image/jpeg;base64,${item.imagen}`} alt={item.nombreProducto} />
-                    <div className="cart-product-details">
-                      <h3>{item.nombreProducto}</h3>
-                      {item.discount > 0 ? (
-                        <>
-                          <p className="original-price">
-                            <span style={{ textDecoration: 'line-through' }}>Precio: ${item.subtotal}</span>
-                          </p>
-                          
-                        </>
-                      ) : (
-                        <p className="product-price-order">Precio: ${item.subtotal.toFixed(2)}</p>
-                      )}
-                      <p>Cantidad: {item.cantidad}</p>
-                      <p><strong>Subtotal:</strong> ${item.total}</p>
-
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="order-confirmation-container">
-          <h2>Confirmar Pedido</h2>
-          <div>
-            <h4>Selecciona el método de pago:</h4>
-            <select className="pedido-select" value={metodoPago} onChange={(e) => setMetodoPago(e.target.value)}>
-              <option value="">Seleccionar...</option>
-              <option value="EFECTIVO">Efectivo</option>
-              <option value="TRANSFERENCIA">Transferencia</option>
-              <option value="CREDITO">Crédito</option>
-              <option value="DEBITO">Débito</option>
-            </select>
-          </div>
-          {metodoPago === 'CREDITO' && (
-            <div>
-              <h3 className="select-cuotas-header">Selecciona el número de cuotas:</h3>
-              <select className="pedido-select" value={cuotas} onChange={(e) => setCuotas(e.target.value)}>
-                <option value={1}>1 cuota</option>
-                <option value={3}>3 cuotas</option>
-                <option value={6}>6 cuotas</option>
-              </select>
+           <div className="pedido-content">
+             <div className="cart-items-container">
+               <h2>Productos en el Carrito</h2>
+               {carrito.productos.length === 0 ? (
+                <p>El carrito está vacío.</p>
+              ) : (
+                <ul className="pedido-list">
+                  {carrito.productos.map((item) => (
+                    <li className="pedido-list-item" key={item.id}>
+                      <div className="cart-product">
+                        <img src={`data:image/jpeg;base64,${item.imagen}`} alt={item.nombreProducto} />
+                        <div className="cart-product-details">
+                          <h3>{item.nombreProducto}</h3>
+                          {item.discount > 0 ? (
+                            <>
+                              <p className="original-price">
+                                <span style={{ textDecoration: 'line-through' }}>Precio: ${item.subtotal}</span>
+                              </p>
+                              
+                            </>
+                          ) : (
+                            <p className="product-price-order">Precio: ${item.subtotal.toFixed(2)}</p>
+                          )}
+                          <p>Cantidad: {item.cantidad}</p>
+                          <p><strong>Subtotal:</strong> ${item.total}</p>
+    
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-          )}
-          <button className="pedido-confirm-button" onClick={handleConfirmarPedido} disabled={!metodoPago || cartItems.length === 0}>
-            Confirmar Pedido
-          </button>
-
-          {/* Mostrar total debajo del botón Confirmar Pedido */}
-          <div className="order-total">
-            {metodoPago === 'EFECTIVO' || metodoPago === 'TRANSFERENCIA' ? (
-              <>
-                <p className="original-total-price">Total: ${totalCarrito.toFixed(2)}</p>
-                <p className="discounted-total-price">Total con Descuento: ${totalConDescuento.toFixed(2)}</p>
-              </>
-            ) : (
-              <p className="total-price">Total: ${totalCarrito.toFixed(2)}</p>
-            )}
+    
+            <div className="order-confirmation-container">
+              <h2>Confirmar Pedido</h2>
+              <div>
+                <h4>Selecciona el método de pago:</h4>
+                <select className="pedido-select" value={metodoPago} onChange={(e) => setMetodoPago(e.target.value)}>
+                  <option value="">Seleccionar...</option>
+                  <option value="EFECTIVO">Efectivo</option>
+                  <option value="TRANSFERENCIA">Transferencia</option>
+                  <option value="CREDITO">Crédito</option>
+                  <option value="DEBITO">Débito</option>
+                </select>
+              </div>
+              {metodoPago === 'CREDITO' && (
+                <div>
+                  <h3 className="select-cuotas-header">Selecciona el número de cuotas:</h3>
+                  <select className="pedido-select" value={cuotas} onChange={(e) => setCuotas(e.target.value)}>
+                    <option value={1}>1 cuota</option>
+                    <option value={3}>3 cuotas</option>
+                    <option value={6}>6 cuotas</option>
+                  </select>
+                </div>
+              )}
+              <button className="pedido-confirm-button" onClick={handleConfirmarPedido} disabled={!metodoPago || carrito.productos.length === 0}>
+                Confirmar Pedido
+              </button>
+    
+              {/* Mostrar total debajo del botón Confirmar Pedido */}
+              <div className="order-total">
+                {metodoPago === 'EFECTIVO' || metodoPago === 'TRANSFERENCIA' ? (
+                  <>
+                    <p className="original-total-price">Total: ${carrito.total.toFixed(2)}</p>
+                    <p className="discounted-total-price">Total con Descuento: ${totalConDescuento.toFixed(2)}</p>
+                  </>
+                ) : (
+                  <p className="total-price">Total: ${carrito.total.toFixed(2)}</p>
+                )}
+              </div>
+            </div>
           </div>
+    
+          {/* Mostrar el pop-up si está activo */}
+          {showPopup && (
+            <Popup 
+              detalles={pedidoDetalles} 
+              onClose={handleClosePopup}
+              
+            />
+          )}
         </div>
-      </div>
-
-      {/* Mostrar el pop-up si está activo */}
-      {showPopup && (
-        <Popup 
-          detalles={pedidoDetalles} 
-          onClose={handleClosePopup}
-          
-        />
-      )}
-    </div>
-  );
-};
+      );
+    };
 
 export default Pedido;

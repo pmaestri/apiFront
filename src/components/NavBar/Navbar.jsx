@@ -3,29 +3,44 @@ import './Navbar.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaSearch, FaShoppingCart, FaUser, FaSignOutAlt } from 'react-icons/fa'; // FaSignOutAlt para cerrar sesión
 import Cart from '../Cart/Cart.jsx';
-import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi';
-import { vaciarCarrito } from '../../api/CartApi.jsx';
+import { fetchProductosDisponiblesConDetalles } from '../../api/ProductCatalogSlice.jsx';
+import { vaciarCarritoSlice } from '../../api/CartSilce.jsx';
+import { useSelector, useDispatch } from 'react-redux';  // Importar useSelector para acceder al estado de Redux
+import { logout } from '../../api/AuthSlice.jsx'; // Acción de logout
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [productosSugeridos, setProductosSugeridos] = useState([]);
   const [showCart, setShowCart] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para verificar si está logeado
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  // Obtener el token desde el estado de Redux
+  const token = useSelector((state) => state.auth.token);  // Token desde el estado de Redux
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);  // Verifica si el token existe
 
   // Verificar si el usuario está logeado al montar el componente
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token); // Verifica si hay un token
-
+    setIsLoggedIn(!!token); // Actualiza el estado según el token de Redux
+  }, [token]); // Dependencia de token
+  useEffect(() => {
     const fetchProductos = async () => {
       if (searchQuery.length > 1) {
-        const productos = await obtenerProductosDisponiblesConDetalles();
-        const sugeridos = productos.filter(producto => 
-          producto.nombre.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setProductosSugeridos(sugeridos);
+        // Disparar la acción del thunk para obtener los productos
+        dispatch(fetchProductosDisponiblesConDetalles())
+          .unwrap()
+          .then((productos) => {
+            // Filtrar los productos sugeridos
+            const sugeridos = productos.filter((producto) =>
+              producto.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setProductosSugeridos(sugeridos);
+          })
+          .catch((error) => {
+            console.error('Error al obtener los productos:', error);
+            setProductosSugeridos([]);
+          });
       } else {
         setProductosSugeridos([]);
       }
@@ -34,19 +49,15 @@ const Navbar = () => {
     const timeoutId = setTimeout(fetchProductos, 300);
 
     return () => clearTimeout(timeoutId); // Limpia el timeout al desmontar
-  }, [searchQuery, location]); // Dependencias del efecto
+  }, [searchQuery, location, dispatch]); // Añadido `dispatch` como dependencia
 
   const handleCatalogClick = () => {
-    // Verifica si ya estás en la página de catálogo
     if (location.pathname === '/ProductCatalog') {
-      // Recarga la página
       window.location.reload();
     } else {
-      // Navega a la página de catálogo
       navigate('/ProductCatalog');
     }
   };
-
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -69,24 +80,21 @@ const Navbar = () => {
     setShowCart(!showCart);
   };
 
-// Función para cerrar sesión
-const handleLogout = async () => {
-  const token = localStorage.getItem('token'); // Obtener el token del almacenamiento local
-  if (token) {
-    try {
-      await vaciarCarrito(token); // Vaciar el carrito
-      console.log('Carrito vaciado exitosamente.');
-    } catch (error) {
-      console.error('Error al vaciar el carrito:', error.message);
+  // Función para cerrar sesión
+  const handleLogout = async () => {
+    if (token) {
+      try {
+       dispatch(vaciarCarritoSlice(token)); // Vaciar el carrito
+        console.log('Carrito vaciado exitosamente.');
+      } catch (error) {
+        console.error('Error al vaciar el carrito:', error.message);
+      }
     }
-  }
 
-  localStorage.removeItem('token');
-  localStorage.removeItem('nombreUsuario');
-  setIsLoggedIn(false);
-  navigate('/login'); // Redirigir al home después de cerrar sesión
-};
-
+    // Despachar acción de logout de Redux
+    dispatch(logout());  // Limpiar el estado de Redux
+    navigate('/login');  // Redirigir al login
+  };
 
   return (
     <nav className="navbar">
@@ -98,7 +106,7 @@ const handleLogout = async () => {
         </div>
 
         <div className="catalogo">
-        <a href="#" onClick={handleCatalogClick}>Catálogo</a>
+          <a href="#" onClick={handleCatalogClick}>Catálogo</a>
         </div>
       </div>
 

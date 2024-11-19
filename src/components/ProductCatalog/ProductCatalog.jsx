@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './ProductCatalog.css';
-import {
-    obtenerProductosDisponiblesConDetalles,
-    obtenerDetalleProducto,
-    filtrarProductos
-} from '../../api/ProductCatalogApi';
+import { fetchProductosDisponiblesConDetalles, filterProductos, fetchDetalleProducto } from '../../api/ProductCatalogSlice';
 import { FaTimes, FaShoppingCart } from 'react-icons/fa';
-import {agregarProducto} from '../../api/CartApi';
-import { obtenerCategorias } from '../../api/CategoryApi';
+import { setAuthToken } from '../../api/CartApi';
+import { agregarAlCarrito } from '../../api/CartSilce';
+import { fetchCategorias } from '../../api/CategorySlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ProductCatalog = () => {
-    const [productos, setProductos] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
@@ -21,10 +18,12 @@ const ProductCatalog = () => {
     const [message, setMessage] = useState(null);
     const [modelos, setModelos] = useState([]);
     const location = useLocation();
-    const navigate = useNavigate();
-    const [categorias, setCategorias] = useState([]);
-
-
+    const Dispatch = useDispatch();
+    const categorias = useSelector((state) => state.categorias.categorias);
+    const token = useSelector((state)=>state.auth.token);
+    const productos = useSelector((state) => state.catalogo.productosDisponibles);
+    const loading1 = useSelector((state) => state.catalogo.loading);
+    const error1 = useSelector((state) => state.catalogo.error);
     const marcas = ['IPHONE', 'SAMSUNG', 'MOTOROLA', 'GENERICO'];
     const modelosPorMarca = {
         IPHONE: ['IPHONE_15_PRO_MAX', 'IPHONE_15_PRO', 'IPHONE_15_PLUS', 'IPHONE_15', 'IPHONE_14_PRO_MAX', 'IPHONE_14_PRO', 'IPHONE_14_PLUS', 'IPHONE_14', 'IPHONE_13_PRO_MAX', 'IPHONE_13_PRO', 'IPHONE_13_MINI', 'IPHONE_13'],
@@ -32,7 +31,12 @@ const ProductCatalog = () => {
         MOTOROLA: ['MOTOROLA_EDGE_40_PRO', 'MOTOROLA_EDGE_40', 'MOTOROLA_EDGE_30_ULTRA', 'MOTOROLA_EDGE_30_FUSION', 'MOTO_G73_5G', 'MOTO_G53_5G', 'MOTO_G23', 'MOTO_G13', 'MOTO_E22', 'MOTO_E32'],
         GENERICO: []
     };
-
+    useEffect(() => {
+        const fetchData = async () => {
+            Dispatch(fetchCategorias()); // Llamamos a la acción para obtener las categorías
+        };
+        fetchData();
+    }, [Dispatch]);
     // Función para obtener el parámetro de la URL
     useEffect(() => {
         console.log("Cargando parámetros de URL...");
@@ -40,7 +44,6 @@ const ProductCatalog = () => {
         const categoriaId = params.get('categoria');
         const searchQuery = params.get('search');  // Capturamos el valor de búsqueda
         const productoId = params.get('productoId'); // Capturamos el id del producto si existe
-        console.log(productoId);
 
         if (categoriaId) {
             setFiltros((prevFiltros) => ({ ...prevFiltros, categoriaId }));
@@ -61,39 +64,19 @@ const ProductCatalog = () => {
     }, [location]);
 
     useEffect(() => {
-        console.log("Obteniendo productos...");
         const fetchProductos = async () => {
-            setLoading(true);
-            try {
-                const data = await obtenerProductosDisponiblesConDetalles();
-                console.log("Productos obtenidos:", data);
-                setProductos(data);
-            } catch (error) {
-                console.error("Error al obtener productos:", error);
-                setError(`Error al obtener productos: ${error.message}`);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProductos();
-    }, []);
-
-    useEffect(() => {
-        const fetchCategorias = async () => {
-          const token = localStorage.getItem('token'); // Obtener el token del almacenamiento local
-          if (token) {
-            try {
-              const categoriasObtenidas = await obtenerCategorias(token);
-              setCategorias(categoriasObtenidas); // Guardar las categorías en el estado
-            } catch (error) {
-              console.error('Error al obtener las categorías:', error.message);
-            }
-          }
+          Dispatch(fetchProductosDisponiblesConDetalles())
+            .unwrap() // Maneja la resolución de la promesa
+            .then((data) => {
+              console.log("Productos obtenidos:", data);
+            })
+            .catch((error) => {
+              console.error("Error al obtener productos:", error);
+            });
         };
     
-        fetchCategorias();
-      }, []);
+        fetchProductos();
+      }, [Dispatch]); // Dependencia en dispatch, no es necesario agregar productos
 
     const handleMarcaChange = (e) => {
         const marcaSeleccionada = e.target.value;
@@ -104,8 +87,12 @@ const ProductCatalog = () => {
 
     const handleFiltrarProductos = async (nombreProducto = '') => {
         console.log("Filtrando productos por:", filtros);
-        setLoading(true);
+    
+        // Establecer el estado de carga en true
+        setLoading(true);  
+        setMessage(null);  // Restablece el mensaje
         try {
+            // Prepara los filtros para enviar
             const filtrosAEnviar = {
                 ...(nombreProducto && { nombre: nombreProducto }),  // Filtramos solo por nombre cuando se usa el botón de búsqueda
                 ...(filtros.categoriaId && { categoriaId: filtros.categoriaId }),
@@ -114,11 +101,12 @@ const ProductCatalog = () => {
                 ...(filtros.marca && { marca: filtros.marca.toUpperCase() }),
                 ...(filtros.modelo && { modelo: filtros.modelo.toUpperCase() })
             };
-
-            const dataFiltrada = await filtrarProductos(filtrosAEnviar);
+    
+            // Despacha el thunk para filtrar productos
+            const dataFiltrada = await Dispatch(filterProductos(filtrosAEnviar)).unwrap();
+    
             console.log("Productos filtrados:", dataFiltrada);
-            setProductos(dataFiltrada);
-
+    
             if (dataFiltrada.length === 0) {
                 setMessage(`No se han encontrado productos para los criterios seleccionados.`);
             } else {
@@ -128,22 +116,27 @@ const ProductCatalog = () => {
             console.error("Error al filtrar productos:", error);
             setError(`Error al filtrar productos: ${error.message}`);
         } finally {
-            setLoading(false);
+            setLoading(false);  // Se termina la carga
         }
     };
 
     const handleVerDetalleProducto = async (productoId) => {
-        setLoading(true);
+        setLoading(true);  // Establece el estado de carga a true
+        setError(null);  // Restablece el mensaje de error
+    
         try {
             console.log("Obteniendo detalles del producto:", productoId);
-            const detalle = await obtenerDetalleProducto(productoId);
+    
+            // Despacha el thunk para obtener el detalle del producto
+            const detalle = await Dispatch(fetchDetalleProducto(productoId)).unwrap();
+            
             console.log("Detalle del producto:", detalle);
-            setProductoSeleccionado(detalle);
+            setProductoSeleccionado(detalle);  // Guarda el detalle del producto en el estado local
         } catch (error) {
             console.error("Error al obtener el detalle del producto:", error);
             setError(`Error al obtener el detalle del producto: ${error.message}`);
         } finally {
-            setLoading(false);
+            setLoading(false);  // Termina el estado de carga
         }
     };
 
@@ -176,9 +169,6 @@ const ProductCatalog = () => {
     };
     const addToCart = async (productoId,cantidad) => {
         console.log("Intentando agregar al carrito...");
-
-        
-        const token = localStorage.getItem('token'); // Obtén el token desde localStorage
     
         if (!token) {
             alert("Por favor, inicia sesión para agregar productos al carrito.");
@@ -186,11 +176,11 @@ const ProductCatalog = () => {
         }
     
         try {
-            
+            console.log(token);
             // Llama a la función que realiza la petición al backend para agregar el producto al carrito
             console.log(productoId, cantidad);
-            const response = await agregarProducto(productoId, cantidad, token);
-            console.log(response); // Mensaje de éxito del backend
+            setAuthToken(token);
+            Dispatch(agregarAlCarrito({productoId: productoId,cantidad: cantidad,token: token}));
             
     
             // Muestra un mensaje de éxito temporal
@@ -271,9 +261,9 @@ const ProductCatalog = () => {
                 </div>
 
                 <div className="product-list">
-                    {loading ? (
+                    {loading1 ? (
                         <p>Cargando productos...</p>
-                    ) : error ? (
+                    ) : error1 ? (
                         <p>Error: {error}</p>
                     ) : (
                         productos.length > 0 ? (

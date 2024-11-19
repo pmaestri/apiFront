@@ -64,6 +64,7 @@ export const obtenerCarrito = async (token) => {
     const response = await api.get('/obtener', {
       headers: { Authorization: `Bearer ${token}` },
     });
+    console.log(response.data);
     return response.data; // Retorna el carrito en formato DTO
   } catch (error) {
     throw new Error(`Error al obtener el carrito: ${error.response?.data?.message || error.message}`);
