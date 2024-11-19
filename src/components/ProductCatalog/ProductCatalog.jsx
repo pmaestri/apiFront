@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './ProductCatalog.css';
 import { fetchProductosDisponiblesConDetalles, filterProductos, fetchDetalleProducto } from '../../api/ProductCatalogSlice';
 import { FaTimes, FaShoppingCart } from 'react-icons/fa';
-import {agregarProducto, setAuthToken} from '../../api/CartApi';
+import { setAuthToken } from '../../api/CartApi';
+import { agregarAlCarrito } from '../../api/CartSilce';
 import { fetchCategorias } from '../../api/CategorySlice';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -179,8 +180,7 @@ const ProductCatalog = () => {
             // Llama a la función que realiza la petición al backend para agregar el producto al carrito
             console.log(productoId, cantidad);
             setAuthToken(token);
-            const response = await agregarProducto(productoId, cantidad, token);
-            console.log(response); // Mensaje de éxito del backend
+            Dispatch(agregarAlCarrito({productoId: productoId,cantidad: cantidad,token: token}));
             
     
             // Muestra un mensaje de éxito temporal

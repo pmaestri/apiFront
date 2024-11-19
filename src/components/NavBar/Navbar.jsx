@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaSearch, FaShoppingCart, FaUser, FaSignOutAlt } from 'react-icons/fa'; // FaSignOutAlt para cerrar sesión
 import Cart from '../Cart/Cart.jsx';
 import { fetchProductosDisponiblesConDetalles } from '../../api/ProductCatalogSlice.jsx';
-import { vaciarCarrito } from '../../api/CartApi.jsx';
+import { vaciarCarritoSlice } from '../../api/CartSilce.jsx';
 import { useSelector, useDispatch } from 'react-redux';  // Importar useSelector para acceder al estado de Redux
 import { logout } from '../../api/AuthSlice.jsx'; // Acción de logout
 
@@ -84,7 +84,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     if (token) {
       try {
-        await vaciarCarrito(token); // Vaciar el carrito
+       dispatch(vaciarCarritoSlice(token)); // Vaciar el carrito
         console.log('Carrito vaciado exitosamente.');
       } catch (error) {
         console.error('Error al vaciar el carrito:', error.message);
