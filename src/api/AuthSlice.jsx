@@ -44,6 +44,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.token = null; // Al hacer logout, limpiamos el token
+  
     },
   },
   extraReducers: (builder) => {
@@ -86,7 +87,11 @@ const authSlice = createSlice({
       .addCase(registerAsAdmin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(logout, (state) => {
+        state.token = null; 
       });
+      
   },
 });
 

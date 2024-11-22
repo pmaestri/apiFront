@@ -1,5 +1,7 @@
-import api from './AxiosConfig';
-
+import axios from "axios";
+const api = axios.create({
+  baseURL: 'http://localhost:8080',
+});
 // Función para establecer el token en las cabeceras de axios
 export const setAuthToken = (token) => {
   if (token) {

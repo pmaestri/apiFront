@@ -14,16 +14,21 @@ const Login = () => {
   const dispatch = useDispatch();
 
   // Obtener el token del estado global
-  const { token, loading, error } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
+  const token = useSelector((state) => state.auth.token);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMessage(null);
     try {
       // Despacha la acción de autenticación
-      await dispatch(authenticate({ nombreUsuario, contrasenia })).unwrap();
+      console.log(token);
+      const hola = await dispatch(authenticate({ nombreUsuario, contrasenia })).unwrap();
+      //console.log(hola)
+      setAuthToken(hola);
+      
       const response = await dispatch(fetchRolUsuario());
-      console.log(response.payload); // Esto debería ser el rol del usuario
+      //console.log(response.payload); // Esto debería ser el rol del usuario
 
       // Redirigir según el rol
       if (response.payload === 'COMPRADOR') {
@@ -61,6 +66,9 @@ const Login = () => {
             value={nombreUsuario}
             onChange={(e) => setNombreUsuario(e.target.value)}
             required
+            onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+            onInput={(e) => e.target.setCustomValidity('')}
+            
           />
         </div>
         <div>
@@ -70,6 +78,9 @@ const Login = () => {
             value={contrasenia}
             onChange={(e) => setContrasenia(e.target.value)}
             required
+            onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+            onInput={(e) => e.target.setCustomValidity('')}
+            
           />
         </div>
 

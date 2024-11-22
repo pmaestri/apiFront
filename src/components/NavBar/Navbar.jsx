@@ -7,6 +7,7 @@ import { fetchProductosDisponiblesConDetalles } from '../../api/ProductCatalogSl
 import { vaciarCarritoSlice } from '../../api/CartSilce.jsx';
 import { useSelector, useDispatch } from 'react-redux';  // Importar useSelector para acceder al estado de Redux
 import { logout } from '../../api/AuthSlice.jsx'; // Acción de logout
+import { logoutUsuario } from '../../api/UserSlice';
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,11 +20,14 @@ const Navbar = () => {
   // Obtener el token desde el estado de Redux
   const token = useSelector((state) => state.auth.token);  // Token desde el estado de Redux
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);  // Verifica si el token existe
+  const rol = useSelector((state) => state.usuarios.rol);
 
   // Verificar si el usuario está logeado al montar el componente
   useEffect(() => {
     setIsLoggedIn(!!token); // Actualiza el estado según el token de Redux
   }, [token]); // Dependencia de token
+
+
   useEffect(() => {
     const fetchProductos = async () => {
       if (searchQuery.length > 1) {
@@ -84,8 +88,12 @@ const Navbar = () => {
   const handleLogout = async () => {
     if (token) {
       try {
-       dispatch(vaciarCarritoSlice(token)); // Vaciar el carrito
-        console.log('Carrito vaciado exitosamente.');
+        if(rol === 'COMPRADOR'){
+          console.log("hola", rol);
+          dispatch(vaciarCarritoSlice(token)); // Vaciar el carrito
+          console.log('Carrito vaciado exitosamente.');
+        }
+      
       } catch (error) {
         console.error('Error al vaciar el carrito:', error.message);
       }
@@ -93,6 +101,10 @@ const Navbar = () => {
 
     // Despachar acción de logout de Redux
     dispatch(logout());  // Limpiar el estado de Redux
+    dispatch(logoutUsuario());
+    
+    console.log(rol);
+    
     navigate('/login');  // Redirigir al login
   };
 
@@ -141,7 +153,10 @@ const Navbar = () => {
         </div>
 
         <div className="icon-container">
-          <FaShoppingCart className="nav-icon" onClick={toggleCart} title="Carrito" />
+          {/* Mostrar el icono del carrito solo si el usuario no es un administrador */}
+          {rol !== 'ADMIN' && (
+            <FaShoppingCart className="nav-icon" onClick={toggleCart} title="Carrito" />
+          )}
         </div>
 
         {isLoggedIn ? (

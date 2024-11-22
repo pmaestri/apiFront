@@ -18,7 +18,7 @@ const UserAdmin = () => {
   const dispatch = useDispatch();
 
   const usuarios = useSelector((state) => state.usuarios.usuariosDTO || []);
-  const usuarioBuscado = useSelector((state) => state.usuarios.usuarioDTO);
+  const usuarioBuscado = useSelector((state) => state.usuarios.usuarioAdminDTO);
   const rol = useSelector((state) => state.usuarios.rol);
   const token = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.usuarios.error);
@@ -55,6 +55,7 @@ const UserAdmin = () => {
       setVerTodosVisible(false);
     } else {
       console.warn('El campo de búsqueda está vacío.');
+      
     }
   };
 
@@ -78,7 +79,7 @@ const UserAdmin = () => {
       <AdminNavbar />
       <div className="header">
         <h1 className="title">Administración de Usuarios</h1>
-        {error && <p className="error-message-User">{`Error: ${error}`}</p>}
+        {error && <p className="error-message-User">{`Usuario Invalido`}</p>}
       </div>
   
       <div className="search-bar-user">
@@ -95,7 +96,6 @@ const UserAdmin = () => {
         </button>
       </div>
   
-      {loading && <p>Cargando...</p>}
   
       {usuarioBuscado && !verTodosVisible && (
         <div className="card">

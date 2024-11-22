@@ -176,6 +176,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import './CategoryAdmin.css'; 
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCategorias, deleteCategoria, addCategoria } from '../../api/CategorySlice.jsx'; // Importar los actions de la slice
+import { setAuthToken } from '../../api/CategoryApi.jsx';
 
 const CategoryAdmin = () => {
     const [categoryName, setCategoryName] = useState('');
@@ -193,8 +194,13 @@ const CategoryAdmin = () => {
     const error = useSelector((state) => state.categorias.error);
     const dispatch = useDispatch();
 
+
     useEffect(() => {
         const fetchData = async () => {
+            console.log(token);
+            console.log(rol);
+           
+
             if (token) {
                 // Verificar el rol y navegar si no es ADMIN
                 if (rol !== 'ADMIN') {
@@ -202,6 +208,7 @@ const CategoryAdmin = () => {
                 } else {
                     setIsAdmin(true); 
                     dispatch(fetchCategorias(token)); // Llamamos a la acción para obtener las categorías
+                    setAuthToken(token);
                 }
             } else {
                 navigate('/login');
@@ -212,6 +219,7 @@ const CategoryAdmin = () => {
     }, [token, navigate, rol, dispatch]);
 
     const handleCreateCategory = async (event) => {
+
         event.preventDefault(); 
 
         if (!categoryName.trim()) {
@@ -224,6 +232,8 @@ const CategoryAdmin = () => {
         };
 
         try {
+            console.log(token);
+            console.log(rol);
             await dispatch(addCategoria(newCategory)); // Llamamos a la acción para crear la categoría
             setSuccessMessage(`Categoría creada: ${categoryName}`);
             setCategoryName(''); 

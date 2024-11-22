@@ -12,6 +12,7 @@ const Registration = () => {
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [success, setSuccess] = useState(null);
 
   // Obtener el estado de Redux
   const { loading, error, token } = useSelector((state) => state.auth);
@@ -49,13 +50,14 @@ const Registration = () => {
     };
 
     dispatch(register(request));
+    
   };
 
   // Verificar si el registro fue exitoso
   if (token) {
     setTimeout(() => {
       // Redirigir o mostrar mensaje de éxito
-      alert('Usuario registrado correctamente!');
+      setSuccess('Usuario registrado correctamente!');
     }, 1000);
   }
 
@@ -64,6 +66,7 @@ const Registration = () => {
       <h2>Registrar Usuario</h2>
       <div className="message-container">
         {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
         {loading && <p className="loading-message">Cargando...</p>}
       </div>
       <form onSubmit={handleSubmit}>
@@ -75,6 +78,8 @@ const Registration = () => {
               value={nombre} 
               onChange={(e) => setNombre(e.target.value)} 
               required 
+              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
             />
           </div>
         </div>
@@ -86,6 +91,8 @@ const Registration = () => {
               value={apellido} 
               onChange={(e) => setApellido(e.target.value)} 
               required 
+              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
             />
           </div>
         </div>
@@ -97,6 +104,8 @@ const Registration = () => {
               value={nombreUsuario} 
               onChange={(e) => setNombreUsuario(e.target.value)} 
               required 
+              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
             />
           </div>
         </div>
@@ -120,6 +129,8 @@ const Registration = () => {
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               required 
+              onInvalid={(e) => e.target.setCustomValidity('Por favor, complete este campo.')}
+              onInput={(e) => e.target.setCustomValidity('')} // Limpia el mensaje al modificar el campo
             />
           </div>
         </div>

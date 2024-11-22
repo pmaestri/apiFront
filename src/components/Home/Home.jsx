@@ -9,35 +9,61 @@ import { faShippingFast, faTag, faUndoAlt } from '@fortawesome/free-solid-svg-ic
 import imagen1 from '../../assets/images/imagen1.png';
 import imagen2 from '../../assets/images/imagen2.png';
 import imagen3 from '../../assets/images/imagen3.png';
-import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi';
+//import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi';
+import { useDispatch, useSelector } from 'react-redux';
+//import { fetchProductosDisponiblesConDetalles } from '../../api/ProductCatalogSlice';
+import { fetchUsuarioVisualDto } from '../../api/UserSlice';
+import { setAuthToken } from '../../api/UserApi';
+
 
 const Home = () => {
   const navigate = useNavigate();
   const sliderRef = React.useRef(null);
-
-  const [nombreUsuario, setNombreUsuario] = useState('');
+  const dispatch = useDispatch();
+  const [nombre, setNombre] = useState(null);
+  
   const [featuredProducts, setFeaturedProducts] = useState([]);
 
+  //const { productosDisponibles, loading } = useSelector((state) => state.productosDisponibles);
+  const token = useSelector((state) => state.auth.token);
+  const nombreUsuario = useSelector((state) => state.usuarios.usuarioDTO);
+  console.log(nombreUsuario)
+  console.log(token);
+  
+
   useEffect(() => {
+    if (token && !nombreUsuario) {
+      setAuthToken(token);
+      dispatch(fetchUsuarioVisualDto());
+      
+    }
+    if (nombreUsuario){
+      setNombre(nombreUsuario.nombreUsuario);
+    }
+  }, [dispatch, nombreUsuario]);
+
+ /* useEffect(() => {
     const storedNombreUsuario = localStorage.getItem('nombreUsuario');
     if (storedNombreUsuario) {
       setNombreUsuario(storedNombreUsuario);
     }
-  }, []);
+  }, []);*/
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const productos = await obtenerProductosDisponiblesConDetalles();
-        const randomProducts = productos.sort(() => 0.5 - Math.random()).slice(0, 5);
-        setFeaturedProducts(randomProducts);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  // useEffect(() => {
+  //   // Despachar la acción para obtener los productos si aún no están cargados
+  //   if (!loading && productosDisponibles.length === 0) {
+  //     dispatch(fetchProductosDisponiblesConDetalles());
+  //   }
+  // }, [dispatch, loading, productosDisponibles.length]);
 
-    fetchProducts();
-  }, []);
+  // useEffect(() => {
+  //   // Este efecto se ejecuta solo cuando los productos disponibles están cargados
+  //   if (productosDisponibles.length > 0) {
+  //     const randomProducts = productosDisponibles.sort(() => 0.5 - Math.random()).slice(0, 5);
+  //     setFeaturedProducts(randomProducts);
+  //   }
+  // }, [productosDisponibles]);
+
 
   const images = [imagen1, imagen2, imagen3];
   const imageDescriptions = [
@@ -66,9 +92,9 @@ const Home = () => {
     <div className="home">
       <div className="Bienvenido-message-home">
         <h2>
-          {nombreUsuario === 'topCases' 
+          {nombre === 'topCases' 
             ? '¡Bienvenido Admin a Top Cases!' 
-            : `¡Bienvenido${nombreUsuario ? ` ${nombreUsuario}` : ''} a Top Cases!`}
+            : `¡Bienvenido${nombre? ` ${nombre}` : ''} a Top Cases!`}
         </h2>
       </div>
 

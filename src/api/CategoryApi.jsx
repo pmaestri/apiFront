@@ -1,9 +1,22 @@
-import api from './AxiosConfig'; // Importamos la configuración del interceptor
+import axios from "axios";
+const api = axios.create({
+  baseURL: 'http://localhost:8080',
+});
+// Función para establecer el token en las cabeceras de axios
+export const setAuthToken = (token) => {
+    if (token) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+      delete api.defaults.headers.common['Authorization'];
+    }
+  };
 
 // Crear una nueva categoría
 export const crearCategoria = async (categoria) => {
   try {
+    console.log(categoria);
       const response = await api.post('/api/categorias', categoria);
+      console.log(response.data)
       return response.data; // Retorna la categoría creada
   } catch (error) {
       throw new Error(`Error al crear la categoría: ${error.response?.data?.message || error.message}`);

@@ -119,12 +119,16 @@ const usuariosSlice = createSlice({
   initialState: {
     usuario: null,
     usuarioDTO: null,
+    usuarioAdminDTO: null,
     usuariosDTO: [],
     loading: false,
     error: null,
     rol: null,
   },
-  reducers: {},
+  reducers: {    logoutUsuario: (state) => {
+    state.usuarioDTO = null; // Limpiamos el usuarioDTO cuando se hace logout
+    state.rol = null;
+  },},
   extraReducers: (builder) => {
     builder
       // Fetch Usuario
@@ -212,7 +216,7 @@ const usuariosSlice = createSlice({
       })
       .addCase(fetchUsuarioAdmin.fulfilled, (state, action) => {
         state.loading = false;
-        state.usuarioDTO = action.payload;
+        state.usuarioAdminDTO = action.payload;
       })
       .addCase(fetchUsuarioAdmin.rejected, (state, action) => {
         state.loading = false;
@@ -225,7 +229,7 @@ const usuariosSlice = createSlice({
       })
       .addCase(deleteUsuarioAdmin.fulfilled, (state, action) => {
         state.loading = false;
-        state.usuarioDTO = state.data.filter((usuario) => usuario.id !== action.payload);
+        state.usuarioAdminDTO = state.data.filter((usuario) => usuario.id !== action.payload);
       })
       .addCase(deleteUsuarioAdmin.rejected, (state, action) => {
         state.loading = false;
@@ -259,6 +263,8 @@ const usuariosSlice = createSlice({
       });
   },
 });
+export const { logoutUsuario } = usuariosSlice.actions;
 
 // Exporta el reducer
 export default usuariosSlice.reducer;
+
