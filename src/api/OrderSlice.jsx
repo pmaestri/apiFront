@@ -40,17 +40,26 @@ export const obtenerPedidosDelAdmin = createAsyncThunk(
   }
 );
 
-export const obtenerTodosLosPedidos = createAsyncThunk(
-  'pedidos/obtenerPedidos',
-  async (_, { rejectWithValue }) => {
-    try {
-      const data = await obtenerPedidos();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
+// export const obtenerTodosLosPedidos = createAsyncThunk(
+//   'pedidos/obtenerPedidos',
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const data = await obtenerPedidos();
+//       return data;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+export const obtenerTodosLosPedidos = createAsyncThunk('pedidos/obtenerPedidos', async (_, thunkAPI) => {
+  try {
+    return await obtenerPedidos();
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
-);
+});
+
 
 export const crearNuevoPedido = createAsyncThunk(
   'pedidos/crearPedido',
@@ -100,7 +109,11 @@ const pedidosSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    cleanPedido: (state) => {
+      state.pedido = null;
+    }
+  },
   extraReducers: (builder) => {
     // Manejo de pedidos
     builder
@@ -203,5 +216,7 @@ const pedidosSlice = createSlice({
       });
   },
 });
+
+export const { cleanPedido } = pedidosSlice.actions;
 
 export default pedidosSlice.reducer;

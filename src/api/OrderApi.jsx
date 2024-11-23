@@ -1,22 +1,23 @@
-import axios from 'axios';
+// import axios from 'axios';
 
-const api = axios.create({
-  baseURL: 'http://localhost:8080/api/pedidos',
-});
+// const api = axios.create({
+//   baseURL: 'http://192.168.100.129:8080/api/pedidos',
+// });
+import api from './Axiosconfig';
 
 // Función para establecer el token en las cabeceras de axios
-export const setAuthToken = (token) => {
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete api.defaults.headers.common['Authorization'];
-  }
-};
+// export const setAuthToken = (token) => {
+//   if (token) {
+//     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+//   } else {
+//     delete api.defaults.headers.common['Authorization'];
+//   }
+// };
 
 export const crearPedido = async (pedido) => {
   try {
     console.log('Creating order with payload:', pedido); // Log the payload
-    const response = await api.post('/crear', pedido); // Cambiar la URL para omitir el usuarioId
+    const response = await api.post('/api/pedidos/crear', pedido); // Cambiar la URL para omitir el usuarioId
     console.log('Order created successfully:', response.data); // Log success
     return response.data;
   } catch (error) {
@@ -29,7 +30,7 @@ export const crearPedido = async (pedido) => {
 // Función para obtener un pedido por su ID
 export const obtenerPedido = async (pedidoId) => {
   try {
-    const response = await api.get(`/${pedidoId}`);
+    const response = await api.get(`/api/pedidos/${pedidoId}`);
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo el pedido: ${error.message}`);
@@ -39,7 +40,7 @@ export const obtenerPedido = async (pedidoId) => {
 // Función para obtener los pedidos de un usuario
 export const obtenerPedidosUsuario = async () => {
   try {
-    const response = await api.get('/usuarioId');
+    const response = await api.get('/api/pedidos/usuarioId');
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo los pedidos del usuario: ${error.message}`);
@@ -49,7 +50,7 @@ export const obtenerPedidosUsuario = async () => {
 // Función para obtener los pedidos de un usuario (ADMIN)
 export const obtenerPedidosUsuarioAdmin = async (usuarioId) => {
   try {
-    const response = await api.get(`/admin/${usuarioId}`);
+    const response = await api.get(`/api/pedidos/admin/${usuarioId}`);
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo los pedidos del usuario (ADMIN): ${error.message}`);
@@ -59,7 +60,7 @@ export const obtenerPedidosUsuarioAdmin = async (usuarioId) => {
 // Función para obtener todos los pedidos
 export const obtenerPedidos = async () => {
   try {
-    const response = await api.get('');
+    const response = await api.get('/api/pedidos');
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo los pedidos: ${error.message}`);

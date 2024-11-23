@@ -1,12 +1,13 @@
 // producto e imagen
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  setAuthToken,
   crearProducto,
   actualizarProducto,
   eliminarProducto,
   obtenerProducto,
   obtenerProductos,
+  agregarProductoACatalogo,
+  eliminarProductoDelCatalogo,
 } from './ProductApi'; // Ajusta el path según tu estructura
 import { updateImagen } from './ImageApi'; // Ajusta el path según tu estructura
 
@@ -15,7 +16,7 @@ export const fetchProductos = createAsyncThunk(
   'producto/fetchProductos',
   async (token, { rejectWithValue }) => {
     try {
-      setAuthToken(token);
+      // setAuthToken(token);
       return await obtenerProductos(token);
     } catch (error) {
       return rejectWithValue(error.message);
@@ -79,6 +80,22 @@ export const updateProductoImagen = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
+  }
+);
+
+export const addProductoACatalogo = createAsyncThunk(
+  'catalogo/addProductoACatalogo',
+  async (productoId) => {
+    await agregarProductoACatalogo(productoId);
+    return productoId; // Devolvemos el productoId agregado para actualizar el estado
+  }
+);
+
+export const removeProductoDelCatalogo = createAsyncThunk(
+  'catalogo/removeProductoDelCatalogo',
+  async (productoId) => {
+    await eliminarProductoDelCatalogo(productoId);
+    return productoId; // Devolvemos el productoId eliminado para actualizar el estado
   }
 );
 
@@ -178,6 +195,35 @@ const productoSlice = createSlice({
       .addCase(updateProductoImagen.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
+      })
+      // Agregar producto al catálogo
+      .addCase(addProductoACatalogo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addProductoACatalogo.fulfilled, (state, action) => {
+        state.loading = false;
+        // Agregar el producto al catálogo
+        const productoId = action.payload;
+        const producto = state.productosDisponibles.find((p) => p.id === productoId);
+        if (producto) {
+          state.catalogo.push(producto);
+        }
+      })
+      .addCase(addProductoACatalogo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      // Eliminar producto del catálogo
+      .addCase(removeProductoDelCatalogo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(removeProductoDelCatalogo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.catalogo = state.catalogo.filter((p) => p.id !== action.payload);
+      })
+      .addCase(removeProductoDelCatalogo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });

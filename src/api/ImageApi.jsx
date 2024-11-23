@@ -1,13 +1,14 @@
-import axios from 'axios';
+// import axios from 'axios';
 
-const api = axios.create({
-  baseURL: 'http://localhost:8080/api/imagenes',
-});
+// const api = axios.create({
+//   baseURL: 'http://192.168.100.129:8080/api/imagenes',
+// });
+import api from './Axiosconfig';
 
 // Función para mostrar una imagen por su ID
 export const fetchImagen = async (id) => {
   try {
-    const response = await api.get('', {
+    const response = await api.get('api/imagenes', {
       params: { id },
     });
     return response.data;
@@ -23,7 +24,7 @@ export const createImagen = async (solicitud) => {
     formData.append('archivo', solicitud.archivo);
     formData.append('nombre', solicitud.nombre);
 
-    const response = await api.post('', formData, {
+    const response = await api.post('api/imagenes', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -37,7 +38,7 @@ export const createImagen = async (solicitud) => {
 // Función para eliminar una imagen
 export const deleteImagen = async (imagenId) => {
   try {
-    await api.delete(`/${imagenId}`);
+    await api.delete(`api/imagenes/${imagenId}`);
   } catch (error) {
     throw new Error(`Error deleting imagen: ${error.message}`);
   }
@@ -50,7 +51,7 @@ export const updateImagen = async (productoId, archivo, nombre,token) => {
     formData.append('archivo', archivo); // Asegúrate de que este nombre coincida con el del modelo
     formData.append('nombre', nombre); // Asegúrate de incluir este campo si es necesario
 
-    const response = await api.put(`imagen/${productoId}`, formData, {
+    const response = await api.put(`api/imagenes/imagen/${productoId}`, formData, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'multipart/form-data'

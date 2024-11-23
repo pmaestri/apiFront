@@ -1,15 +1,17 @@
-import axios from "axios";
-const api = axios.create({
-  baseURL: 'http://localhost:8080',
-});
+// import axios from "axios";
+// const api = axios.create({
+//   baseURL: 'http://192.168.100.129:8080',
+// });
+import api from './Axiosconfig';
+
 // Función para establecer el token en las cabeceras de axios
-export const setAuthToken = (token) => {
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete api.defaults.headers.common['Authorization'];
-  }
-};
+// export const setAuthToken = (token) => {
+//   if (token) {
+//     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+//   } else {
+//     delete api.defaults.headers.common['Authorization'];
+//   }
+// };
 // Función para crear un nuevo usuario
 export const crearUsuario = async (usuario) => {
   try {
@@ -94,7 +96,6 @@ export const obtenerRolUsuario = async () => {
 // Función para obtener un usuario por ID si sos admin
 export const obtenerUsuarioAdmin = async (usuarioId) => {
   try {
-    console.log(usuarioId);
     const response = await api.get(`/api/usuarios/${usuarioId}`); // Cambia esto para incluir el ID en la URL
     return response.data;
   } catch (error) {

@@ -3,8 +3,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   obtenerCatalogo,
   obtenerProductosDisponiblesConDetalles,
-  agregarProductoACatalogo,
-  eliminarProductoDelCatalogo,
   crearCatalogo,
   obtenerDetalleProducto,
   filtrarProductos,
@@ -21,22 +19,6 @@ export const fetchProductosDisponiblesConDetalles = createAsyncThunk(
   async () => {
     const data = await obtenerProductosDisponiblesConDetalles();
     return data;
-  }
-);
-
-export const addProductoACatalogo = createAsyncThunk(
-  'catalogo/addProductoACatalogo',
-  async (productoId) => {
-    await agregarProductoACatalogo(productoId);
-    return productoId; // Devolvemos el productoId agregado para actualizar el estado
-  }
-);
-
-export const removeProductoDelCatalogo = createAsyncThunk(
-  'catalogo/removeProductoDelCatalogo',
-  async (productoId) => {
-    await eliminarProductoDelCatalogo(productoId);
-    return productoId; // Devolvemos el productoId eliminado para actualizar el estado
   }
 );
 
@@ -98,35 +80,6 @@ const catalogoSlice = createSlice({
         state.productosDisponibles = action.payload;
       })
       .addCase(fetchProductosDisponiblesConDetalles.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      // Agregar producto al catálogo
-      .addCase(addProductoACatalogo.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(addProductoACatalogo.fulfilled, (state, action) => {
-        state.loading = false;
-        // Agregar el producto al catálogo
-        const productoId = action.payload;
-        const producto = state.productosDisponibles.find((p) => p.id === productoId);
-        if (producto) {
-          state.catalogo.push(producto);
-        }
-      })
-      .addCase(addProductoACatalogo.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      // Eliminar producto del catálogo
-      .addCase(removeProductoDelCatalogo.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(removeProductoDelCatalogo.fulfilled, (state, action) => {
-        state.loading = false;
-        state.catalogo = state.catalogo.filter((p) => p.id !== action.payload);
-      })
-      .addCase(removeProductoDelCatalogo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

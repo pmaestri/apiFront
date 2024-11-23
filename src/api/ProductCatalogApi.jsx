@@ -1,8 +1,9 @@
-import axios from 'axios';
+// import axios from 'axios';
 
-const api = axios.create({
-  baseURL: 'http://localhost:8080/api/catalogos',
-});
+// const api = axios.create({
+//   baseURL: 'http://192.168.100.129:8080/api/catalogos',
+// });
+import api from './Axiosconfig';
 
 // Función para obtener todos los catálogos
 export const obtenerCatalogo = async () => {
@@ -17,35 +18,17 @@ export const obtenerCatalogo = async () => {
 // Función para obtener productos disponibles con detalles
 export const obtenerProductosDisponiblesConDetalles = async () => {
   try {
-    const response = await api.get('/disponibles');
+    const response = await api.get('/api/catalogos/disponibles');
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo productos disponibles: ${error.message}`);
   }
 };
 
-// Función para agregar un producto a un catálogo
-export const agregarProductoACatalogo = async (productoId) => {
-  try {
-    await api.post(`/${productoId}`);
-  } catch (error) {
-    throw new Error(`Error agregando producto al catálogo: ${error.message}`);
-  }
-};
-
-// Función para eliminar un producto de un catálogo
-export const eliminarProductoDelCatalogo = async (productoId) => {
-  try {
-    await api.delete(`/${productoId}`);
-  } catch (error) {
-    throw new Error(`Error eliminando producto del catálogo: ${error.message}`);
-  }
-};
-
 // Función para crear un catálogo
 export const crearCatalogo = async (catalogo) => {
   try {
-    await api.post('/', catalogo);
+    await api.post('/api/catalogos/', catalogo);
   } catch (error) {
     throw new Error(`Error creando el catálogo: ${error.message}`);
   }
@@ -54,7 +37,7 @@ export const crearCatalogo = async (catalogo) => {
 // Función para obtener el detalle de un producto
 export const obtenerDetalleProducto = async (productoId) => {
   try {
-    const response = await api.get(`/${productoId}`);
+    const response = await api.get(`/api/catalogos/${productoId}`);
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo el detalle del producto: ${error.message}`);
@@ -64,7 +47,7 @@ export const obtenerDetalleProducto = async (productoId) => {
 // Función para filtrar productos
 export const filtrarProductos = async (filtros) => {
   try {
-    const response = await api.get('/filtrar', { params: filtros });
+    const response = await api.get('/api/catalogos/filtrar', { params: filtros });
     return response.data;
   } catch (error) {
     throw new Error(`Error filtrando productos: ${error.message}`);

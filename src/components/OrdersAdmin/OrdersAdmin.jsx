@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminNavbar from '../AdminNavbar/AdminNavbar.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAuthToken } from '../../api/OrderApi.jsx';
-import { obtenerPedidoPorId, obtenerTodosLosPedidos } from '../../api/OrderSlice.jsx'; // Importar las acciones de la slice
+// import { setAuthToken } from '../../api/OrderApi.jsx';
+import { obtenerPedidoPorId, obtenerTodosLosPedidos, cleanPedido } from '../../api/OrderSlice.jsx'; // Importar las acciones de la slice
 import { fetchRolUsuario } from '../../api/UserSlice.jsx';
 import './OrdersAdmin.css';
 
@@ -11,7 +11,8 @@ const Orders = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [pedidoId, setPedidoId] = useState('');
-  const [pedidoBuscado, setPedidoBuscado] = useState(null);
+  const [setPedidoBuscado] = useState(null);
+  const pedidoBuscado = useSelector((state) => state.pedidos.pedido);
   const [verTodosVisible, setVerTodosVisible] = useState(false);
   const [error, setError] = useState(null);
 
@@ -19,14 +20,20 @@ const Orders = () => {
   const token = useSelector((state)=> state.auth.token);
   const { rol, loading, error: errorUsuario } = useSelector((state) => state.usuarios);
   const { pedidos, loading: loadingPedidos, error: errorPedidos } = useSelector((state) => state.pedidos);
-  setAuthToken(token);
+  // setAuthToken(token);
 
   useEffect(() => {
-    if (!rol) {
-      dispatch(fetchRolUsuario()); // Obtener rol del usuario
-    } else if (rol !== 'ADMIN') {
-      navigate('/');
+    if (token) {
+      dispatch(fetchRolUsuario());
+      if (rol && rol !== 'ADMIN') {
+        console.warn('Usuario no autorizado, redirigiendo...');
+        navigate('/');
+      }
+    } else {
+      console.warn('Token no encontrado, redirigiendo al login...');
+      navigate('/login');
     }
+    dispatch(cleanPedido());
   }, [rol, navigate, dispatch]);
 
   // Función para obtener un pedido específico por ID
@@ -34,16 +41,17 @@ const Orders = () => {
     if (pedidoId.trim()) {
       try {
         dispatch(obtenerPedidoPorId(pedidoId)); // Usamos la acción de Redux
-        const pedidoEncontrado = pedidos.find(pedido => pedido.id === parseInt(pedidoId.trim()));
-                if (pedidoEncontrado) {
-          setPedidoBuscado(pedidoEncontrado); // Actualiza el pedido buscado con el estado de Redux
-          setError(null); // Limpiar cualquier error anterior
-        } else {
-          setError('Pedido no encontrado.');
-          setTimeout(() => {
-            setError(null); // Ocultar el mensaje de error después de 3 segundos
-          }, 3000);
-        }
+        setVerTodosVisible(false);
+        // const pedidoEncontrado = pedidos.find(pedido => pedido.id === parseInt(pedidoId.trim()));
+        //         if (pedidoEncontrado) {
+        //   setPedidoBuscado(pedidoEncontrado); // Actualiza el pedido buscado con el estado de Redux
+        //   setError(null); // Limpiar cualquier error anterior
+        // } else {
+        //   setError('Pedido no encontrado.');
+        //   setTimeout(() => {
+        //     setError(null); // Ocultar el mensaje de error después de 3 segundos
+        //   }, 3000);
+        // }
       } catch (err) {
         setError('Error al buscar el pedido.');
         setTimeout(() => {
@@ -54,21 +62,27 @@ const Orders = () => {
   };
 
   // Función para obtener todos los pedidos
-  const fetchPedidos = async () => {
-    try {
-      dispatch(obtenerTodosLosPedidos()); // Usamos la acción de Redux para obtener todos los pedidos
-    } catch (err) {
-      setError('Error al obtener los pedidos.');
-    }
-  };
+  // const fetchPedidos = async () => {
+  //   try {
+  //     dispatch(obtenerTodosLosPedidos()); // Usamos la acción de Redux para obtener todos los pedidos
+  //   } catch (err) {
+  //     setError('Error al obtener los pedidos.');
+  //   }
+  // };
 
   // Función manejadora para el botón "Ver Todos"
   const handleVerTodos = () => {
-    setVerTodosVisible(!verTodosVisible); // Alterna la visibilidad de la lista completa
-    fetchPedidos();
-    setPedidoBuscado(null); // Limpiar la búsqueda
+    if (verTodosVisible) {
+      console.log('Ocultando todos los pedidos...');
+      setVerTodosVisible(false);
+    } else {
+      console.log('Cargando todos los pedidos...');
+      dispatch(cleanPedido());
+      setPedidoId('');
+      dispatch(obtenerTodosLosPedidos());
+      setVerTodosVisible(true);
+    }
   };
-
 
 
   return (

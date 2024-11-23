@@ -95,11 +95,12 @@ const Cart = ({ onClose }) => {
       <h2>Carrito de Compras</h2>
 
       {loginMessage && <p className="login-message">{loginMessage}</p>}
-      {loading ? (
+      {/* {loading ? (
         <p>Cargando carrito...</p>
       ) : carrito.productos.length === 0 ? (
         <p>El carrito está vacío.</p>
-      ) : (
+      ) :  */}
+      
         <div className="cart-items-container">
           {carrito.productos.map((item) => (
             <li key={item.productoId} className="cart-item">
@@ -163,7 +164,7 @@ const Cart = ({ onClose }) => {
             <h3>Total: ${carrito.total.toFixed(2)}</h3>
           </div>
         </div>
-      )}
+      
       <button
         className="confirm-cart"
         onClick={handleConfirmCart}

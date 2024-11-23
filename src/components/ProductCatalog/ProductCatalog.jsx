@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './ProductCatalog.css';
 import { fetchProductosDisponiblesConDetalles, filterProductos, fetchDetalleProducto } from '../../api/ProductCatalogSlice';
 import { FaTimes, FaShoppingCart } from 'react-icons/fa';
-import { setAuthToken } from '../../api/CartApi';
+// import { setAuthToken } from '../../api/CartApi';
 import { agregarAlCarrito } from '../../api/CartSilce';
 import { fetchCategorias } from '../../api/CategorySlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -65,7 +65,7 @@ const ProductCatalog = () => {
 
     useEffect(() => {
         const fetchProductos = async () => {
-          Dispatch(fetchProductosDisponiblesConDetalles())
+          Dispatch(fetchProductosDisponiblesConDetalles(token))
             .unwrap() // Maneja la resolución de la promesa
             .then((data) => {
               console.log("Productos obtenidos:", data);
@@ -179,7 +179,7 @@ const ProductCatalog = () => {
             console.log(token);
             // Llama a la función que realiza la petición al backend para agregar el producto al carrito
             console.log(productoId, cantidad);
-            setAuthToken(token);
+            // setAuthToken(token);
             Dispatch(agregarAlCarrito({productoId: productoId,cantidad: cantidad,token: token}));
             
     

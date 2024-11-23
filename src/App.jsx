@@ -23,6 +23,7 @@ import UserAdmin from './components/UserAdmin/UserAdmin.jsx'; // Importa el comp
 import ProductsAdmin from './components/ProductsAdmin/ProductsAdmin.jsx'; // Importa el componente ProductsAdmin
 import OrdersAdmin from './components/OrdersAdmin/OrdersAdmin.jsx'; // Importa el componente OrdersAdmin
 import CategoryAdmin from './components/CategoryAdmin/CategoryAdmin.jsx';
+import setToken from './api/SetToken.jsx';
 
 function App() {
   return (
@@ -35,6 +36,8 @@ function App() {
 function MainContent() {
   const location = useLocation(); // Aquí usamos useLocation
 
+  setToken();
+  
   return (
     <>
       {/* Muestra el Navbar solo si no estás en la ruta de AdminHome o sus subcomponentes */}

@@ -7,6 +7,7 @@ import {
   fetchUsuariosVisualDtos,
   deleteUsuarioAdmin,
   fetchRolUsuario,
+  cleanUsuarioAdmin,
 } from '../../api/UserSlice.jsx';
 import './UserAdmin.css';
 
@@ -35,6 +36,7 @@ const UserAdmin = () => {
       console.warn('Token no encontrado, redirigiendo al login...');
       navigate('/login');
     }
+    dispatch(cleanUsuarioAdmin());
   }, [dispatch, navigate, token, rol]);
 
   const handleVerTodos = () => {
@@ -43,6 +45,8 @@ const UserAdmin = () => {
       setVerTodosVisible(false);
     } else {
       console.log('Cargando todos los usuarios...');
+      dispatch(cleanUsuarioAdmin());
+      setUsuarioId('');
       dispatch(fetchUsuariosVisualDtos());
       setVerTodosVisible(true);
     }

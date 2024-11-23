@@ -125,10 +125,15 @@ const usuariosSlice = createSlice({
     error: null,
     rol: null,
   },
-  reducers: {    logoutUsuario: (state) => {
-    state.usuarioDTO = null; // Limpiamos el usuarioDTO cuando se hace logout
-    state.rol = null;
-  },},
+  reducers: {    
+    logoutUsuario: (state) => {
+      state.usuarioDTO = null; // Limpiamos el usuarioDTO cuando se hace logout
+      state.rol = null;
+    },
+    cleanUsuarioAdmin: (state) => {
+      state.usuarioAdminDTO = null;
+    }
+  },
   extraReducers: (builder) => {
     builder
       // Fetch Usuario
@@ -263,7 +268,7 @@ const usuariosSlice = createSlice({
       });
   },
 });
-export const { logoutUsuario } = usuariosSlice.actions;
+export const { logoutUsuario, cleanUsuarioAdmin } = usuariosSlice.actions;
 
 // Exporta el reducer
 export default usuariosSlice.reducer;

@@ -6,7 +6,7 @@ import {
   obtenerPedidoPorId, 
   crearNuevoDetalle,  
 } from '../../api/OrderSlice'; // Importa las acciones de tu slice
-import { setAuthToken } from '../../api/OrderApi';
+// import { setAuthToken } from '../../api/OrderApi';
 import { fetchCarrito, vaciarCarritoSlice } from '../../api/CartSilce';
 import './Order.css';
 
@@ -64,7 +64,7 @@ const Pedido = () => {
   const handleConfirmarPedido = async () => {
     try {
       // Crear un nuevo pedido
-      setAuthToken(token);
+      // setAuthToken(token);
       const pedidoData = await dispatch(
         crearNuevoPedido({ metodoPago, cuotas: metodoPago === 'CREDITO' ? cuotas : undefined })
       ).unwrap();

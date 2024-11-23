@@ -176,7 +176,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import './CategoryAdmin.css'; 
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCategorias, deleteCategoria, addCategoria } from '../../api/CategorySlice.jsx'; // Importar los actions de la slice
-import { setAuthToken } from '../../api/CategoryApi.jsx';
+//import { setAuthToken } from '../../api/CategoryApi.jsx';
 
 const CategoryAdmin = () => {
     const [categoryName, setCategoryName] = useState('');
@@ -208,7 +208,7 @@ const CategoryAdmin = () => {
                 } else {
                     setIsAdmin(true); 
                     dispatch(fetchCategorias(token)); // Llamamos a la acción para obtener las categorías
-                    setAuthToken(token);
+                    //setAuthToken(token);
                 }
             } else {
                 navigate('/login');

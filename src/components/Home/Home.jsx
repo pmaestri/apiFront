@@ -12,7 +12,7 @@ import imagen3 from '../../assets/images/imagen3.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductosDisponiblesConDetalles } from '../../api/ProductCatalogSlice';
 import { fetchUsuarioVisualDto } from '../../api/UserSlice';
-import { setAuthToken } from '../../api/UserApi';
+//import { setAuthToken } from '../../api/UserApi';
 
 
 const Home = () => {
@@ -27,7 +27,9 @@ const Home = () => {
   
   useEffect(() => {
     const fetchProductos = async () => {
-      dispatch(fetchProductosDisponiblesConDetalles())
+      //setAuthToken(token);
+      console.log(`Home: dispatch de productos con toekn: ${token}`)
+      dispatch(fetchProductosDisponiblesConDetalles(token))
         .unwrap()
         .then((data) => {
           console.log("Productos obtenidos:", data);
@@ -42,7 +44,7 @@ const Home = () => {
 
   useEffect(() => {
     if (token && !nombreUsuario) {
-      setAuthToken(token);
+      //setAuthToken(token);
       dispatch(fetchUsuarioVisualDto());
       
     }

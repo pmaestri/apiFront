@@ -1,21 +1,22 @@
-import axios from 'axios';
+// import axios from 'axios';
+import api from './Axiosconfig';
 
-const api = axios.create({
-  baseURL: 'http://localhost:8080/api/carritos',
-});
+// const api = axios.create({
+//   baseURL: 'http://192.168.100.129:8080/api/carritos',
+// });
 
 // Función para establecer el token en las cabeceras de axios
-export const setAuthToken = (token) => {
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete api.defaults.headers.common['Authorization'];
-  }
-};
+// export const setAuthToken = (token) => {
+//   if (token) {
+//     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+//   } else {
+//     delete api.defaults.headers.common['Authorization'];
+//   }
+// };
 export const agregarProducto = async (productoId, cantidad, token) => {
     try {
         const response = await api.post(
-            `/agregar?productoId=${productoId}&cantidad=${cantidad}`, // Usa params en la URL
+            `/api/carritos/agregar?productoId=${productoId}&cantidad=${cantidad}`, // Usa params en la URL
             {}, // Deja el cuerpo vacío ya que los params están en la URL
             {
                 headers: { Authorization: `Bearer ${token}` },
@@ -31,7 +32,7 @@ export const agregarProducto = async (productoId, cantidad, token) => {
 export const eliminarProducto = async (productoId, token) => {
   try {
       const response = await api.delete(
-          `/eliminar?productoId=${productoId}`, // Usa params en la URL
+          `/api/carritos/eliminar?productoId=${productoId}`, // Usa params en la URL
           {
               headers: { Authorization: `Bearer ${token}` },
           }
@@ -46,7 +47,7 @@ export const eliminarProducto = async (productoId, token) => {
 export const disminuirProductoEnCarrito = async (productoId, cantidad, token) => {
   try {
       const response = await api.put(
-          `/disminuir?productoId=${productoId}&cantidad=${cantidad}`, // Usa params en la URL
+          `/api/carritos/disminuir?productoId=${productoId}&cantidad=${cantidad}`, // Usa params en la URL
           {}, // Deja el cuerpo vacío ya que los params están en la URL
           {
               headers: { Authorization: `Bearer ${token}` },
@@ -61,7 +62,7 @@ export const disminuirProductoEnCarrito = async (productoId, cantidad, token) =>
 // Obtener el carrito del usuario
 export const obtenerCarrito = async (token) => {
   try {
-    const response = await api.get('/obtener', {
+    const response = await api.get('/api/carritos/obtener', {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log(response.data);
@@ -74,7 +75,7 @@ export const obtenerCarrito = async (token) => {
 // Confirmar el pedido del carrito
 export const confirmarCarrito = async (metodoPago, token) => {
   try {
-    const response = await api.post('/confirmar', {
+    const response = await api.post('/api/carritos/confirmar', {
       params: { metodoPago },
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -87,7 +88,7 @@ export const confirmarCarrito = async (metodoPago, token) => {
 // Vaciar el carrito
 export const vaciarCarrito = async (token) => {
   try {
-    const response = await api.delete('/vaciar', {
+    const response = await api.delete('/api/carritos/vaciar', {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data; // Retorna mensaje de éxito

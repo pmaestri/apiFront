@@ -206,6 +206,8 @@ const ProductsAdmin = () => {
     }
   };
 
+  const catalogos = ["Si", "No"];
+
   if (!isAdmin) return null;
 
   return (
@@ -268,7 +270,16 @@ const ProductsAdmin = () => {
             </label>
             <label>
               Catálogo:
-              <input className="ProductsAdmin__input" type="number" name="catalogo" onChange={handleChange} />
+              {/* <input className="ProductsAdmin__input" type="number" name="catalogo" onChange={handleChange} /> */}
+                <select
+                  name="catalogoId"
+                  onChange={handleChange}
+                  value={productoData.catalogoId} // Asegúrate de que el valor actual sea el ID de la categoría
+                >
+                  <option value="" disabled></option> 
+                    <option key="0" value="0">No</option>
+                    <option key="1" value="1">Si</option>
+                </select>
             </label>
             <div className="ProductsAdmin__file-container">
             <label className="ProductsAdmin__input_imagen">Imágen:</label>
@@ -383,13 +394,15 @@ const ProductsAdmin = () => {
                         />
 
                         <p><strong>Catálogo:</strong></p>
-                        <input
-                          type="text"
-                          name="catalogoId"
-                          value={productoData.catalogoId}
-                          onChange={handleChange}
-                          className="ProductsAdmin__input-edit-inline"
-                        />
+                         <select
+                            name="catalogoId"
+                            onChange={handleChange}
+                            value={productoData.catalogoId} // Asegúrate de que el valor actual sea el ID de la categoría
+                          >
+                            <option value="" disabled></option> 
+                              <option key="0" value="0">No</option>
+                              <option key="1" value="1">Si</option>
+                          </select>
                           <p><strong>Categoría:</strong></p>
                           <select
                             name="categoria"
@@ -437,6 +450,7 @@ const ProductsAdmin = () => {
                       <p><strong>Modelo:</strong> <span className="ProductsAdmin__value">{producto.modelo || "-"}</span></p>
                       <p><strong>Descuento:</strong> <span className="ProductsAdmin__value">{producto.descuento}%</span></p>
                       <p><strong>Categoría:</strong> <span className="ProductsAdmin__value">{producto.nombreCategoria}</span></p>
+                      <p><strong>Catalogo:</strong> <span className="ProductsAdmin__value">{producto.catalogoId==0?"No":"Si"}</span></p>
                   
                       <div className="ProductsAdmin__action-buttons">
                         <button className="ProductsAdmin__edit-button" onClick={() => handleEditProducto(producto)}>
