@@ -122,6 +122,19 @@ const Navbar = () => {
         </div>
       </div>
 
+      <div className="icon-container">
+      {rol === 'ADMIN' && (
+        <button 
+          className="nav-icon-admin" 
+          title="Admin"
+          onClick={() => navigate('/admin-home/usuarios')}
+        >
+          Admin
+        </button>
+      )}
+    </div>
+
+
       <div className="search-and-icons">
         <div className="search-bar">
           <input

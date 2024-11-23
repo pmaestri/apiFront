@@ -268,3 +268,25 @@ p {
   font-size: 20px;
   margin-bottom: 10px;
 }
+.nav-icon-admin {
+  background-color: #bd6f95; /* Color principal */
+  color: white;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1em;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px; /* Tamaño del botón */
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-icon-admin:hover {
+  background-color: #a35c7a; /* Color al pasar el mouse */
+  transform: translateY(-2px); /* Efecto de elevación */
+}
+
+.nav-icon-admin:active {
+  background-color: #933f5f; /* Color al hacer clic */
+  transform: translateY(1px); /* Reducir el efecto de elevación */
+}

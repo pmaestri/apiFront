@@ -9,9 +9,8 @@ import { faShippingFast, faTag, faUndoAlt } from '@fortawesome/free-solid-svg-ic
 import imagen1 from '../../assets/images/imagen1.png';
 import imagen2 from '../../assets/images/imagen2.png';
 import imagen3 from '../../assets/images/imagen3.png';
-//import { obtenerProductosDisponiblesConDetalles } from '../../api/ProductCatalogApi';
 import { useDispatch, useSelector } from 'react-redux';
-//import { fetchProductosDisponiblesConDetalles } from '../../api/ProductCatalogSlice';
+import { fetchProductosDisponiblesConDetalles } from '../../api/ProductCatalogSlice';
 import { fetchUsuarioVisualDto } from '../../api/UserSlice';
 import { setAuthToken } from '../../api/UserApi';
 
@@ -21,15 +20,25 @@ const Home = () => {
   const sliderRef = React.useRef(null);
   const dispatch = useDispatch();
   const [nombre, setNombre] = useState(null);
-  
   const [featuredProducts, setFeaturedProducts] = useState([]);
-
-  //const { productosDisponibles, loading } = useSelector((state) => state.productosDisponibles);
   const token = useSelector((state) => state.auth.token);
   const nombreUsuario = useSelector((state) => state.usuarios.usuarioDTO);
-  console.log(nombreUsuario)
-  console.log(token);
+  const productos = useSelector((state) => state.catalogo.productosDisponibles);
   
+  useEffect(() => {
+    const fetchProductos = async () => {
+      dispatch(fetchProductosDisponiblesConDetalles())
+        .unwrap()
+        .then((data) => {
+          console.log("Productos obtenidos:", data);
+        })
+        .catch((error) => {
+          console.error("Error al obtener productos:", error);
+        });
+    };
+
+    fetchProductos();
+  }, [dispatch]);
 
   useEffect(() => {
     if (token && !nombreUsuario) {
@@ -40,30 +49,16 @@ const Home = () => {
     if (nombreUsuario){
       setNombre(nombreUsuario.nombreUsuario);
     }
-  }, [dispatch, nombreUsuario]);
+  }, [dispatch, nombreUsuario, token]);
 
- /* useEffect(() => {
-    const storedNombreUsuario = localStorage.getItem('nombreUsuario');
-    if (storedNombreUsuario) {
-      setNombreUsuario(storedNombreUsuario);
+  useEffect(() => {
+    if (productos.length > 0) {
+      const randomProducts = [...productos]
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 5);
+      setFeaturedProducts(randomProducts);
     }
-  }, []);*/
-
-  // useEffect(() => {
-  //   // Despachar la acción para obtener los productos si aún no están cargados
-  //   if (!loading && productosDisponibles.length === 0) {
-  //     dispatch(fetchProductosDisponiblesConDetalles());
-  //   }
-  // }, [dispatch, loading, productosDisponibles.length]);
-
-  // useEffect(() => {
-  //   // Este efecto se ejecuta solo cuando los productos disponibles están cargados
-  //   if (productosDisponibles.length > 0) {
-  //     const randomProducts = productosDisponibles.sort(() => 0.5 - Math.random()).slice(0, 5);
-  //     setFeaturedProducts(randomProducts);
-  //   }
-  // }, [productosDisponibles]);
-
+  }, [productos]);
 
   const images = [imagen1, imagen2, imagen3];
   const imageDescriptions = [

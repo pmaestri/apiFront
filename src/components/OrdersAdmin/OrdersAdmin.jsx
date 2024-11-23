@@ -69,8 +69,7 @@ const Orders = () => {
     setPedidoBuscado(null); // Limpiar la búsqueda
   };
 
-  // Si aún se está cargando o si no es admin, no renderizamos el contenido
-  if (loading || loadingPedidos) return <div>Cargando...</div>;
+
 
   return (
     <div className="orders-container">
