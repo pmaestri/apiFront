@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { authenticate, logout } from '../../api/AuthSlice'; // Importa las acciones de la slice
 // import { setAuthToken } from '../../api/UserApi'; // Ajusta esta ruta según tu proyecto
 import { fetchRolUsuario } from '../../api/UserSlice';
+import { vaciarCarritoSlice } from '../../api/CartSilce';
 import './LogIn2.css';
 
 const Login = () => {
@@ -32,6 +33,7 @@ const Login = () => {
 
       // Redirigir según el rol
       if (response.payload === 'COMPRADOR') {
+        dispatch(vaciarCarritoSlice(token));
         navigate('/'); // Redirigir a la página principal del comprador
       } else if (response.payload === 'ADMIN') {
         navigate('/admin-home/usuarios'); // Redirigir al home del administrador
