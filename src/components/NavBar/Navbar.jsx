@@ -56,13 +56,13 @@ const Navbar = () => {
   }, [searchQuery, location, dispatch]); // Añadido `dispatch` como dependencia
 
   const handleCatalogClick = () => {
+    // Si ya estamos en la página de catálogo, simplemente hacer fetch de los productos
     if (location.pathname === '/ProductCatalog') {
-      window.location.reload();
+      dispatch(fetchProductosDisponiblesConDetalles()); // Hacer fetch de productos nuevamente
     } else {
-      navigate('/ProductCatalog');
+      navigate('/ProductCatalog'); // Si no estamos en /ProductCatalog, navegamos hacia allí
     }
   };
-
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
   };

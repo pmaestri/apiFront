@@ -63,12 +63,12 @@ const UserAdmin = () => {
     }
   };
 
-  const handleEliminarUsuario = (usuarioId) => {
+  /*const handleEliminarUsuario = (usuarioId) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
       console.log(`Eliminando usuario con ID: ${usuarioId}`);
       dispatch(deleteUsuarioAdmin(usuarioId));
     }
-  };
+  };*/
 
   const toggleVerPedidos = (usuarioId) => {
     console.log(`Alternando visibilidad de pedidos para usuario ID: ${usuarioId}`);
@@ -144,12 +144,7 @@ const UserAdmin = () => {
             <div className="card-content">
               <p>ID usuario: {usuario.id}</p>
               <p>Email: {usuario.mail}</p>
-              <button
-                onClick={() => handleEliminarUsuario(usuario.id)}
-                className="button eliminar-button"
-              >
-                Eliminar Usuario
-              </button>
+
               <h4>Pedidos:</h4>
               {usuario.pedidos && usuario.pedidos.length > 0 ? (
                 <div>

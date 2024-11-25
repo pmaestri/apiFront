@@ -181,23 +181,34 @@ const ProductCatalog = () => {
             console.log(token);
             // Llama a la función que realiza la petición al backend para agregar el producto al carrito
             console.log(productoId, cantidad);
-            // setAuthToken(token);
             console.log("********* addToCart: ", productoSeleccionado.stock, " cantidad: ", cantidad);
             
-            if (carrito.productos.length == 0) {
-                Dispatch(agregarAlCarrito({productoId: productoId,cantidad: cantidad,token: token}));
-            }
-            carrito.productos.map((item) => {
-                console.log("Dentro del map de carrito: ", item.cantidad);
+            // Si el carrito está vacío, agregar el primer producto
+            if (carrito.productos.length === 0) {
+                Dispatch(agregarAlCarrito({ productoId, cantidad, token }));
+            } else {
+                let productoExistente = false;
+                carrito.productos.forEach((item) => {
+                    console.log("Dentro del map de carrito: ", item.cantidad);
             
-                if (item.productoId == productoSeleccionado.id) {
-                    if ((cantidad + item.cantidad) < productoSeleccionado.stock) {
-                        Dispatch(agregarAlCarrito({productoId: productoId,cantidad: cantidad,token: token}));
-                    } else {
-                        alert("No se puede agregar FIERA!")
+                    if (item.productoId === productoSeleccionado.id) {
+                        productoExistente = true;
+            
+                        // Si el producto ya está en el carrito y la cantidad no supera el stock
+                        if (cantidad + item.cantidad <= productoSeleccionado.stock) {
+                            Dispatch(agregarAlCarrito({ productoId, cantidad, token }));
+                        } else {
+                            alert("No se puede agregar más de este producto, excede el stock disponible.");
+                        }
                     }
+                });
+            
+                // Si el producto no existe en el carrito, lo agregamos
+                if (!productoExistente) {
+                    Dispatch(agregarAlCarrito({ productoId, cantidad, token }));
                 }
-            });
+            }
+            
     
             // Muestra un mensaje de éxito temporal
             setShowSuccessMessage(true);
