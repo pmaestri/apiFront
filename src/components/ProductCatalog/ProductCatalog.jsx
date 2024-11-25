@@ -91,6 +91,7 @@ const ProductCatalog = () => {
         
         // Restablece el estado de los filtros
         setFiltros({
+            nombre: '',
             categoriaId: '',
             precioMinimo: '',
             precioMaximo: '',
