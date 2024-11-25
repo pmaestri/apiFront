@@ -14,7 +14,7 @@ const Orders = () => {
   const [setPedidoBuscado] = useState(null);
   const pedidoBuscado = useSelector((state) => state.pedidos.pedido);
   const [verTodosVisible, setVerTodosVisible] = useState(false);
-  const [error, setError] = useState(null);
+  const [errorP, setErrorP] = useState(null);
 
   // Obtenemos el estado de Redux
   const token = useSelector((state)=> state.auth.token);
@@ -35,31 +35,41 @@ const Orders = () => {
     }
     dispatch(cleanPedido());
   }, [rol, navigate, dispatch]);
+  
 
   // Función para obtener un pedido específico por ID
-  const buscarPedido = async () => {
-    if (pedidoId.trim()) {
-      try {
-        dispatch(obtenerPedidoPorId(pedidoId)); // Usamos la acción de Redux
+// Función para obtener un pedido específico por ID
+const buscarPedido = async () => {
+  if (pedidoId.trim()) {
+    try {
+      // Esperamos la respuesta del dispatch, que es una promesa
+      const resultado = await dispatch(obtenerPedidoPorId(pedidoId)); 
+      console.log(resultado.payload);
+
+      // Verificamos si el resultado es válido
+      if (!resultado.error) {
+        // Si existe el pedido, ocultamos la lista de todos los pedidos
+        
         setVerTodosVisible(false);
-        // const pedidoEncontrado = pedidos.find(pedido => pedido.id === parseInt(pedidoId.trim()));
-        //         if (pedidoEncontrado) {
-        //   setPedidoBuscado(pedidoEncontrado); // Actualiza el pedido buscado con el estado de Redux
-        //   setError(null); // Limpiar cualquier error anterior
-        // } else {
-        //   setError('Pedido no encontrado.');
-        //   setTimeout(() => {
-        //     setError(null); // Ocultar el mensaje de error después de 3 segundos
-        //   }, 3000);
-        // }
-      } catch (err) {
-        setError('Error al buscar el pedido.');
+      } else {
+        // Si no hay resultado, mostramos un mensaje de error
+        setErrorP('Error al buscar el pedido.');
         setTimeout(() => {
-          setError(null); // Ocultar el mensaje de error después de 3 segundos
+          setErrorP(null); // Ocultar el mensaje de error después de 3 segundos
         }, 3000);
       }
+    } catch (err) {
+      // Si ocurre un error al hacer el dispatch, lo capturamos aquí
+      console.error('Error en la búsqueda del pedido:', err);
+      setErrorP('Error al buscar el pedido.');
+      setTimeout(() => {
+        setErrorP(null); // Ocultar el mensaje de error después de 3 segundos
+      }, 3000);
     }
-  };
+  }
+};
+
+
 
   // Función para obtener todos los pedidos
   // const fetchPedidos = async () => {
@@ -90,7 +100,7 @@ const Orders = () => {
       <AdminNavbar />
       <div className="orders-header">
         <h1 className="orders-title">Administración de Pedidos</h1>
-        {error && <p className="error-message-Orders">{error}</p>}
+        {errorP&& <p className="error-message-Orders">{errorP}</p>}
       </div>
       
       <div className="orders-search-bar">

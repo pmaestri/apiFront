@@ -86,6 +86,40 @@ const ProductCatalog = () => {
         setModelos(modelosPorMarca[marcaSeleccionada] || []);
         console.log("Marca seleccionada:", marcaSeleccionada);
     };
+    const handleResetFiltros = async () => {
+        console.log("Reiniciando filtros...");
+        
+        // Restablece el estado de los filtros
+        setFiltros({
+            categoriaId: '',
+            precioMinimo: '',
+            precioMaximo: '',
+            marca: '',
+            modelo: ''
+        });
+    
+        setMessage(null);  // Limpia el mensaje de error o de resultados vacíos
+        setLoading(true);  // Establece el estado de carga en true
+    
+        try {
+            // Llama al thunk para obtener todos los productos sin filtros
+            const productosIniciales = await Dispatch(filterProductos({})).unwrap();
+    
+            console.log("Productos iniciales:", productosIniciales);
+    
+            if (productosIniciales.length === 0) {
+                setMessage(`No hay productos disponibles.`);
+            } else {
+                setMessage(null);
+            }
+        } catch (error) {
+            console.error("Error al reiniciar filtros:", error);
+            setError(`Error al reiniciar filtros: ${error.message}`);
+        } finally {
+            setLoading(false);  // Finaliza el estado de carga
+        }
+    };
+    
 
     const handleFiltrarProductos = async (nombreProducto = '') => {
         console.log("Filtrando productos por:", filtros);
@@ -284,6 +318,7 @@ const ProductCatalog = () => {
                             ))}
                         </select>
                         <button type="submit">Filtrar</button>
+                        <button onClick={handleResetFiltros}>Reiniciar filtrado</button>
                     </form>
                 </div>
 
