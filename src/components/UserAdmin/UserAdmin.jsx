@@ -108,12 +108,6 @@ const UserAdmin = () => {
             <p>ID usuario: {usuarioBuscado.id}</p>
             <p>Nombre de Usuario: {usuarioBuscado.nombreUsuario}</p>
             <p>Email: {usuarioBuscado.mail}</p>
-            <button
-              onClick={() => handleEliminarUsuario(usuarioBuscado.id)}
-              className="button eliminar-button"
-            >
-              Eliminar Usuario
-            </button>
             <h4>Pedidos:</h4>
             {usuarioBuscado.pedidos && usuarioBuscado.pedidos.length > 0 ? (
               <div>

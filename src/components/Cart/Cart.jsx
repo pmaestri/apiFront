@@ -36,12 +36,15 @@ const Cart = ({ onClose }) => {
       alert('Por favor, inicia sesión para agregar productos al carrito.');
       return;
     }
+    
     dispatch(agregarAlCarrito({ productoId, cantidad: 1, token }))
     .then(() => {
+
       // Una vez que se haya agregado el producto, se ejecuta el fetchCarrito
       setTimeout(() => {
         dispatch(fetchCarrito(token));
       }, 1);    })
+      console.log(response);
   };
 
   const handleDecreaseItemQuantity = (productoId) => {
