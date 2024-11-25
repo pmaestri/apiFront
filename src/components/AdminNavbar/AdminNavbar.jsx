@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './AdminNavbar.css';
-import { FaUser, FaClipboardList, FaBoxOpen, FaTags } from 'react-icons/fa'; // Importa los íconos que desees
+import { FaUser, FaClipboardList, FaBoxOpen, FaTags } from 'react-icons/fa'; 
 
 const AdminNavbar = () => {
   return (

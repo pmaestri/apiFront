@@ -21,7 +21,7 @@ const Footer = () => {
           topcasesarg@gmail.com
         </a>
         <a 
-          href="https://wa.me/5491123456789" // Cambia el número a un formato válido
+          href="https://wa.me/5491123456789" 
           target="_blank" 
           rel="noopener noreferrer" 
           className="footer-contact"

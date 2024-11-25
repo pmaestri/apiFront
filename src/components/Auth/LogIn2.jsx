@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { authenticate, logout } from '../../api/AuthSlice'; // Importa las acciones de la slice
-// import { setAuthToken } from '../../api/UserApi'; // Ajusta esta ruta según tu proyecto
+import { authenticate, logout } from '../../api/AuthSlice'; 
+// import { setAuthToken } from '../../api/UserApi'; 
 import { fetchRolUsuario } from '../../api/UserSlice';
 import { vaciarCarritoSlice } from '../../api/CartSilce';
 import './LogIn2.css';

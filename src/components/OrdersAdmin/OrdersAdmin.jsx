@@ -37,7 +37,7 @@ const Orders = () => {
   }, [rol, navigate, dispatch]);
   
 
-  // Función para obtener un pedido específico por ID
+  
 // Función para obtener un pedido específico por ID
 const buscarPedido = async () => {
   if (pedidoId.trim()) {
@@ -70,15 +70,6 @@ const buscarPedido = async () => {
 };
 
 
-
-  // Función para obtener todos los pedidos
-  // const fetchPedidos = async () => {
-  //   try {
-  //     dispatch(obtenerTodosLosPedidos()); // Usamos la acción de Redux para obtener todos los pedidos
-  //   } catch (err) {
-  //     setError('Error al obtener los pedidos.');
-  //   }
-  // };
 
   // Función manejadora para el botón "Ver Todos"
   const handleVerTodos = () => {

@@ -63,13 +63,6 @@ const UserAdmin = () => {
     }
   };
 
-  /*const handleEliminarUsuario = (usuarioId) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-      console.log(`Eliminando usuario con ID: ${usuarioId}`);
-      dispatch(deleteUsuarioAdmin(usuarioId));
-    }
-  };*/
-
   const toggleVerPedidos = (usuarioId) => {
     console.log(`Alternando visibilidad de pedidos para usuario ID: ${usuarioId}`);
     setVerPedidos((prevState) => ({

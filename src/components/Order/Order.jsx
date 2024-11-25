@@ -5,7 +5,7 @@ import {
   crearNuevoPedido, 
   obtenerPedidoPorId, 
   crearNuevoDetalle,  
-} from '../../api/OrderSlice'; // Importa las acciones de tu slice
+} from '../../api/OrderSlice';
 // import { setAuthToken } from '../../api/OrderApi';
 import { fetchCarrito, vaciarCarritoSlice } from '../../api/CartSilce';
 import './Order.css';
@@ -48,7 +48,7 @@ const Pedido = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const token = useSelector((state) => state.auth.token); // Asegúrate de que el token esté en el estado `user`
+  const token = useSelector((state) => state.auth.token); 
   const { carrito, loading, error } = useSelector((state) => state.carrito);
   useEffect(() => {
     if (token) {

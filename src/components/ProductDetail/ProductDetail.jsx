@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { obtenerDetalleProducto } from '../../api/ProductCatalogApi'; // Asegúrate de que esta ruta sea correcta
+import { obtenerDetalleProducto } from '../../api/ProductCatalogApi'; 
 import './ProductDetail.css';
 
 const ProductDetail = ({ onClose }) => {

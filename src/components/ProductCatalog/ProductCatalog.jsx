@@ -279,7 +279,7 @@ const ProductCatalog = () => {
                             <option value="">Selecciona una categoría</option>
                             {categorias.map((categoria) => (
                                 <option key={categoria.id} value={categoria.id}>
-                                {categoria.nombre} {/* Asegúrate de que el nombre de la propiedad coincide con el de la API */}
+                                {categoria.nombre}
                                 </option>
                             ))}
                         </select>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../../api/AuthSlice'; // Asegúrate de ajustar la ruta de importación
+import { register } from '../../api/AuthSlice'; 
 import './Register.css';
 import { fetchCarrito } from '../../api/CartSilce';
 

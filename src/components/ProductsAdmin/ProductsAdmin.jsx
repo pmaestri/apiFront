@@ -274,7 +274,7 @@ const ProductsAdmin = () => {
                 <select
                   name="catalogoId"
                   onChange={handleChange}
-                  value={productoData.catalogoId} // Asegúrate de que el valor actual sea el ID de la categoría
+                  value={productoData.catalogoId}
                 >
                   <option value="" disabled></option> 
                     <option key="0" value="0">No</option>
@@ -397,7 +397,7 @@ const ProductsAdmin = () => {
                          <select
                             name="catalogoId"
                             onChange={handleChange}
-                            value={productoData.catalogoId} // Asegúrate de que el valor actual sea el ID de la categoría
+                            value={productoData.catalogoId}
                           >
                             <option value="" disabled></option> 
                               <option key="0" value="0">No</option>
@@ -407,7 +407,7 @@ const ProductsAdmin = () => {
                           <select
                             name="categoria"
                             onChange={handleChange}
-                            value={productoData.categoria || ''} // Asegúrate de que el valor actual sea el ID de la categoría
+                            value={productoData.categoria || ''}
                           >
                             <option value="" disabled>{producto.nombreCategoria}</option> 
                             {categorias.map((categoria) => (
